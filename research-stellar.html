@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stellar Astrophysics Research | Swan Yi Htet</title>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)'], ['$', '$']],
+                displayMath: [['\\[', '\\]'], ['$$', '$$']],
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        display: ['Outfit', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff', 100: '#e0f2fe', 200: '#bae6fd', 300: '#7dd3fc',
+                            400: '#38bdf8', 500: '#0ea5e9', 600: '#0284c7', 700: '#0369a1',
+                            800: '#075985', 900: '#0c4a6e', 950: '#082f49',
+                        },
+                        accent: {
+                            400: '#4ade80', // Green for "Completed"
+                            500: '#22c55e',
+                            900: '#14532d',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #020617; color: #e2e8f0; }
+        .glass { background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .tech-grid { background-image: linear-gradient(rgba(56, 189, 248, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(56, 189, 248, 0.03) 1px, transparent 1px); background-size: 30px 30px; }
+    </style>
+</head>
+<body class="selection:bg-accent-500/30 selection:text-accent-400 tech-grid min-h-screen">
+
+    <nav class="fixed top-0 w-full z-50 glass border-b border-slate-800/50">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <a href="index.html" class="group flex items-center space-x-2 text-slate-400 hover:text-white transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                <span class="font-mono text-sm uppercase tracking-widest">Return to Portfolio</span>
+            </a>
+            
+            <div class="hidden sm:flex items-center space-x-2 px-3 py-1 rounded-full bg-accent-900/30 border border-accent-500/30">
+                <span class="flex h-2 w-2 rounded-full bg-accent-500 shadow-[0_0_8px_rgba(34,197,94,0.6)]"></span>
+                <span class="text-accent-400 text-xs font-mono font-bold uppercase">Project Completed</span>
+            </div>
+        </div>
+    </nav>
+
+    <header class="pt-32 pb-16 px-6">
+        <div class="max-w-4xl mx-auto">
+            <p class="text-brand-400 font-mono text-sm uppercase tracking-widest mb-4">Astro-Computing • CUNY Queens College</p>
+            <h1 class="font-display text-4xl md:text-6xl font-bold text-white mb-6 leading-tight">
+                Calibrating TESS Photometry: <br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-300 to-accent-400">White Dwarfs as Flux Standards</span>
+            </h1>
+            <p class="text-xl text-slate-400 font-light leading-relaxed">
+                A statistical analysis of <strong>33,000+ sector observations</strong> to quantify errors in the TESS pipeline's <span class="font-mono text-brand-300">CROWDSAP</span> metric. We utilized White Dwarfs as stable photometric calibrators to identify edge-case failures in automated data processing.
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 pb-24 grid lg:grid-cols-12 gap-12">
+        
+        <div class="lg:col-span-8 space-y-12">
+            
+            <section class="glass p-8 rounded-3xl">
+                <h2 class="font-display text-2xl font-bold text-white mb-6 flex items-center">
+                    <span class="text-brand-500 mr-3">01.</span> The Challenge
+                </h2>
+                <div class="space-y-4 text-slate-300 leading-relaxed">
+                    <p>
+                        The Transiting Exoplanet Survey Satellite (TESS) monitors millions of stars, but in dense stellar fields, light from nearby stars ("crowding") contaminates the target aperture. The TESS pipeline estimates this contamination using a metric called <strong>CROWDSAP</strong> (\( c_p \)).
+                    </p>
+                    <p>
+                        However, for faint targets or complex scenes, this metric can be inaccurate, leading to errors in critical astrophysical measurements like exoplanet transit depths. We needed a way to empirically validate these values across the entire sky.
+                    </p>
+                </div>
+            </section>
+
+            <section class="glass p-8 rounded-3xl border-l-4 border-l-brand-500">
+                <h2 class="font-display text-2xl font-bold text-white mb-6 flex items-center">
+                    <span class="text-brand-500 mr-3">02.</span> Technical Methodology
+                </h2>
+                <div class="space-y-6">
+                    <div>
+                        <h3 class="text-white font-semibold mb-2 font-mono text-lg">Flux Recalibration Algorithm</h3>
+                        <p class="text-slate-400 text-sm leading-relaxed mb-4">
+                            We leveraged <strong>White Dwarfs (WDs)</strong> as calibrators because they are intrinsically stable. By anchoring the observed flux to the expected flux derived from the TESS Input Catalog (TIC), we derived a "Ground Truth" crowding metric (\( c_{est} \)) to compare against the pipeline.
+                        </p>
+                        
+                        <div class="bg-slate-950 p-4 rounded-lg border border-slate-700/50 font-mono text-sm text-slate-300 overflow-x-auto">
+                            <p class="mb-2 text-slate-500">// Recalibration Formula</p>
+                            c_est = c_p * ( F_expected / F_observed )
+                            <br><br>
+                            <p class="mb-2 text-slate-500">// Discrepancy Ratio</p>
+                            R = c_p / c_est
+                        </div>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-6 mt-6">
+                        <div class="bg-slate-900/50 p-5 rounded-xl border border-slate-700/50">
+                            <h4 class="text-brand-400 font-mono text-xs uppercase tracking-wider mb-2">Data Sample</h4>
+                            <p class="text-slate-300 text-sm">
+                                Analyzed <strong>8,132</strong> White Dwarfs across <strong>33,396</strong> sector observations using Python and TESS pipeline data headers.
+                            </p>
+                        </div>
+                        <div class="bg-slate-900/50 p-5 rounded-xl border border-slate-700/50">
+                            <h4 class="text-brand-400 font-mono text-xs uppercase tracking-wider mb-2">Outlier Detection</h4>
+                            <p class="text-slate-300 text-sm">
+                                Implemented an iterative <strong>5-sigma clipping</strong> algorithm to identify statistically significant failures in the pipeline processing.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="font-display text-2xl font-bold text-white mb-6 flex items-center">
+                    <span class="text-brand-500 mr-3">03.</span> Key Findings
+                </h2>
+                <div class="glass p-6 rounded-3xl">
+                    <p class="text-slate-300 mb-6">
+                        While the pipeline is generally reliable, we identified ~200 specific failure modes where <span class="font-mono text-brand-300">CROWDSAP</span> was grossly inaccurate. These fell into four distinct categories:
+                    </p>
+                    <ul class="space-y-4">
+                        <li class="flex items-start">
+                            <span class="inline-flex items-center justify-center h-6 w-6 rounded-full bg-slate-800 border border-slate-600 text-xs font-mono text-brand-400 mr-3 mt-0.5">1</span>
+                            <span class="text-slate-400 text-sm"><strong>Extremely Faint Targets:</strong> Near the detection limit, background noise is misattributed as source flux.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="inline-flex items-center justify-center h-6 w-6 rounded-full bg-slate-800 border border-slate-600 text-xs font-mono text-brand-400 mr-3 mt-0.5">2</span>
+                            <span class="text-slate-400 text-sm"><strong>Intrinsic Variability:</strong> Cataclysmic variables or binaries that violate the stable flux assumption.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="inline-flex items-center justify-center h-6 w-6 rounded-full bg-slate-800 border border-slate-600 text-xs font-mono text-brand-400 mr-3 mt-0.5">3</span>
+                            <span class="text-slate-400 text-sm"><strong>Saturation Bleed:</strong> Nearby bright stars saturating the detector and bleeding charge into the target aperture.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="inline-flex items-center justify-center h-6 w-6 rounded-full bg-slate-800 border border-slate-600 text-xs font-mono text-brand-400 mr-3 mt-0.5">4</span>
+                            <span class="text-slate-400 text-sm"><strong>Transient Artifacts:</strong> Solar system objects (asteroids) passing through the aperture.</span>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+        </div>
+
+        <div class="lg:col-span-4 space-y-6">
+            
+            <div class="glass p-6 rounded-3xl sticky top-24">
+                <h3 class="text-white font-bold text-lg mb-4">Project Resources</h3>
+                <p class="text-slate-400 text-sm mb-6">
+                    This project has been concluded. The codebase and related analysis notebooks are available for review.
+                </p>
+                
+                <a href="https://github.com/shtet100/tess_crowdsap" target="_blank" class="flex items-center justify-center space-x-3 w-full py-4 bg-slate-800 hover:bg-slate-700 border border-slate-600 hover:border-slate-500 text-white rounded-xl font-semibold transition-all mb-3 group">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                    <span>Analysis Code</span>
+                </a>
+
+                <div class="mt-8 pt-6 border-t border-slate-700/50 space-y-4">
+                    <div>
+                        <span class="text-xs font-mono text-brand-400 uppercase tracking-wider">Principle Investigator</span>
+                        <p class="text-white font-medium">Dr. Keaton Bell</p>
+                    </div>
+                    <div>
+                        <span class="text-xs font-mono text-brand-400 uppercase tracking-wider">Collaborators</span>
+                        <p class="text-white font-medium">Nikoo Hosseininezhad</p>
+                    </div>
+                    <div>
+                        <span class="text-xs font-mono text-brand-400 uppercase tracking-wider">Tools</span>
+                        <div class="flex flex-wrap gap-2 mt-2">
+                            <span class="px-2 py-1 bg-slate-800 rounded text-xs text-slate-300">TESS Pipeline</span>
+                            <span class="px-2 py-1 bg-slate-800 rounded text-xs text-slate-300">Python</span>
+                            <span class="px-2 py-1 bg-slate-800 rounded text-xs text-slate-300">MCMC</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="border-t border-slate-800/50 py-12 text-center">
+        <p class="text-slate-500 text-sm font-mono">&copy; 2025 Keaton Bell, Nikoo Hoosseininezhad, Swan Yi Htet. Project Concluded.</p>
+    </footer>
+
+</body>
+</html>

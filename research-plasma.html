@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plasma Physics Research | Swan Yi Htet</title>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)'], ['$', '$']],
+                displayMath: [['\\[', '\\]'], ['$$', '$$']],
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        display: ['Outfit', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff', 100: '#e0f2fe', 200: '#bae6fd', 300: '#7dd3fc',
+                            400: '#38bdf8', 500: '#0ea5e9', 600: '#0284c7', 700: '#0369a1',
+                            800: '#075985', 900: '#0c4a6e', 950: '#082f49',
+                        },
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #020617; color: #e2e8f0; }
+        .glass { background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .tech-grid { background-image: linear-gradient(rgba(56, 189, 248, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(56, 189, 248, 0.03) 1px, transparent 1px); background-size: 30px 30px; }
+    </style>
+</head>
+<body class="selection:bg-brand-500/30 selection:text-brand-200 tech-grid min-h-screen">
+
+    <nav class="fixed top-0 w-full z-50 glass border-b border-slate-800/50">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <a href="index.html" class="group flex items-center space-x-2 text-slate-400 hover:text-white transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                <span class="font-mono text-sm uppercase tracking-widest">Return to Portfolio</span>
+            </a>
+            
+            <div class="hidden sm:flex items-center space-x-2 px-3 py-1 rounded-full bg-brand-500/10 border border-brand-500/20">
+                <span class="relative flex h-2 w-2">
+                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-400 opacity-75"></span>
+                  <span class="relative inline-flex rounded-full h-2 w-2 bg-brand-500"></span>
+                </span>
+                <span class="text-brand-400 text-xs font-mono font-bold uppercase">Active Development</span>
+            </div>
+        </div>
+    </nav>
+
+    <header class="pt-32 pb-16 px-6">
+        <div class="max-w-4xl mx-auto">
+            <p class="text-brand-400 font-mono text-sm uppercase tracking-widest mb-4">Computational Plasma Physics • Columbia University</p>
+            <h1 class="font-display text-4xl md:text-6xl font-bold text-white mb-6 leading-tight">
+                Reduced Simulation Models for <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-300 to-brand-500">Nonlinear Wave-Particle Interactions</span>
+            </h1>
+            <p class="text-xl text-slate-400 font-light leading-relaxed">
+                Developing a <strong>&delta;f (delta-f) Particle-in-Cell (PIC)</strong> framework to simulate the Vlasov-Poisson bump-on-tail instability and analyze phase-space transport in complex 3D magnetic fields.
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 pb-24 grid lg:grid-cols-12 gap-12">
+        
+        <div class="lg:col-span-8 space-y-12">
+            
+            <section class="glass p-8 rounded-3xl">
+                <h2 class="font-display text-2xl font-bold text-white mb-6 flex items-center">
+                    <span class="text-brand-500 mr-3">01.</span> Research Overview
+                </h2>
+                <div class="space-y-4 text-slate-300 leading-relaxed">
+                    <p>
+                        Resonant wave-particle interactions (WPI) are a fundamental driver of transport in both magnetic confinement fusion devices (like tokamaks and stellarators) and astrophysical plasmas (such as Earth's radiation belts). Standard models often assume idealized symmetries that break down in realistic 3D magnetic configurations.
+                    </p>
+                    <p>
+                        My research focuses on bridging this gap by developing a <strong>reduced-order kinetic simulation model</strong>. By isolating the resonant population evolution from the background thermal evolution, we can efficiently model complex nonlinear phenomena like <strong>mode chirping, bursting, and phase-space clumping</strong> without the computational cost of fully resolving the background timescales.
+                    </p>
+                </div>
+            </section>
+
+            <section class="glass p-8 rounded-3xl border-l-4 border-l-brand-500">
+                <h2 class="font-display text-2xl font-bold text-white mb-6 flex items-center">
+                    <span class="text-brand-500 mr-3">02.</span> Technical Methodology
+                </h2>
+                <div class="space-y-6">
+                    <div>
+                        <h3 class="text-white font-semibold mb-2 font-mono text-lg">The Vlasov-Poisson Model</h3>
+                        <p class="text-slate-400 text-sm leading-relaxed">
+                            We utilize the Vlasov-Poisson system to model the "bump-on-tail" instability as a paradigm for general WPI. The electric field amplitude \( \hat{E}(t) \) and phase \( \phi(t) \) are evolved via coupling equations derived from Ampere's law, driven by the current density \( j_b \) of energetic beam electrons.
+                        </p>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="bg-slate-900/50 p-5 rounded-xl border border-slate-700/50">
+                            <h4 class="text-brand-400 font-mono text-xs uppercase tracking-wider mb-2">Algorithm</h4>
+                            <p class="text-slate-300 text-sm">
+                                <strong>&delta;f Method:</strong> To reduce Monte-Carlo sampling noise, we split the distribution function into a static equilibrium \( f_0 \) and a perturbed part \( \delta f \). Only the deviation is evolved, significantly improving signal-to-noise ratio.
+                            </p>
+                        </div>
+                        <div class="bg-slate-900/50 p-5 rounded-xl border border-slate-700/50">
+                            <h4 class="text-brand-400 font-mono text-xs uppercase tracking-wider mb-2">Numerical Stability</h4>
+                            <p class="text-slate-300 text-sm">
+                                <strong>Pseudo-Cartesian Coordinates:</strong> To avoid singularities when the mode amplitude vanishes (\( \hat{u} \to 0 \)), we integrate in a transformed coordinate system:
+                                <br>
+                                <span class="font-mono text-xs text-brand-300 block mt-2">
+                                    u_c = u * cos(&phi;)<br>
+                                    u_s = u * sin(&phi;)
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="font-display text-2xl font-bold text-white mb-6 flex items-center">
+                    <span class="text-brand-500 mr-3">03.</span> Current Status & Roadmap
+                </h2>
+                <div class="relative pl-8 border-l border-slate-800 space-y-8">
+                    <div class="relative">
+                        <div class="absolute -left-[37px] top-1 w-4 h-4 rounded-full bg-brand-500 shadow-[0_0_10px_rgba(14,165,233,0.5)]"></div>
+                        <h3 class="text-white font-bold">Phase 1: Code Implementation (WISP)</h3>
+                        <p class="text-slate-400 text-sm mt-1">Implementing the Wave Interaction Simulation Platform (WISP). Developing the Langmuir mode stepping equations and particle trajectory integration.</p>
+                    </div>
+                    <div class="relative">
+                        <div class="absolute -left-[37px] top-1 w-4 h-4 rounded-full bg-brand-900 border border-brand-500"></div>
+                        <h3 class="text-white font-bold">Phase 2: Benchmarking</h3>
+                        <p class="text-slate-400 text-sm mt-1">Validating the code against analytic predictions for linear growth rates and nonlinear saturation amplitudes (e.g., \( \omega_b \approx 3.2\gamma_L \)).</p>
+                    </div>
+                    <div class="relative">
+                        <div class="absolute -left-[37px] top-1 w-4 h-4 rounded-full bg-slate-800 border border-slate-600"></div>
+                        <h3 class="text-slate-400 font-bold">Phase 3: 3D Field Integration</h3>
+                        <p class="text-slate-500 text-sm mt-1">Extending the model to include non-symmetric background magnetic fields to study drift orbit bifurcations.</p>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+
+        <div class="lg:col-span-4 space-y-6">
+            
+            <div class="glass p-6 rounded-3xl sticky top-24">
+                <h3 class="text-white font-bold text-lg mb-4">Repository</h3>
+                <p class="text-slate-400 text-sm mb-6">
+                    This is an active research project. The codebase is updated regularly with new benchmarks and optimization routines.
+                </p>
+                
+                <a href="https://github.com/shtet100/Plasma-Bump-On-Tail" target="_blank" class="flex items-center justify-center space-x-3 w-full py-4 bg-brand-600 hover:bg-brand-500 text-white rounded-xl font-semibold transition-all shadow-lg shadow-brand-500/20 group">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                    <span>View Source Code</span>
+                </a>
+
+                <div class="mt-8 pt-6 border-t border-slate-700/50 space-y-4">
+                    <div>
+                        <span class="text-xs font-mono text-brand-400 uppercase tracking-wider">Principle Investigator</span>
+                        <p class="text-white font-medium">Dr. Elizabeth Paul</p>
+                    </div>
+                    <div>
+                        <span class="text-xs font-mono text-brand-400 uppercase tracking-wider">Collaborators</span>
+                        <p class="text-white font-medium">Kamil Ahmed Syed</p>
+                    </div>
+                    <div>
+                        <span class="text-xs font-mono text-brand-400 uppercase tracking-wider">Lab</span>
+                        <p class="text-white font-medium">Columbia Fusion Energy Research Center</p>
+                    </div>
+                    <div>
+                        <span class="text-xs font-mono text-brand-400 uppercase tracking-wider">Keywords</span>
+                        <div class="flex flex-wrap gap-2 mt-2">
+                            <span class="px-2 py-1 bg-slate-800 rounded text-xs text-slate-300">Vlasov-Poisson</span>
+                            <span class="px-2 py-1 bg-slate-800 rounded text-xs text-slate-300">Nonlinear Dynamics</span>
+                            <span class="px-2 py-1 bg-slate-800 rounded text-xs text-slate-300">Symplectic Integration</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="border-t border-slate-800/50 py-12 text-center">
+        <p class="text-slate-500 text-sm font-mono">&copy; 2026 Swan Yi Htet. Research in Progress.</p>
+    </footer>
+
+</body>
+</html>
