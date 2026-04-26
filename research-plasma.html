@@ -3,199 +3,1058 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Plasma Physics Research | Swan Yi Htet</title>
-    <script>
-        window.MathJax = {
-            tex: {
-                inlineMath: [['\\(', '\\)'], ['$', '$']],
-                displayMath: [['\\[', '\\]'], ['$$', '$$']],
-            }
-        };
-    </script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <title>Plasma Physics Research · Wave-Particle Interactions | Swan Yi Htet</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700;9..144,800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Plus Jakarta Sans', 'sans-serif'],
-                        display: ['Outfit', 'sans-serif'],
-                        mono: ['JetBrains Mono', 'monospace'],
-                    },
-                    colors: {
-                        brand: {
-                            50: '#f0f9ff', 100: '#e0f2fe', 200: '#bae6fd', 300: '#7dd3fc',
-                            400: '#38bdf8', 500: '#0ea5e9', 600: '#0284c7', 700: '#0369a1',
-                            800: '#075985', 900: '#0c4a6e', 950: '#082f49',
-                        },
-                    }
+            theme: { extend: {
+                fontFamily: { display: ['Fraunces', 'serif'], sans: ['Inter', 'sans-serif'], mono: ['"JetBrains Mono"', 'monospace'] },
+                colors: {
+                    ink: { DEFAULT: '#070b14', deep: '#04060c', soft: '#0c1220' },
+                    ember: { 300: '#fbbf67', 400: '#f5a142', 500: '#e8842a' },
+                    plasma: { 300: '#7dd3fc', 400: '#38bdf8', 500: '#0ea5e9' },
                 }
-            }
+            }}
         }
     </script>
     <style>
-        body { background-color: #020617; color: #e2e8f0; }
-        .glass { background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        .tech-grid { background-image: linear-gradient(rgba(56, 189, 248, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(56, 189, 248, 0.03) 1px, transparent 1px); background-size: 30px 30px; }
+        body { background: #04060c; color: #d8dde6; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+        .lab-grid {
+            background-image:
+                radial-gradient(circle, rgba(125,211,252,0.07) 1px, transparent 1px),
+                radial-gradient(circle, rgba(232,132,42,0.04) 1px, transparent 1px);
+            background-size: 36px 36px, 72px 72px;
+            background-position: 0 0, 18px 18px;
+        }
+        .display-serif { font-family: 'Fraunces', serif; }
+        .mono-tag { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; }
+        .section-num { font-family: 'Fraunces', serif; font-size: 13px; color: rgba(125,211,252,0.55); letter-spacing: 0.05em; }
+        .heading-mark { position: relative; padding-bottom: 4px; }
+        .heading-mark::after { content: ''; position: absolute; left: 0; bottom: 0; width: 36px; height: 2px; background: rgba(125,211,252,0.7); }
+        .instrument-panel {
+            position: relative;
+            background: linear-gradient(180deg, rgba(16,23,42,0.5), rgba(7,11,20,0.7));
+            border: 1px solid rgba(125,211,252,0.1);
+            border-radius: 4px;
+        }
+        .instrument-panel::before {
+            content: ''; position: absolute; top: -1px; left: -1px;
+            width: 14px; height: 14px;
+            border-top: 1px solid rgba(125,211,252,0.55);
+            border-left: 1px solid rgba(125,211,252,0.55);
+        }
+        .instrument-panel::after {
+            content: ''; position: absolute; bottom: -1px; right: -1px;
+            width: 14px; height: 14px;
+            border-bottom: 1px solid rgba(125,211,252,0.55);
+            border-right: 1px solid rgba(125,211,252,0.55);
+        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #04060c; }
+        ::-webkit-scrollbar-thumb { background: #1a2238; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #38bdf8; }
+        .pull-quote { font-family: 'Fraunces', serif; font-style: italic; font-weight: 300; letter-spacing: -0.01em; }
+        .blip { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #38bdf8; box-shadow: 0 0 6px rgba(56,189,248,0.8); animation: pulseSoft 2s ease-in-out infinite; }
+        @keyframes pulseSoft { 0%,100% { opacity: 0.35; } 50% { opacity: 0.85; } }
+        .equation-block {
+            font-family: 'Fraunces', serif;
+            background: rgba(7,11,20,0.6);
+            border: 1px solid rgba(125,211,252,0.15);
+            border-left: 2px solid rgba(56,189,248,0.6);
+            padding: 18px 22px;
+            border-radius: 3px;
+            color: rgba(125,211,252,0.92);
+        }
+        .math-i { font-family: 'Fraunces', serif; font-style: italic; font-weight: 400; color: rgba(125,211,252, 0.95); white-space: nowrap; }
+        .math-i sub { font-size: 0.7em; vertical-align: -0.25em; font-style: normal; }
     </style>
 </head>
-<body class="selection:bg-brand-500/30 selection:text-brand-200 tech-grid min-h-screen">
+<body class="selection:bg-plasma-500/30 selection:text-plasma-300">
 
-    <nav class="fixed top-0 w-full z-50 glass border-b border-slate-800/50">
-        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-            <a href="index.html" class="group flex items-center space-x-2 text-slate-400 hover:text-white transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                </svg>
-                <span class="font-mono text-sm uppercase tracking-widest">Return to Portfolio</span>
+    <!-- Animated backdrop -->
+    <div class="fixed inset-0 -z-50 pointer-events-none overflow-hidden">
+        <div class="absolute inset-0 lab-grid opacity-50"></div>
+        <canvas id="bg-robotics" class="absolute inset-0 w-full h-full"></canvas>
+        <div class="absolute top-0 right-0 w-[700px] h-[700px] bg-plasma-500/8 rounded-full blur-[180px]"></div>
+        <div class="absolute bottom-[-10%] left-[-5%] w-[600px] h-[600px] bg-ember-500/6 rounded-full blur-[160px]"></div>
+    </div>
+
+        <script>
+        // Per-section robotics backdrop: arm, hand, gears, drone, humanoid, coil, orbital, servo, circuit
+        // Hard section transitions, restrained opacity, more motion
+        (function() {
+            const canvas = document.getElementById('bg-robotics');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            let w, h;
+            const DPR = Math.min(window.devicePixelRatio || 1, 2);
+
+            // Colors
+            const COL_LINE = 'rgba(129,140,248,0.95)';
+            const COL_LINE_FAINT = 'rgba(129,140,248,0.55)';
+            const COL_PLASMA = 'rgba(125,211,252,0.85)';
+            const COL_PLASMA_FAINT = 'rgba(125,211,252,0.55)';
+
+            function resize() {
+                w = canvas.clientWidth;
+                h = canvas.clientHeight;
+                canvas.width = w * DPR;
+                canvas.height = h * DPR;
+                ctx.setTransform(1, 0, 0, 1, 0, 0);
+                ctx.scale(DPR, DPR);
+            }
+
+            // Section detection
+            const SECTIONS = ['hero', 'overview', 'methodology', 'roadmap', 'keywords'];
+            // Map section to elements that should be visible
+            const SECTION_ELEMENTS = {
+                'hero': ['coil', 'orbital', 'orbital'],
+                'overview': ['coil', 'orbital', 'coil'],
+                'methodology': ['orbital', 'coil', 'orbital', 'coil'],
+                'roadmap': ['coil', 'orbital', 'gear'],
+                'keywords': ['orbital', 'coil']
+            };
+
+            let currentSection = 'hero';
+            let agents = [];
+            let scrollY = 0;
+            let lastScrollY = 0;
+            let scrollVel = 0;
+
+            // ========== AGENT FACTORY ==========
+            function spawnAgent(type) {
+                return {
+                    type,
+                    x: Math.random() * w,
+                    y: Math.random() * h,
+                    vx: (Math.random() - 0.5) * 0.35,  // faster than before
+                    vy: (Math.random() - 0.5) * 0.25,
+                    rot: Math.random() * Math.PI * 2,
+                    rotSpeed: (Math.random() - 0.5) * 0.0025,
+                    scale: 0.65 + Math.random() * 0.55,
+                    phase: Math.random() * Math.PI * 2,
+                    phaseSpeed: 0.0008 + Math.random() * 0.0006,
+                    breathPhase: Math.random() * Math.PI * 2,
+                    breathSpeed: 0.0003 + Math.random() * 0.0004,
+                    flip: Math.random() < 0.5 ? 1 : -1,
+                    fadeIn: 0,           // 0->1 as section becomes active
+                    targetFade: 0,       // what we're aiming for
+                };
+            }
+
+            // ========== DRAW FUNCTIONS ==========
+
+            // 6-DOF robotic arm
+            function drawArm(a, t) {
+                const phase = a.phase + t * a.phaseSpeed;
+                ctx.save();
+                ctx.translate(a.x, a.y);
+                ctx.rotate(a.rot);
+                ctx.scale(a.scale * a.flip, a.scale);
+                ctx.lineWidth = 1.4;
+                ctx.lineCap = 'round';
+                ctx.lineJoin = 'round';
+
+                const j1 = Math.sin(phase) * 0.55;
+                const j2 = Math.sin(phase * 0.7 + 1.0) * 0.7;
+                const j3 = Math.sin(phase * 0.9 + 2.1) * 0.5;
+                const j4 = Math.sin(phase * 1.3 + 0.5) * 0.35;
+                const L0 = 28, L1 = 70, L2 = 60, L3 = 26, L4 = 18;
+
+                // Base
+                ctx.beginPath();
+                ctx.moveTo(-22, 0); ctx.lineTo(22, 0); ctx.lineTo(18, 8); ctx.lineTo(-18, 8); ctx.closePath();
+                ctx.stroke();
+                ctx.fillRect(-16, 4, 2, 2); ctx.fillRect(14, 4, 2, 2);
+                // Shoulder pillar
+                ctx.beginPath();
+                ctx.moveTo(-8, 0); ctx.lineTo(-8, -L0); ctx.lineTo(8, -L0); ctx.lineTo(8, 0);
+                ctx.stroke();
+
+                ctx.translate(0, -L0);
+                ctx.beginPath(); ctx.arc(0, 0, 5, 0, Math.PI * 2); ctx.stroke();
+                ctx.beginPath(); ctx.arc(0, 0, 1.5, 0, Math.PI * 2); ctx.fill();
+
+                ctx.rotate(-Math.PI / 2 + j1);
+                ctx.beginPath();
+                ctx.moveTo(-4, 0); ctx.lineTo(L1, -3); ctx.lineTo(L1, 3); ctx.lineTo(-4, 0);
+                ctx.moveTo(0, -4); ctx.lineTo(0, 4);
+                ctx.stroke();
+
+                ctx.translate(L1, 0);
+                ctx.beginPath(); ctx.arc(0, 0, 4.5, 0, Math.PI * 2); ctx.stroke();
+                ctx.beginPath(); ctx.arc(0, 0, 1.5, 0, Math.PI * 2); ctx.fill();
+
+                ctx.rotate(j2);
+                ctx.beginPath();
+                ctx.moveTo(0, -2.5); ctx.lineTo(L2, -2); ctx.lineTo(L2, 2); ctx.lineTo(0, 2.5); ctx.closePath();
+                ctx.stroke();
+
+                ctx.translate(L2, 0);
+                ctx.beginPath(); ctx.arc(0, 0, 3.5, 0, Math.PI * 2); ctx.stroke();
+
+                ctx.rotate(j3);
+                ctx.beginPath();
+                ctx.moveTo(0, -2); ctx.lineTo(L3, -2); ctx.lineTo(L3, 2); ctx.lineTo(0, 2);
+                ctx.stroke();
+
+                ctx.translate(L3, 0);
+                ctx.beginPath(); ctx.arc(0, 0, 3, 0, Math.PI * 2); ctx.stroke();
+
+                ctx.rotate(j4);
+                const open = 4 + Math.abs(Math.sin(phase * 1.7)) * 6;
+                ctx.beginPath(); ctx.moveTo(0, -open); ctx.lineTo(L4, -open); ctx.lineTo(L4 + 2, -open - 1.5); ctx.stroke();
+                ctx.beginPath(); ctx.moveTo(0, open); ctx.lineTo(L4, open); ctx.lineTo(L4 + 2, open + 1.5); ctx.stroke();
+                ctx.beginPath(); ctx.moveTo(0, -open - 2); ctx.lineTo(0, open + 2); ctx.stroke();
+
+                ctx.restore();
+            }
+
+            // Articulated hand
+            function drawHand(a, t) {
+                const phase = a.phase + t * a.phaseSpeed;
+                ctx.save();
+                ctx.translate(a.x, a.y);
+                ctx.rotate(a.rot);
+                ctx.scale(a.scale * a.flip, a.scale);
+                ctx.lineWidth = 1.2;
+                ctx.lineCap = 'round';
+                ctx.lineJoin = 'round';
+
+                const palmW = 36, palmH = 42;
+                ctx.beginPath();
+                ctx.moveTo(-palmW / 2 + 4, -palmH / 2);
+                ctx.lineTo(palmW / 2 - 4, -palmH / 2);
+                ctx.quadraticCurveTo(palmW / 2, -palmH / 2, palmW / 2, -palmH / 2 + 4);
+                ctx.lineTo(palmW / 2, palmH / 2 - 4);
+                ctx.quadraticCurveTo(palmW / 2, palmH / 2, palmW / 2 - 4, palmH / 2);
+                ctx.lineTo(-palmW / 2 + 4, palmH / 2);
+                ctx.quadraticCurveTo(-palmW / 2, palmH / 2, -palmW / 2, palmH / 2 - 4);
+                ctx.lineTo(-palmW / 2, -palmH / 2 + 4);
+                ctx.quadraticCurveTo(-palmW / 2, -palmH / 2, -palmW / 2 + 4, -palmH / 2);
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.moveTo(-palmW / 2 + 4, palmH / 2 + 6);
+                ctx.lineTo(palmW / 2 - 4, palmH / 2 + 6);
+                ctx.stroke();
+
+                function drawFinger(baseX, length, curlOffset, isThumb) {
+                    const curl = (Math.sin(phase + curlOffset) + 1) * 0.5;
+                    const a1 = -curl * 0.6, a2 = -curl * 0.85, a3 = -curl * 0.7;
+                    ctx.save();
+                    ctx.translate(baseX, -palmH / 2);
+                    if (isThumb) ctx.rotate(-Math.PI * 0.4);
+                    const seg = length / 3;
+                    ctx.rotate(a1);
+                    ctx.beginPath();
+                    ctx.moveTo(-2, 0); ctx.lineTo(-2, -seg); ctx.lineTo(2, -seg); ctx.lineTo(2, 0);
+                    ctx.stroke();
+                    ctx.translate(0, -seg);
+                    ctx.beginPath(); ctx.arc(0, 0, 2, 0, Math.PI * 2); ctx.stroke();
+                    ctx.rotate(a2);
+                    ctx.beginPath();
+                    ctx.moveTo(-1.7, 0); ctx.lineTo(-1.7, -seg); ctx.lineTo(1.7, -seg); ctx.lineTo(1.7, 0);
+                    ctx.stroke();
+                    ctx.translate(0, -seg);
+                    ctx.beginPath(); ctx.arc(0, 0, 1.6, 0, Math.PI * 2); ctx.stroke();
+                    ctx.rotate(a3);
+                    ctx.beginPath();
+                    ctx.moveTo(-1.4, 0); ctx.lineTo(-1.4, -seg * 0.8);
+                    ctx.quadraticCurveTo(0, -seg * 0.95, 1.4, -seg * 0.8); ctx.lineTo(1.4, 0);
+                    ctx.stroke();
+                    ctx.restore();
+                }
+
+                drawFinger(-13, 30, 0.0, false);
+                drawFinger(-4, 34, 0.5, false);
+                drawFinger(5, 32, 1.0, false);
+                drawFinger(13, 28, 1.5, false);
+                drawFinger(-palmW / 2, 26, 2.0, true);
+
+                ctx.restore();
+            }
+
+            // Two-finger gripper (smaller, simpler than full arm)
+            function drawGripper(a, t) {
+                const phase = a.phase + t * a.phaseSpeed;
+                ctx.save();
+                ctx.translate(a.x, a.y);
+                ctx.rotate(a.rot);
+                ctx.scale(a.scale * a.flip, a.scale);
+                ctx.lineWidth = 1.3;
+                ctx.lineCap = 'round';
+
+                const open = 6 + Math.abs(Math.sin(phase * 1.4)) * 10;
+                // Body
+                ctx.beginPath();
+                ctx.moveTo(-18, -8); ctx.lineTo(0, -8); ctx.lineTo(0, 8); ctx.lineTo(-18, 8);
+                ctx.stroke();
+                // Pivot circle
+                ctx.beginPath(); ctx.arc(-9, 0, 3, 0, Math.PI * 2); ctx.stroke();
+                // Upper finger
+                ctx.beginPath();
+                ctx.moveTo(0, -open); ctx.lineTo(20, -open); ctx.lineTo(22, -open - 2);
+                ctx.moveTo(0, -open + 2); ctx.lineTo(18, -open + 2);
+                ctx.stroke();
+                // Lower finger
+                ctx.beginPath();
+                ctx.moveTo(0, open); ctx.lineTo(20, open); ctx.lineTo(22, open + 2);
+                ctx.moveTo(0, open - 2); ctx.lineTo(18, open - 2);
+                ctx.stroke();
+                // Connecting bar
+                ctx.beginPath();
+                ctx.moveTo(0, -open - 1); ctx.lineTo(0, open + 1);
+                ctx.stroke();
+
+                ctx.restore();
+            }
+
+            // Gear cluster
+            function drawGearTeeth(radius, teeth) {
+                ctx.beginPath();
+                for (let i = 0; i < teeth; i++) {
+                    const ang = (i / teeth) * Math.PI * 2;
+                    const inner = radius * 0.78, outer = radius;
+                    const half = (Math.PI * 2 / teeth) * 0.32;
+                    const x1 = Math.cos(ang - half) * inner, y1 = Math.sin(ang - half) * inner;
+                    const x2 = Math.cos(ang - half * 0.55) * outer, y2 = Math.sin(ang - half * 0.55) * outer;
+                    const x3 = Math.cos(ang + half * 0.55) * outer, y3 = Math.sin(ang + half * 0.55) * outer;
+                    const x4 = Math.cos(ang + half) * inner, y4 = Math.sin(ang + half) * inner;
+                    if (i === 0) ctx.moveTo(x1, y1); else ctx.lineTo(x1, y1);
+                    ctx.lineTo(x2, y2); ctx.lineTo(x3, y3); ctx.lineTo(x4, y4);
+                }
+                ctx.closePath();
+                ctx.stroke();
+                ctx.beginPath(); ctx.arc(0, 0, radius * 0.28, 0, Math.PI * 2); ctx.stroke();
+                for (let i = 0; i < 4; i++) {
+                    const ang = (i / 4) * Math.PI * 2 + Math.PI / 4;
+                    ctx.beginPath();
+                    ctx.moveTo(Math.cos(ang) * radius * 0.28, Math.sin(ang) * radius * 0.28);
+                    ctx.lineTo(Math.cos(ang) * radius * 0.7, Math.sin(ang) * radius * 0.7);
+                    ctx.stroke();
+                }
+            }
+
+            function drawGears(a, t) {
+                ctx.save();
+                ctx.translate(a.x, a.y);
+                ctx.rotate(a.rot);
+                ctx.scale(a.scale, a.scale);
+                ctx.lineWidth = 1.1;
+                const r1 = 26, r2 = 18;
+                const meshDist = r1 + r2 - 3;
+
+                ctx.save();
+                ctx.rotate(t * 0.0015);
+                drawGearTeeth(r1, 12);
+                ctx.restore();
+
+                ctx.save();
+                ctx.translate(meshDist, 0);
+                ctx.rotate(-t * 0.0015 * (12 / 9));
+                drawGearTeeth(r2, 9);
+                ctx.restore();
+
+                ctx.restore();
+            }
+
+            // Quadcopter drone (top view)
+            function drawDrone(a, t) {
+                const phase = a.phase + t * a.phaseSpeed;
+                ctx.save();
+                ctx.translate(a.x, a.y);
+                ctx.rotate(a.rot);
+                ctx.scale(a.scale, a.scale);
+                ctx.lineWidth = 1.3;
+                ctx.lineCap = 'round';
+
+                // Center body
+                ctx.beginPath();
+                ctx.moveTo(-9, -9); ctx.lineTo(9, -9); ctx.lineTo(9, 9); ctx.lineTo(-9, 9); ctx.closePath();
+                ctx.stroke();
+                // Camera dot
+                ctx.beginPath(); ctx.arc(0, 0, 2.5, 0, Math.PI * 2); ctx.stroke();
+
+                // 4 arms diagonally
+                const armLen = 28;
+                for (let i = 0; i < 4; i++) {
+                    const ang = (Math.PI / 4) + i * (Math.PI / 2);
+                    const px = Math.cos(ang) * armLen, py = Math.sin(ang) * armLen;
+                    // Arm
+                    ctx.beginPath();
+                    ctx.moveTo(Math.cos(ang) * 8, Math.sin(ang) * 8);
+                    ctx.lineTo(px, py);
+                    ctx.stroke();
+                    // Motor
+                    ctx.beginPath(); ctx.arc(px, py, 4, 0, Math.PI * 2); ctx.stroke();
+                    // Spinning rotor (suggested by a subtle circle that pulses)
+                    const rotorR = 11 + Math.sin(phase * 5 + i) * 0.5;
+                    ctx.save();
+                    ctx.globalAlpha = ctx.globalAlpha * 0.4;
+                    ctx.beginPath(); ctx.arc(px, py, rotorR, 0, Math.PI * 2); ctx.stroke();
+                    // Blur lines suggesting spin
+                    for (let k = 0; k < 3; k++) {
+                        const bang = phase * 8 + i + k * (Math.PI * 2 / 3);
+                        ctx.beginPath();
+                        ctx.moveTo(px + Math.cos(bang) * 3, py + Math.sin(bang) * 3);
+                        ctx.lineTo(px + Math.cos(bang) * rotorR, py + Math.sin(bang) * rotorR);
+                        ctx.stroke();
+                    }
+                    ctx.restore();
+                }
+
+                ctx.restore();
+            }
+
+            // Humanoid figure (side view, simplified)
+            function drawHumanoid(a, t) {
+                const phase = a.phase + t * a.phaseSpeed;
+                ctx.save();
+                ctx.translate(a.x, a.y);
+                ctx.rotate(a.rot);
+                ctx.scale(a.scale * a.flip, a.scale);
+                ctx.lineWidth = 1.3;
+                ctx.lineCap = 'round';
+                ctx.lineJoin = 'round';
+
+                const armSwing = Math.sin(phase * 1.5) * 0.4;
+                const legSwing = Math.sin(phase * 1.5 + Math.PI) * 0.35;
+
+                // Head
+                ctx.beginPath(); ctx.arc(0, -50, 10, 0, Math.PI * 2); ctx.stroke();
+                // Eye sensor
+                ctx.beginPath(); ctx.arc(3, -50, 1.5, 0, Math.PI * 2); ctx.fill();
+
+                // Neck
+                ctx.beginPath();
+                ctx.moveTo(0, -40); ctx.lineTo(0, -36);
+                ctx.stroke();
+
+                // Torso (rectangle)
+                ctx.beginPath();
+                ctx.moveTo(-12, -36); ctx.lineTo(12, -36);
+                ctx.lineTo(10, -8); ctx.lineTo(-10, -8); ctx.closePath();
+                ctx.stroke();
+                // Chest indicator
+                ctx.beginPath();
+                ctx.moveTo(-6, -28); ctx.lineTo(6, -28);
+                ctx.stroke();
+
+                // Arms: shoulder pivot animated
+                ctx.save();
+                ctx.translate(-12, -34);
+                ctx.rotate(armSwing);
+                ctx.beginPath();
+                ctx.moveTo(-3, 0); ctx.lineTo(-3, 14); ctx.lineTo(3, 14); ctx.lineTo(3, 0);
+                ctx.stroke();
+                ctx.translate(0, 14);
+                ctx.beginPath(); ctx.arc(0, 0, 2.5, 0, Math.PI * 2); ctx.stroke();
+                ctx.rotate(-armSwing * 0.5);
+                ctx.beginPath();
+                ctx.moveTo(-2.5, 0); ctx.lineTo(-2.5, 14); ctx.lineTo(2.5, 14); ctx.lineTo(2.5, 0);
+                ctx.stroke();
+                ctx.restore();
+
+                ctx.save();
+                ctx.translate(12, -34);
+                ctx.rotate(-armSwing);
+                ctx.beginPath();
+                ctx.moveTo(-3, 0); ctx.lineTo(-3, 14); ctx.lineTo(3, 14); ctx.lineTo(3, 0);
+                ctx.stroke();
+                ctx.translate(0, 14);
+                ctx.beginPath(); ctx.arc(0, 0, 2.5, 0, Math.PI * 2); ctx.stroke();
+                ctx.rotate(armSwing * 0.5);
+                ctx.beginPath();
+                ctx.moveTo(-2.5, 0); ctx.lineTo(-2.5, 14); ctx.lineTo(2.5, 14); ctx.lineTo(2.5, 0);
+                ctx.stroke();
+                ctx.restore();
+
+                // Pelvis joint
+                ctx.beginPath();
+                ctx.moveTo(-10, -8); ctx.lineTo(10, -8);
+                ctx.stroke();
+
+                // Legs
+                ctx.save();
+                ctx.translate(-5, -8);
+                ctx.rotate(legSwing);
+                ctx.beginPath();
+                ctx.moveTo(-3, 0); ctx.lineTo(-3, 18); ctx.lineTo(3, 18); ctx.lineTo(3, 0);
+                ctx.stroke();
+                ctx.translate(0, 18);
+                ctx.beginPath(); ctx.arc(0, 0, 2.5, 0, Math.PI * 2); ctx.stroke();
+                ctx.rotate(-legSwing * 0.7);
+                ctx.beginPath();
+                ctx.moveTo(-2.5, 0); ctx.lineTo(-2.5, 16); ctx.lineTo(2.5, 16); ctx.lineTo(2.5, 0);
+                ctx.stroke();
+                // Foot
+                ctx.translate(0, 16);
+                ctx.beginPath();
+                ctx.moveTo(-3, 0); ctx.lineTo(7, 0); ctx.lineTo(7, 2); ctx.lineTo(-3, 2); ctx.closePath();
+                ctx.stroke();
+                ctx.restore();
+
+                ctx.save();
+                ctx.translate(5, -8);
+                ctx.rotate(-legSwing);
+                ctx.beginPath();
+                ctx.moveTo(-3, 0); ctx.lineTo(-3, 18); ctx.lineTo(3, 18); ctx.lineTo(3, 0);
+                ctx.stroke();
+                ctx.translate(0, 18);
+                ctx.beginPath(); ctx.arc(0, 0, 2.5, 0, Math.PI * 2); ctx.stroke();
+                ctx.rotate(legSwing * 0.7);
+                ctx.beginPath();
+                ctx.moveTo(-2.5, 0); ctx.lineTo(-2.5, 16); ctx.lineTo(2.5, 16); ctx.lineTo(2.5, 0);
+                ctx.stroke();
+                ctx.translate(0, 16);
+                ctx.beginPath();
+                ctx.moveTo(-3, 0); ctx.lineTo(7, 0); ctx.lineTo(7, 2); ctx.lineTo(-3, 2); ctx.closePath();
+                ctx.stroke();
+                ctx.restore();
+
+                ctx.restore();
+            }
+
+            // Magnetic coil (stellarator-inspired twisted toroidal field)
+            function drawCoil(a, t) {
+                const phase = a.phase + t * a.phaseSpeed;
+                ctx.save();
+                ctx.translate(a.x, a.y);
+                ctx.rotate(a.rot);
+                ctx.scale(a.scale, a.scale);
+                ctx.lineWidth = 1.1;
+
+                const R = 38;
+                const r = 14;
+                const turns = 16;
+
+                // Outer toroidal frame (ellipse)
+                ctx.beginPath();
+                ctx.ellipse(0, 0, R, r, 0, 0, Math.PI * 2);
+                ctx.stroke();
+
+                // Helical coil winding
+                ctx.beginPath();
+                for (let i = 0; i <= 200; i++) {
+                    const tt = i / 200;
+                    const ang = tt * Math.PI * 2;
+                    const tilt = Math.sin(ang * turns + phase * 2) * (r * 0.85);
+                    const x = Math.cos(ang) * R;
+                    const y = Math.sin(ang) * r + tilt * Math.cos(ang) * 0.2;
+                    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+                }
+                ctx.stroke();
+
+                // Cross-section markers
+                for (let i = 0; i < 6; i++) {
+                    const ang = (i / 6) * Math.PI * 2;
+                    const cx = Math.cos(ang) * R;
+                    const cy = Math.sin(ang) * r;
+                    ctx.beginPath(); ctx.arc(cx, cy, 1.8, 0, Math.PI * 2); ctx.fill();
+                }
+
+                ctx.restore();
+            }
+
+            // Atomic orbital (electron orbit-style physics motif)
+            function drawOrbital(a, t) {
+                const phase = a.phase + t * a.phaseSpeed;
+                ctx.save();
+                ctx.translate(a.x, a.y);
+                ctx.rotate(a.rot + t * 0.0004);
+                ctx.scale(a.scale, a.scale);
+                ctx.lineWidth = 1;
+
+                // Nucleus
+                ctx.beginPath(); ctx.arc(0, 0, 3, 0, Math.PI * 2); ctx.fill();
+
+                // 3 electron orbits at different angles
+                const radii = [22, 30, 38];
+                for (let i = 0; i < 3; i++) {
+                    ctx.save();
+                    ctx.rotate((i / 3) * Math.PI * 2);
+                    ctx.beginPath();
+                    ctx.ellipse(0, 0, radii[i], radii[i] * 0.4, 0, 0, Math.PI * 2);
+                    ctx.stroke();
+                    // Electron
+                    const ePhase = phase * (1 + i * 0.3) + i * 1.5;
+                    const ex = Math.cos(ePhase) * radii[i];
+                    const ey = Math.sin(ePhase) * radii[i] * 0.4;
+                    ctx.beginPath(); ctx.arc(ex, ey, 2, 0, Math.PI * 2); ctx.fill();
+                    ctx.restore();
+                }
+
+                ctx.restore();
+            }
+
+            // Servo motor (compact rotational actuator)
+            function drawServo(a, t) {
+                const phase = a.phase + t * a.phaseSpeed;
+                ctx.save();
+                ctx.translate(a.x, a.y);
+                ctx.rotate(a.rot);
+                ctx.scale(a.scale, a.scale);
+                ctx.lineWidth = 1.2;
+
+                // Body (rectangle)
+                ctx.beginPath();
+                ctx.moveTo(-16, -10); ctx.lineTo(16, -10);
+                ctx.lineTo(16, 10); ctx.lineTo(-16, 10); ctx.closePath();
+                ctx.stroke();
+                // Mounting tabs
+                ctx.beginPath();
+                ctx.moveTo(-22, -8); ctx.lineTo(-16, -8);
+                ctx.moveTo(-22, 8); ctx.lineTo(-16, 8);
+                ctx.moveTo(22, -8); ctx.lineTo(16, -8);
+                ctx.moveTo(22, 8); ctx.lineTo(16, 8);
+                ctx.stroke();
+                // Mounting holes
+                ctx.beginPath(); ctx.arc(-20, -8, 1.5, 0, Math.PI * 2); ctx.stroke();
+                ctx.beginPath(); ctx.arc(-20, 8, 1.5, 0, Math.PI * 2); ctx.stroke();
+                ctx.beginPath(); ctx.arc(20, -8, 1.5, 0, Math.PI * 2); ctx.stroke();
+                ctx.beginPath(); ctx.arc(20, 8, 1.5, 0, Math.PI * 2); ctx.stroke();
+                // Output shaft (rotating)
+                ctx.save();
+                ctx.translate(8, 0);
+                ctx.rotate(phase * 1.8);
+                ctx.beginPath(); ctx.arc(0, 0, 5, 0, Math.PI * 2); ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(-4, 0); ctx.lineTo(4, 0);
+                ctx.moveTo(0, -4); ctx.lineTo(0, 4);
+                ctx.stroke();
+                ctx.restore();
+                // Wire pigtail
+                ctx.beginPath();
+                ctx.moveTo(-16, 0);
+                ctx.bezierCurveTo(-22, 2, -24, -2, -28, 1);
+                ctx.stroke();
+
+                ctx.restore();
+            }
+
+            // Circuit trace (PCB-style)
+            function drawCircuit(a, t) {
+                const phase = a.phase + t * a.phaseSpeed;
+                ctx.save();
+                ctx.translate(a.x, a.y);
+                ctx.rotate(a.rot);
+                ctx.scale(a.scale, a.scale);
+                ctx.lineWidth = 1.1;
+
+                // Trace path with right angles (PCB-style)
+                ctx.beginPath();
+                ctx.moveTo(-40, -10);
+                ctx.lineTo(-20, -10);
+                ctx.lineTo(-20, 10);
+                ctx.lineTo(0, 10);
+                ctx.lineTo(0, -15);
+                ctx.lineTo(20, -15);
+                ctx.lineTo(20, 5);
+                ctx.lineTo(40, 5);
+                ctx.stroke();
+
+                // Pads at junctions
+                const pads = [[-40, -10], [-20, -10], [-20, 10], [0, 10], [0, -15], [20, -15], [20, 5], [40, 5]];
+                for (const [px, py] of pads) {
+                    ctx.beginPath(); ctx.arc(px, py, 2.5, 0, Math.PI * 2); ctx.stroke();
+                }
+                // Animated signal pulse traveling along the trace
+                const pulseT = (phase % (Math.PI * 2)) / (Math.PI * 2);
+                if (pulseT < 1) {
+                    const idx = Math.floor(pulseT * (pads.length - 1));
+                    const sub = pulseT * (pads.length - 1) - idx;
+                    if (idx < pads.length - 1) {
+                        const px = pads[idx][0] + (pads[idx + 1][0] - pads[idx][0]) * sub;
+                        const py = pads[idx][1] + (pads[idx + 1][1] - pads[idx][1]) * sub;
+                        ctx.save();
+                        ctx.fillStyle = COL_PLASMA;
+                        ctx.beginPath(); ctx.arc(px, py, 3, 0, Math.PI * 2); ctx.fill();
+                        ctx.restore();
+                    }
+                }
+
+                ctx.restore();
+            }
+
+            // ========== SECTION DETECTION ==========
+            function detectSection() {
+                const viewportMid = window.scrollY + window.innerHeight / 2;
+                const els = document.querySelectorAll('[data-bg-section]');
+                let closest = SECTIONS[0];
+                let closestDist = Infinity;
+                els.forEach(el => {
+                    const tag = el.getAttribute('data-bg-section');
+                    if (!SECTIONS.includes(tag)) return;
+                    const rect = el.getBoundingClientRect();
+                    const elMid = window.scrollY + rect.top + rect.height / 2;
+                    const dist = Math.abs(viewportMid - elMid);
+                    if (dist < closestDist) {
+                        closestDist = dist;
+                        closest = tag;
+                    }
+                });
+                return closest;
+            }
+
+            // Build agents for a given section
+            function rebuildAgents(section) {
+                const types = SECTION_ELEMENTS[section] || ['arm'];
+                agents = types.map(type => spawnAgent(type));
+                // Set initial fade target
+                for (const a of agents) {
+                    a.fadeIn = 0;
+                    a.targetFade = 1;
+                }
+            }
+
+            // ========== MAIN LOOP ==========
+            function step(t) {
+                // Detect section change
+                const newSection = detectSection();
+                if (newSection !== currentSection) {
+                    currentSection = newSection;
+                    rebuildAgents(currentSection);
+                }
+
+                // Track scroll velocity for parallax
+                const sy = window.scrollY;
+                scrollVel = (sy - lastScrollY) * 0.3;
+                lastScrollY = sy;
+
+                ctx.clearRect(0, 0, w, h);
+
+                for (const a of agents) {
+                    // Animate fade in
+                    a.fadeIn += (a.targetFade - a.fadeIn) * 0.04;
+
+                    // Position update (drift + scroll parallax)
+                    a.x += a.vx;
+                    a.y += a.vy + scrollVel * (a.scale * 0.5);
+                    a.rot += a.rotSpeed;
+
+                    // Wrap
+                    const margin = 200;
+                    if (a.x < -margin) a.x = w + margin;
+                    if (a.x > w + margin) a.x = -margin;
+                    if (a.y < -margin) a.y = h + margin;
+                    if (a.y > h + margin) a.y = -margin;
+
+                    // Breathing pulse for opacity
+                    const breath = 0.7 + Math.sin(a.breathPhase + t * a.breathSpeed) * 0.3;
+
+                    // Final opacity: section-fade * breath * base
+                    const baseOpacity = 0.20;
+                    const opacity = a.fadeIn * breath * baseOpacity;
+
+                    // Color choice based on type
+                    let strokeCol, fillCol;
+                    if (a.type === 'orbital' || a.type === 'coil') {
+                        strokeCol = `rgba(125,211,252,${opacity * 4})`;
+                        fillCol = `rgba(125,211,252,${opacity * 3})`;
+                    } else {
+                        strokeCol = `rgba(129,140,248,${opacity * 4})`;
+                        fillCol = `rgba(129,140,248,${opacity * 3})`;
+                    }
+                    ctx.strokeStyle = strokeCol;
+                    ctx.fillStyle = fillCol;
+                    ctx.globalAlpha = 1;
+
+                    // Dispatch to drawer
+                    switch (a.type) {
+                        case 'arm': drawArm(a, t); break;
+                        case 'hand': drawHand(a, t); break;
+                        case 'gripper': drawGripper(a, t); break;
+                        case 'gear': drawGears(a, t); break;
+                        case 'drone': drawDrone(a, t); break;
+                        case 'humanoid': drawHumanoid(a, t); break;
+                        case 'coil': drawCoil(a, t); break;
+                        case 'orbital': drawOrbital(a, t); break;
+                        case 'servo': drawServo(a, t); break;
+                        case 'circuit': drawCircuit(a, t); break;
+                    }
+                }
+
+                requestAnimationFrame(step);
+            }
+
+            function start() {
+                resize();
+                rebuildAgents(detectSection());
+                step(0);
+                window.addEventListener('resize', () => {
+                    resize();
+                    rebuildAgents(currentSection);
+                });
+            }
+
+            start();
+        })();
+    </script>
+
+
+    <!-- Nav -->
+    <nav class="fixed top-0 w-full z-50 backdrop-blur-md bg-ink-deep/70 border-b border-white/5">
+        <div class="max-w-[1240px] mx-auto px-6 h-16 flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-2 text-zinc-400 hover:text-plasma-300 transition-colors group">
+                <svg class="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                <span class="text-[13px]">return to portfolio</span>
             </a>
-            
-            <div class="hidden sm:flex items-center space-x-2 px-3 py-1 rounded-full bg-brand-500/10 border border-brand-500/20">
-                <span class="relative flex h-2 w-2">
-                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-400 opacity-75"></span>
-                  <span class="relative inline-flex rounded-full h-2 w-2 bg-brand-500"></span>
-                </span>
-                <span class="text-brand-400 text-xs font-mono font-bold uppercase">Active Development</span>
+            <div class="flex items-center gap-3">
+                <a href="./SwanYiHtet_TechnicalResume.pdf" download class="hidden md:inline-flex items-center gap-1.5 text-[12px] text-zinc-400 hover:text-plasma-300 transition-colors mr-4">
+                    <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                    Resume
+                </a>
+                <span class="hidden sm:inline-flex items-center gap-1.5 mono-tag text-plasma-300"><span class="blip"></span> ACTIVE_RESEARCH</span>
+                <span class="mono-tag text-zinc-600 border border-white/5 px-2.5 py-1 rounded-sm">PROJECT_ID: PLM_01</span>
             </div>
         </div>
     </nav>
 
-    <header class="pt-32 pb-16 px-6">
-        <div class="max-w-4xl mx-auto">
-            <p class="text-brand-400 font-mono text-sm uppercase tracking-widest mb-4">Computational Plasma Physics • Columbia University</p>
-            <h1 class="font-display text-4xl md:text-6xl font-bold text-white mb-6 leading-tight">
-                Reduced Simulation Models for <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-300 to-brand-500">Nonlinear Wave-Particle Interactions</span>
-            </h1>
-            <p class="text-xl text-slate-400 font-light leading-relaxed">
-                Developing a <strong>&delta;f (delta-f) Particle-in-Cell (PIC)</strong> framework to simulate the Vlasov-Poisson bump-on-tail instability and analyze phase-space transport in complex 3D magnetic fields.
-            </p>
-        </div>
-    </header>
-
-    <main class="max-w-7xl mx-auto px-6 pb-24 grid lg:grid-cols-12 gap-12">
-        
-        <div class="lg:col-span-8 space-y-12">
-            
-            <section class="glass p-8 rounded-3xl">
-                <h2 class="font-display text-2xl font-bold text-white mb-6 flex items-center">
-                    <span class="text-brand-500 mr-3">01.</span> Research Overview
-                </h2>
-                <div class="space-y-4 text-slate-300 leading-relaxed">
-                    <p>
-                        Resonant wave-particle interactions (WPI) are a fundamental driver of transport in both magnetic confinement fusion devices (like tokamaks and stellarators) and astrophysical plasmas (such as Earth's radiation belts). Standard models often assume idealized symmetries that break down in realistic 3D magnetic configurations.
-                    </p>
-                    <p>
-                        My research focuses on bridging this gap by developing a <strong>reduced-order kinetic simulation model</strong>. By isolating the resonant population evolution from the background thermal evolution, we can efficiently model complex nonlinear phenomena like <strong>mode chirping, bursting, and phase-space clumping</strong> without the computational cost of fully resolving the background timescales.
-                    </p>
-                </div>
-            </section>
-
-            <section class="glass p-8 rounded-3xl border-l-4 border-l-brand-500">
-                <h2 class="font-display text-2xl font-bold text-white mb-6 flex items-center">
-                    <span class="text-brand-500 mr-3">02.</span> Technical Methodology
-                </h2>
-                <div class="space-y-6">
-                    <div>
-                        <h3 class="text-white font-semibold mb-2 font-mono text-lg">The Vlasov-Poisson Model</h3>
-                        <p class="text-slate-400 text-sm leading-relaxed">
-                            We utilize the Vlasov-Poisson system to model the "bump-on-tail" instability as a paradigm for general WPI. The electric field amplitude \( \hat{E}(t) \) and phase \( \phi(t) \) are evolved via coupling equations derived from Ampere's law, driven by the current density \( j_b \) of energetic beam electrons.
-                        </p>
+    <!-- Hero -->
+    <section data-bg-section="hero" class="pt-32 pb-16 px-6">
+        <div class="max-w-[1240px] mx-auto">
+            <div class="grid lg:grid-cols-12 gap-10 items-start">
+                <div class="lg:col-span-7">
+                    <div class="mono-tag text-plasma-300 mb-6 flex items-center gap-3">
+                        <span class="h-px w-7 bg-plasma-400/60"></span>
+                        Computational Plasma Physics · Columbia
                     </div>
 
-                    <div class="grid md:grid-cols-2 gap-6">
-                        <div class="bg-slate-900/50 p-5 rounded-xl border border-slate-700/50">
-                            <h4 class="text-brand-400 font-mono text-xs uppercase tracking-wider mb-2">Algorithm</h4>
-                            <p class="text-slate-300 text-sm">
-                                <strong>&delta;f Method:</strong> To reduce Monte-Carlo sampling noise, we split the distribution function into a static equilibrium \( f_0 \) and a perturbed part \( \delta f \). Only the deviation is evolved, significantly improving signal-to-noise ratio.
-                            </p>
+                    <h1 class="display-serif text-[44px] md:text-[64px] leading-[1.0] tracking-[-0.02em] text-white font-light mb-6">
+                        Reduced models for <span class="font-semibold">nonlinear wave-particle interactions</span><span class="text-plasma-400">.</span>
+                    </h1>
+
+                    <p class="text-[18px] text-zinc-300 leading-relaxed mb-4 font-light max-w-2xl">A delta-f Particle-in-Cell framework for the Vlasov-Poisson bump-on-tail instability. The goal: model resonant transport in stellarator-class 3D magnetic geometries.</p>
+                    <p class="text-zinc-400 leading-relaxed mb-8 max-w-2xl">Idealized symmetries break down in real fusion devices. We're building a kinetic simulation that handles the full nonlinear physics without resolving every background timescale.</p>
+
+                    <div class="flex flex-wrap gap-3">
+                        <a href="https://github.com/shtet100/Plasma-Bump-On-Tail" target="_blank" class="inline-flex items-center gap-2 px-5 py-3 bg-plasma-500 hover:bg-plasma-400 text-white font-semibold text-[13px] rounded-sm transition-all shadow-[0_0_24px_rgba(14,165,233,0.4)]">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                            Source on GitHub
+                        </a>
+                        <a href="#methodology" class="inline-flex items-center gap-2 px-5 py-3 bg-transparent border border-plasma-400/40 hover:border-plasma-400/80 text-plasma-300 text-[13px] rounded-sm transition-all">View Methodology</a>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-5">
+                    <div class="instrument-panel rounded-sm p-6 sticky top-24">
+                        <div class="flex items-start justify-between mb-6 pb-4 border-b border-white/5">
+                            <div>
+                                <div class="mono-tag text-plasma-300 mb-1">Project Classification</div>
+                                <div class="text-white display-serif text-lg">Active Research</div>
+                            </div>
+                            <span class="mono-tag text-plasma-300 inline-flex items-center gap-1.5"><span class="blip"></span> LIVE</span>
                         </div>
-                        <div class="bg-slate-900/50 p-5 rounded-xl border border-slate-700/50">
-                            <h4 class="text-brand-400 font-mono text-xs uppercase tracking-wider mb-2">Numerical Stability</h4>
-                            <p class="text-slate-300 text-sm">
-                                <strong>Pseudo-Cartesian Coordinates:</strong> To avoid singularities when the mode amplitude vanishes (\( \hat{u} \to 0 \)), we integrate in a transformed coordinate system:
-                                <br>
-                                <span class="font-mono text-xs text-brand-300 block mt-2">
-                                    u_c = u * cos(&phi;)<br>
-                                    u_s = u * sin(&phi;)
-                                </span>
-                            </p>
+
+                        <div class="space-y-3 text-[13px]">
+                            <div class="flex justify-between"><span class="mono-tag text-zinc-500">Field</span><span class="text-zinc-300 font-mono text-[12px]">Plasma Kinetics</span></div>
+                            <div class="flex justify-between"><span class="mono-tag text-zinc-500">PI</span><span class="text-zinc-300 font-mono text-[12px]">Dr. Elizabeth Paul</span></div>
+                            <div class="flex justify-between"><span class="mono-tag text-zinc-500">Lab</span><span class="text-zinc-300 font-mono text-[12px]">Columbia FERC</span></div>
+                            <div class="flex justify-between"><span class="mono-tag text-zinc-500">Stack</span><span class="text-zinc-300 font-mono text-[12px]">Python · NumPy</span></div>
+                            <div class="flex justify-between"><span class="mono-tag text-zinc-500">Compute</span><span class="text-zinc-300 font-mono text-[12px]">NERSC Perlmutter</span></div>
+                            <div class="flex justify-between"><span class="mono-tag text-zinc-500">Started</span><span class="text-zinc-300 font-mono text-[12px]">2025</span></div>
                         </div>
-                    </div>
-                </div>
-            </section>
 
-            <section>
-                <h2 class="font-display text-2xl font-bold text-white mb-6 flex items-center">
-                    <span class="text-brand-500 mr-3">03.</span> Current Status & Roadmap
-                </h2>
-                <div class="relative pl-8 border-l border-slate-800 space-y-8">
-                    <div class="relative">
-                        <div class="absolute -left-[37px] top-1 w-4 h-4 rounded-full bg-brand-500 shadow-[0_0_10px_rgba(14,165,233,0.5)]"></div>
-                        <h3 class="text-white font-bold">Phase 1: Code Implementation (WISP)</h3>
-                        <p class="text-slate-400 text-sm mt-1">Implementing the Wave Interaction Simulation Platform (WISP). Developing the Langmuir mode stepping equations and particle trajectory integration.</p>
-                    </div>
-                    <div class="relative">
-                        <div class="absolute -left-[37px] top-1 w-4 h-4 rounded-full bg-brand-900 border border-brand-500"></div>
-                        <h3 class="text-white font-bold">Phase 2: Benchmarking</h3>
-                        <p class="text-slate-400 text-sm mt-1">Validating the code against analytic predictions for linear growth rates and nonlinear saturation amplitudes (e.g., \( \omega_b \approx 3.2\gamma_L \)).</p>
-                    </div>
-                    <div class="relative">
-                        <div class="absolute -left-[37px] top-1 w-4 h-4 rounded-full bg-slate-800 border border-slate-600"></div>
-                        <h3 class="text-slate-400 font-bold">Phase 3: 3D Field Integration</h3>
-                        <p class="text-slate-500 text-sm mt-1">Extending the model to include non-symmetric background magnetic fields to study drift orbit bifurcations.</p>
-                    </div>
-                </div>
-            </section>
-
-        </div>
-
-        <div class="lg:col-span-4 space-y-6">
-            
-            <div class="glass p-6 rounded-3xl sticky top-24">
-                <h3 class="text-white font-bold text-lg mb-4">Repository</h3>
-                <p class="text-slate-400 text-sm mb-6">
-                    This is an active research project. The codebase is updated regularly with new benchmarks and optimization routines.
-                </p>
-                
-                <a href="https://github.com/shtet100/Plasma-Bump-On-Tail" target="_blank" class="flex items-center justify-center space-x-3 w-full py-4 bg-brand-600 hover:bg-brand-500 text-white rounded-xl font-semibold transition-all shadow-lg shadow-brand-500/20 group">
-                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-                    <span>View Source Code</span>
-                </a>
-
-                <div class="mt-8 pt-6 border-t border-slate-700/50 space-y-4">
-                    <div>
-                        <span class="text-xs font-mono text-brand-400 uppercase tracking-wider">Principle Investigator</span>
-                        <p class="text-white font-medium">Dr. Elizabeth Paul</p>
-                    </div>
-                    <div>
-                        <span class="text-xs font-mono text-brand-400 uppercase tracking-wider">Collaborators</span>
-                        <p class="text-white font-medium">Kamil Ahmed Syed</p>
-                    </div>
-                    <div>
-                        <span class="text-xs font-mono text-brand-400 uppercase tracking-wider">Lab</span>
-                        <p class="text-white font-medium">Columbia Fusion Energy Research Center</p>
-                    </div>
-                    <div>
-                        <span class="text-xs font-mono text-brand-400 uppercase tracking-wider">Keywords</span>
-                        <div class="flex flex-wrap gap-2 mt-2">
-                            <span class="px-2 py-1 bg-slate-800 rounded text-xs text-slate-300">Vlasov-Poisson</span>
-                            <span class="px-2 py-1 bg-slate-800 rounded text-xs text-slate-300">Nonlinear Dynamics</span>
-                            <span class="px-2 py-1 bg-slate-800 rounded text-xs text-slate-300">Symplectic Integration</span>
+                        <div class="mt-6 pt-4 border-t border-white/5">
+                            <div class="mono-tag text-plasma-300 mb-2">Collaborator</div>
+                            <div class="text-zinc-200 text-[13px] font-medium">Kamil Ahmed Syed</div>
+                            <div class="text-zinc-500 text-[11px] mono-tag">graduate researcher</div>
                         </div>
                     </div>
                 </div>
             </div>
 
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-12">
+                <div class="border border-white/5 p-4 rounded-sm">
+                    <div class="display-serif text-2xl text-white font-medium">δf</div>
+                    <div class="mono-tag text-zinc-500 mt-1">PIC METHOD</div>
+                </div>
+                <div class="border border-white/5 p-4 rounded-sm">
+                    <div class="display-serif text-2xl text-white font-medium">3D</div>
+                    <div class="mono-tag text-zinc-500 mt-1">FIELD GEOMETRY</div>
+                </div>
+                <div class="border border-white/5 p-4 rounded-sm">
+                    <div class="display-serif text-2xl text-white font-medium">~3.2γ<sub class="text-sm">L</sub></div>
+                    <div class="mono-tag text-zinc-500 mt-1">SATURATION TARGET</div>
+                </div>
+                <div class="border border-white/5 p-4 rounded-sm">
+                    <div class="display-serif text-2xl text-white font-medium">4<sup class="text-sm">th</sup></div>
+                    <div class="mono-tag text-zinc-500 mt-1">YOSHIDA ORDER</div>
+                </div>
+            </div>
         </div>
-    </main>
+    </section>
 
-    <footer class="border-t border-slate-800/50 py-12 text-center">
-        <p class="text-slate-500 text-sm font-mono">&copy; 2026 Swan Yi Htet. Research in Progress.</p>
+    <!-- Overview -->
+    <section data-bg-section="overview" class="py-16 px-6 border-t border-white/5">
+        <div class="max-w-[1240px] mx-auto">
+            <div class="grid lg:grid-cols-12 gap-10">
+                <div class="lg:col-span-3">
+                    <span class="section-num">§ 01</span>
+                    <h2 class="display-serif text-2xl text-white font-medium mt-2 heading-mark">Overview</h2>
+                </div>
+                <div class="lg:col-span-9 max-w-2xl">
+                    <p class="text-[18px] text-zinc-200 leading-[1.7] mb-6 font-light">Resonant wave-particle interactions drive transport in two very different settings: magnetic confinement fusion devices like tokamaks and stellarators, and astrophysical plasmas like Earth's radiation belts. The same equations describe both.</p>
+                    <p class="text-zinc-400 leading-relaxed mb-6">The standard simplification in WPI theory is to assume idealized symmetries, but real 3D magnetic configurations break those symmetries in ways that matter. The drift orbits bifurcate. Mode chirping, bursting, and phase-space clumping become important. None of this can be captured in the symmetric approximation.</p>
+                    <p class="pull-quote text-[20px] text-zinc-300 mt-10 leading-snug border-l-2 border-plasma-400/50 pl-6">I want to model the nonlinear physics that actually shapes confinement, without resolving every background timescale. That's what reduced-order kinetic simulation makes possible.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Methodology -->
+    <section id="methodology" data-bg-section="methodology" class="py-16 px-6 border-t border-white/5">
+        <div class="max-w-[1240px] mx-auto">
+            <div class="grid lg:grid-cols-12 gap-10 mb-10">
+                <div class="lg:col-span-3">
+                    <span class="section-num">§ 02</span>
+                    <h2 class="display-serif text-2xl text-white font-medium mt-2 heading-mark">Methodology</h2>
+                </div>
+                <div class="lg:col-span-9 max-w-2xl">
+                    <p class="text-zinc-400 leading-relaxed">We use the Vlasov-Poisson system as a paradigm for general wave-particle interaction. The bump-on-tail instability gives us the cleanest test bed: well-understood linear theory, rich nonlinear behavior, exact analytic benchmarks for saturation amplitude and frequency.</p>
+                </div>
+            </div>
+
+            <div class="instrument-panel rounded-sm p-7 mb-5">
+                <div class="flex items-center gap-3 mb-4 pb-3 border-b border-white/5">
+                    <span class="w-2 h-2 rounded-full bg-plasma-400"></span>
+                    <span class="mono-tag text-plasma-300">Vlasov-Poisson Model</span>
+                </div>
+                <p class="text-zinc-300 leading-relaxed mb-4">The electric field amplitude <em class="math-i">Ê(t)</em> and phase <em class="math-i">φ(t)</em> are evolved through equations derived from Ampere's law, driven by the current density <em class="math-i">j<sub>b</sub></em> of energetic beam electrons. The distribution function evolves on the kinetic timescale.</p>
+                <p class="text-zinc-400 leading-relaxed text-[14px]">Linear theory predicts a growth rate <em class="math-i">γ<sub>L</sub></em>. The nonlinear saturation amplitude is set by particle trapping in the wave field, with bounce frequency <em class="math-i">ω<sub>b</sub></em> approximately <em class="math-i">3.2γ<sub>L</sub></em> at saturation. This is our primary code validation target.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-5">
+                <div class="instrument-panel rounded-sm p-6">
+                    <div class="mono-tag text-plasma-300 mb-3">δf Decomposition</div>
+                    <p class="text-zinc-300 text-[14px] leading-relaxed mb-3">Split the distribution function: <em class="math-i">f = f<sub>0</sub> + δf</em>. The equilibrium <em class="math-i">f<sub>0</sub></em> stays static; only the perturbed part evolves. This dramatically reduces Monte-Carlo sampling noise.</p>
+                    <p class="text-zinc-500 text-[12px] leading-relaxed">Standard PIC samples the full distribution, so the signal we care about is buried in shot noise. With δf, we directly track only the deviation that contains the physics.</p>
+                </div>
+
+                <div class="instrument-panel rounded-sm p-6">
+                    <div class="mono-tag text-plasma-300 mb-3">Pseudo-Cartesian Coords</div>
+                    <p class="text-zinc-300 text-[14px] leading-relaxed mb-3">When the mode amplitude <em class="math-i">û → 0</em>, the polar coordinate <em class="math-i">φ</em> becomes singular. We integrate in pseudo-Cartesian coordinates instead:</p>
+                    <div class="equation-block text-center text-[14px] mt-3">
+                        u<sub>c</sub> = u · cos(φ)<br>
+                        u<sub>s</sub> = u · sin(φ)
+                    </div>
+                    <p class="text-zinc-500 text-[12px] leading-relaxed mt-3">Smooth derivatives all the way to the origin. No special-case handling near small amplitudes.</p>
+                </div>
+            </div>
+
+            <div class="instrument-panel rounded-sm p-7 mt-5">
+                <div class="flex items-center gap-3 mb-4 pb-3 border-b border-white/5">
+                    <span class="w-2 h-2 rounded-full bg-plasma-400"></span>
+                    <span class="mono-tag text-plasma-300">Operator Splitting Integrators</span>
+                </div>
+                <p class="text-zinc-300 leading-relaxed mb-4">The Hamiltonian splits naturally into linear (free streaming + field oscillation) and nonlinear (wave-particle coupling) parts. We tested three symplectic integrators of increasing order:</p>
+                <div class="grid grid-cols-3 gap-3 mt-4">
+                    <div class="text-center bg-ink-deep/40 border border-white/5 p-4 rounded-sm">
+                        <div class="display-serif text-2xl text-white font-medium">1<sup class="text-sm">st</sup></div>
+                        <div class="mono-tag text-plasma-300 text-[10px] mt-1">TROTTER</div>
+                        <div class="text-zinc-500 text-[10px] font-mono mt-2">first order</div>
+                    </div>
+                    <div class="text-center bg-ink-deep/40 border border-white/5 p-4 rounded-sm">
+                        <div class="display-serif text-2xl text-white font-medium">2<sup class="text-sm">nd</sup></div>
+                        <div class="mono-tag text-plasma-300 text-[10px] mt-1">STRANG</div>
+                        <div class="text-zinc-500 text-[10px] font-mono mt-2">second order</div>
+                    </div>
+                    <div class="text-center bg-ink-deep/40 border border-plasma-500/40 p-4 rounded-sm">
+                        <div class="display-serif text-2xl text-white font-medium">4<sup class="text-sm">th</sup></div>
+                        <div class="mono-tag text-plasma-300 text-[10px] mt-1">YOSHIDA</div>
+                        <div class="text-plasma-300 text-[10px] font-mono mt-2">fourth order</div>
+                    </div>
+                </div>
+                <p class="text-zinc-500 text-[12px] leading-relaxed mt-5">Convergence verification took longer than expected. Yoshida's theoretical 4th-order convergence was masked by particle noise floors at certain parameter regimes. Once we resolved which sub-integrator errors were dominating, the slope measurement matched theory.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Roadmap -->
+    <section data-bg-section="roadmap" class="py-16 px-6 border-t border-white/5">
+        <div class="max-w-[1240px] mx-auto">
+            <div class="grid lg:grid-cols-12 gap-10">
+                <div class="lg:col-span-3">
+                    <span class="section-num">§ 03</span>
+                    <h2 class="display-serif text-2xl text-white font-medium mt-2 heading-mark">Roadmap</h2>
+                </div>
+                <div class="lg:col-span-9">
+                    <div class="space-y-6 max-w-2xl relative pl-8 border-l border-white/10">
+                        <div class="relative">
+                            <div class="absolute -left-[37px] top-1 w-4 h-4 rounded-full bg-plasma-500 shadow-[0_0_8px_rgba(56,189,248,0.5)]"></div>
+                            <div class="mono-tag text-plasma-300 mb-1">Phase 1 · in progress</div>
+                            <h3 class="text-white font-medium mb-1">WISP code implementation</h3>
+                            <p class="text-zinc-500 text-[13px] leading-relaxed">Wave Interaction Simulation Platform: Langmuir mode stepping, particle trajectory integration, δf splitting, the three symplectic integrators with proper convergence verification.</p>
+                        </div>
+                        <div class="relative">
+                            <div class="absolute -left-[37px] top-1 w-4 h-4 rounded-full bg-ember-500 shadow-[0_0_8px_rgba(245,161,66,0.5)]"></div>
+                            <div class="mono-tag text-ember-400 mb-1">Phase 2 · next</div>
+                            <h3 class="text-white font-medium mb-1">Benchmarking against analytic theory</h3>
+                            <p class="text-zinc-500 text-[13px] leading-relaxed">Validate linear growth rates and the nonlinear saturation <em class="math-i">ω<sub>b</sub> ≈ 3.2γ<sub>L</sub></em>. Extend to multi-mode interactions where simple analytic predictions break down.</p>
+                        </div>
+                        <div class="relative">
+                            <div class="absolute -left-[37px] top-1 w-4 h-4 rounded-full bg-zinc-700 border border-zinc-600"></div>
+                            <div class="mono-tag text-zinc-500 mb-1">Phase 3 · planned</div>
+                            <h3 class="text-zinc-400 font-medium mb-1">3D field integration</h3>
+                            <p class="text-zinc-500 text-[13px] leading-relaxed">Extend the model to non-symmetric background magnetic fields. Study drift orbit bifurcations and how they reshape phase-space transport in stellarator geometry.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Keywords -->
+    <section data-bg-section="keywords" class="py-16 px-6 border-t border-white/5">
+        <div class="max-w-[1240px] mx-auto">
+            <div class="grid lg:grid-cols-12 gap-10">
+                <div class="lg:col-span-3">
+                    <span class="section-num">§ 04</span>
+                    <h2 class="display-serif text-2xl text-white font-medium mt-2 heading-mark">Keywords</h2>
+                </div>
+                <div class="lg:col-span-9">
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-3 py-1.5 bg-plasma-500/10 border border-plasma-500/25 rounded-sm text-plasma-300 font-mono text-[11px]">Vlasov-Poisson</span>
+                        <span class="px-3 py-1.5 bg-plasma-500/10 border border-plasma-500/25 rounded-sm text-plasma-300 font-mono text-[11px]">Particle-in-Cell</span>
+                        <span class="px-3 py-1.5 bg-plasma-500/10 border border-plasma-500/25 rounded-sm text-plasma-300 font-mono text-[11px]">δf Decomposition</span>
+                        <span class="px-3 py-1.5 bg-plasma-500/10 border border-plasma-500/25 rounded-sm text-plasma-300 font-mono text-[11px]">Bump-on-Tail Instability</span>
+                        <span class="px-3 py-1.5 bg-plasma-500/10 border border-plasma-500/25 rounded-sm text-plasma-300 font-mono text-[11px]">Symplectic Integration</span>
+                        <span class="px-3 py-1.5 bg-plasma-500/10 border border-plasma-500/25 rounded-sm text-plasma-300 font-mono text-[11px]">Operator Splitting</span>
+                        <span class="px-3 py-1.5 bg-plasma-500/10 border border-plasma-500/25 rounded-sm text-plasma-300 font-mono text-[11px]">Wave-Particle Resonance</span>
+                        <span class="px-3 py-1.5 bg-plasma-500/10 border border-plasma-500/25 rounded-sm text-plasma-300 font-mono text-[11px]">Stellarator Optimization</span>
+                        <span class="px-3 py-1.5 bg-plasma-500/10 border border-plasma-500/25 rounded-sm text-plasma-300 font-mono text-[11px]">Mode Chirping</span>
+                        <span class="px-3 py-1.5 bg-plasma-500/10 border border-plasma-500/25 rounded-sm text-plasma-300 font-mono text-[11px]">Phase-Space Clumping</span>
+                        <span class="px-3 py-1.5 bg-plasma-500/10 border border-plasma-500/25 rounded-sm text-plasma-300 font-mono text-[11px]">High-Performance Computing</span>
+                        <span class="px-3 py-1.5 bg-plasma-500/10 border border-plasma-500/25 rounded-sm text-plasma-300 font-mono text-[11px]">NERSC</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-white/5 py-10 px-6 mt-16">
+        <div class="max-w-[1240px] mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-start gap-6">
+                <div>
+                    <div class="display-serif text-lg text-white mb-1">Plasma Physics Research</div>
+                    <div class="mono-tag text-zinc-500">Swan Yi Htet · Dr. Elizabeth Paul · Kamil Ahmed Syed</div>
+                </div>
+                <div class="flex flex-wrap gap-4 text-[12px] mono-tag">
+                    <a href="index.html" class="text-zinc-500 hover:text-plasma-300 transition-colors">← portfolio</a>
+                    <a href="research-stellar.html" class="text-zinc-500 hover:text-plasma-300 transition-colors">stellar research →</a>
+                    <a href="https://github.com/shtet100/Plasma-Bump-On-Tail" target="_blank" class="text-zinc-500 hover:text-white transition-colors">repo ↗</a>
+                </div>
+            </div>
+            <div class="mt-6 pt-4 border-t border-white/5 flex flex-col sm:flex-row justify-between items-center gap-2 text-[10px] mono-tag text-zinc-700">
+                <span>© 2026 Swan Yi Htet · Research in Progress</span>
+                <span>PROJECT_ID: PLM_01</span>
+            </div>
+        </div>
     </footer>
-
 </body>
 </html>

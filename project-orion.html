@@ -10,64 +10,35 @@
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700;9..144,800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        display: ['Fraunces', 'serif'],
-                        sans: ['Inter', 'sans-serif'],
-                        mono: ['"JetBrains Mono"', 'monospace'],
-                    },
-                    colors: {
-                        ink: { DEFAULT: '#070b14', deep: '#04060c', soft: '#0c1220', panel: '#10172a' },
-                        ember: { 300: '#fbbf67', 400: '#f5a142', 500: '#e8842a', 600: '#c66a1c' },
-                        plasma: { 300: '#7dd3fc', 400: '#38bdf8', 500: '#0ea5e9' },
-                    },
+            theme: { extend: {
+                fontFamily: { display: ['Fraunces', 'serif'], sans: ['Inter', 'sans-serif'], mono: ['"JetBrains Mono"', 'monospace'] },
+                colors: {
+                    ink: { DEFAULT: '#070b14', deep: '#04060c', soft: '#0c1220', panel: '#10172a' },
+                    ember: { 300: '#fbbf67', 400: '#f5a142', 500: '#e8842a', 600: '#c66a1c' },
+                    plasma: { 300: '#7dd3fc', 400: '#38bdf8', 500: '#0ea5e9' },
                 }
-            }
+            }}
         }
     </script>
     <style>
         body { background: #04060c; color: #d8dde6; font-family: 'Inter', sans-serif; overflow-x: hidden; }
         .lab-grid {
-            background-image:
-                radial-gradient(circle, rgba(125,211,252,0.06) 1px, transparent 1px),
-                radial-gradient(circle, rgba(232,132,42,0.04) 1px, transparent 1px);
-            background-size: 36px 36px, 72px 72px;
-            background-position: 0 0, 18px 18px;
+            background-image: radial-gradient(circle, rgba(125,211,252,0.07) 1px, transparent 1px), radial-gradient(circle, rgba(232,132,42,0.04) 1px, transparent 1px);
+            background-size: 36px 36px, 72px 72px; background-position: 0 0, 18px 18px;
         }
         .display-serif { font-family: 'Fraunces', serif; }
         .mono-tag { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; }
         .section-num { font-family: 'Fraunces', serif; font-size: 13px; color: rgba(245,161,66,0.55); letter-spacing: 0.05em; }
         .heading-mark { position: relative; padding-bottom: 4px; }
         .heading-mark::after { content: ''; position: absolute; left: 0; bottom: 0; width: 36px; height: 2px; background: rgba(245,161,66,0.7); }
-        .instrument-panel {
-            position: relative;
-            background: linear-gradient(180deg, rgba(16,23,42,0.5), rgba(7,11,20,0.7));
-            border: 1px solid rgba(125,211,252,0.08);
-            border-radius: 4px;
-        }
-        .instrument-panel::before {
-            content: ''; position: absolute; top: -1px; left: -1px;
-            width: 14px; height: 14px;
-            border-top: 1px solid rgba(245,161,66,0.5);
-            border-left: 1px solid rgba(245,161,66,0.5);
-        }
-        .instrument-panel::after {
-            content: ''; position: absolute; bottom: -1px; right: -1px;
-            width: 14px; height: 14px;
-            border-bottom: 1px solid rgba(245,161,66,0.5);
-            border-right: 1px solid rgba(245,161,66,0.5);
-        }
+        .instrument-panel { position: relative; background: linear-gradient(180deg, rgba(16,23,42,0.5), rgba(7,11,20,0.7)); border: 1px solid rgba(245,161,66,0.1); border-radius: 4px; }
+        .instrument-panel::before { content: ''; position: absolute; top: -1px; left: -1px; width: 14px; height: 14px; border-top: 1px solid rgba(245,161,66,0.55); border-left: 1px solid rgba(245,161,66,0.55); }
+        .instrument-panel::after { content: ''; position: absolute; bottom: -1px; right: -1px; width: 14px; height: 14px; border-bottom: 1px solid rgba(245,161,66,0.55); border-right: 1px solid rgba(245,161,66,0.55); }
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #04060c; }
         ::-webkit-scrollbar-thumb { background: #1a2238; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #e8842a; }
         .pull-quote { font-family: 'Fraunces', serif; font-style: italic; font-weight: 300; letter-spacing: -0.01em; }
-        .blip {
-            display: inline-block; width: 6px; height: 6px; border-radius: 50%;
-            background: #f5a142; box-shadow: 0 0 6px rgba(245,161,66,0.8);
-            animation: pulseSoft 2s ease-in-out infinite;
-        }
+        .blip { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: rgb(245,161,66); box-shadow: 0 0 6px rgba(245,161,66,0.8); animation: pulseSoft 2s ease-in-out infinite; }
         @keyframes pulseSoft { 0%,100% { opacity: 0.35; } 50% { opacity: 0.85; } }
         .orion-flow-line { stroke: rgba(245,161,66,0.3); stroke-dasharray: 4 4; }
         .arrow-down { width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 7px solid rgba(245,161,66,0.6); margin: 0 auto; }
@@ -78,65 +49,722 @@
     <!-- Animated backdrop -->
     <div class="fixed inset-0 -z-50 pointer-events-none overflow-hidden">
         <div class="absolute inset-0 lab-grid opacity-50"></div>
-        <canvas id="bg-network" class="absolute inset-0 w-full h-full"></canvas>
+        <canvas id="bg-robotics" class="absolute inset-0 w-full h-full"></canvas>
         <div class="absolute top-0 right-0 w-[700px] h-[700px] bg-ember-500/8 rounded-full blur-[180px]"></div>
         <div class="absolute bottom-[-10%] left-[-5%] w-[600px] h-[600px] bg-plasma-500/6 rounded-full blur-[160px]"></div>
     </div>
 
     <script>
+        // Per-section robotics backdrop: arm, hand, gears, drone, humanoid, coil, orbital, servo, circuit
+        // Hard section transitions, restrained opacity, more motion
         (function() {
-            const canvas = document.getElementById('bg-network');
+            const canvas = document.getElementById('bg-robotics');
             if (!canvas) return;
             const ctx = canvas.getContext('2d');
-            let w, h, nodes = [];
+            let w, h;
             const DPR = Math.min(window.devicePixelRatio || 1, 2);
-            function resize() { w = canvas.clientWidth; h = canvas.clientHeight; canvas.width = w * DPR; canvas.height = h * DPR; ctx.scale(DPR, DPR); }
-            function init() {
-                resize();
-                const count = Math.min(60, Math.floor((w * h) / 22000));
-                nodes = [];
-                for (let i = 0; i < count; i++) {
-                    nodes.push({ x: Math.random() * w, y: Math.random() * h, vx: (Math.random() - 0.5) * 0.12, vy: (Math.random() - 0.5) * 0.12, r: Math.random() * 1.2 + 0.6, type: Math.random() < 0.15 ? 'ember' : (Math.random() < 0.85 ? 'plasma' : 'white'), phase: Math.random() * Math.PI * 2 });
+
+            // Colors
+            const COL_LINE = 'rgba(245,161,66,0.95)';
+            const COL_LINE_FAINT = 'rgba(245,161,66,0.55)';
+            const COL_PLASMA = 'rgba(125,211,252,0.85)';
+            const COL_PLASMA_FAINT = 'rgba(125,211,252,0.55)';
+
+            function resize() {
+                w = canvas.clientWidth;
+                h = canvas.clientHeight;
+                canvas.width = w * DPR;
+                canvas.height = h * DPR;
+                ctx.setTransform(1, 0, 0, 1, 0, 0);
+                ctx.scale(DPR, DPR);
+            }
+
+            // Section detection
+            const SECTIONS = ['hero', 'principle', 'topology', 'subsystems', 'status', 'roadmap'];
+            // Map section to elements that should be visible
+            const SECTION_ELEMENTS = {
+                'hero': ['arm', 'humanoid', 'drone'],
+                'principle': ['arm', 'humanoid', 'gear'],
+                'topology': ['arm', 'drone', 'humanoid', 'gear'],
+                'subsystems': ['arm', 'hand', 'gripper', 'drone'],
+                'status': ['gear', 'gear', 'servo', 'circuit'],
+                'roadmap': ['arm', 'humanoid', 'gear']
+            };
+
+            let currentSection = 'hero';
+            let agents = [];
+            let scrollY = 0;
+            let lastScrollY = 0;
+            let scrollVel = 0;
+
+            // ========== AGENT FACTORY ==========
+            function spawnAgent(type) {
+                return {
+                    type,
+                    x: Math.random() * w,
+                    y: Math.random() * h,
+                    vx: (Math.random() - 0.5) * 0.35,  // faster than before
+                    vy: (Math.random() - 0.5) * 0.25,
+                    rot: Math.random() * Math.PI * 2,
+                    rotSpeed: (Math.random() - 0.5) * 0.0025,
+                    scale: 0.65 + Math.random() * 0.55,
+                    phase: Math.random() * Math.PI * 2,
+                    phaseSpeed: 0.0008 + Math.random() * 0.0006,
+                    breathPhase: Math.random() * Math.PI * 2,
+                    breathSpeed: 0.0003 + Math.random() * 0.0004,
+                    flip: Math.random() < 0.5 ? 1 : -1,
+                    fadeIn: 0,           // 0->1 as section becomes active
+                    targetFade: 0,       // what we're aiming for
+                };
+            }
+
+            // ========== DRAW FUNCTIONS ==========
+
+            // 6-DOF robotic arm
+            function drawArm(a, t) {
+                const phase = a.phase + t * a.phaseSpeed;
+                ctx.save();
+                ctx.translate(a.x, a.y);
+                ctx.rotate(a.rot);
+                ctx.scale(a.scale * a.flip, a.scale);
+                ctx.lineWidth = 1.4;
+                ctx.lineCap = 'round';
+                ctx.lineJoin = 'round';
+
+                const j1 = Math.sin(phase) * 0.55;
+                const j2 = Math.sin(phase * 0.7 + 1.0) * 0.7;
+                const j3 = Math.sin(phase * 0.9 + 2.1) * 0.5;
+                const j4 = Math.sin(phase * 1.3 + 0.5) * 0.35;
+                const L0 = 28, L1 = 70, L2 = 60, L3 = 26, L4 = 18;
+
+                // Base
+                ctx.beginPath();
+                ctx.moveTo(-22, 0); ctx.lineTo(22, 0); ctx.lineTo(18, 8); ctx.lineTo(-18, 8); ctx.closePath();
+                ctx.stroke();
+                ctx.fillRect(-16, 4, 2, 2); ctx.fillRect(14, 4, 2, 2);
+                // Shoulder pillar
+                ctx.beginPath();
+                ctx.moveTo(-8, 0); ctx.lineTo(-8, -L0); ctx.lineTo(8, -L0); ctx.lineTo(8, 0);
+                ctx.stroke();
+
+                ctx.translate(0, -L0);
+                ctx.beginPath(); ctx.arc(0, 0, 5, 0, Math.PI * 2); ctx.stroke();
+                ctx.beginPath(); ctx.arc(0, 0, 1.5, 0, Math.PI * 2); ctx.fill();
+
+                ctx.rotate(-Math.PI / 2 + j1);
+                ctx.beginPath();
+                ctx.moveTo(-4, 0); ctx.lineTo(L1, -3); ctx.lineTo(L1, 3); ctx.lineTo(-4, 0);
+                ctx.moveTo(0, -4); ctx.lineTo(0, 4);
+                ctx.stroke();
+
+                ctx.translate(L1, 0);
+                ctx.beginPath(); ctx.arc(0, 0, 4.5, 0, Math.PI * 2); ctx.stroke();
+                ctx.beginPath(); ctx.arc(0, 0, 1.5, 0, Math.PI * 2); ctx.fill();
+
+                ctx.rotate(j2);
+                ctx.beginPath();
+                ctx.moveTo(0, -2.5); ctx.lineTo(L2, -2); ctx.lineTo(L2, 2); ctx.lineTo(0, 2.5); ctx.closePath();
+                ctx.stroke();
+
+                ctx.translate(L2, 0);
+                ctx.beginPath(); ctx.arc(0, 0, 3.5, 0, Math.PI * 2); ctx.stroke();
+
+                ctx.rotate(j3);
+                ctx.beginPath();
+                ctx.moveTo(0, -2); ctx.lineTo(L3, -2); ctx.lineTo(L3, 2); ctx.lineTo(0, 2);
+                ctx.stroke();
+
+                ctx.translate(L3, 0);
+                ctx.beginPath(); ctx.arc(0, 0, 3, 0, Math.PI * 2); ctx.stroke();
+
+                ctx.rotate(j4);
+                const open = 4 + Math.abs(Math.sin(phase * 1.7)) * 6;
+                ctx.beginPath(); ctx.moveTo(0, -open); ctx.lineTo(L4, -open); ctx.lineTo(L4 + 2, -open - 1.5); ctx.stroke();
+                ctx.beginPath(); ctx.moveTo(0, open); ctx.lineTo(L4, open); ctx.lineTo(L4 + 2, open + 1.5); ctx.stroke();
+                ctx.beginPath(); ctx.moveTo(0, -open - 2); ctx.lineTo(0, open + 2); ctx.stroke();
+
+                ctx.restore();
+            }
+
+            // Articulated hand
+            function drawHand(a, t) {
+                const phase = a.phase + t * a.phaseSpeed;
+                ctx.save();
+                ctx.translate(a.x, a.y);
+                ctx.rotate(a.rot);
+                ctx.scale(a.scale * a.flip, a.scale);
+                ctx.lineWidth = 1.2;
+                ctx.lineCap = 'round';
+                ctx.lineJoin = 'round';
+
+                const palmW = 36, palmH = 42;
+                ctx.beginPath();
+                ctx.moveTo(-palmW / 2 + 4, -palmH / 2);
+                ctx.lineTo(palmW / 2 - 4, -palmH / 2);
+                ctx.quadraticCurveTo(palmW / 2, -palmH / 2, palmW / 2, -palmH / 2 + 4);
+                ctx.lineTo(palmW / 2, palmH / 2 - 4);
+                ctx.quadraticCurveTo(palmW / 2, palmH / 2, palmW / 2 - 4, palmH / 2);
+                ctx.lineTo(-palmW / 2 + 4, palmH / 2);
+                ctx.quadraticCurveTo(-palmW / 2, palmH / 2, -palmW / 2, palmH / 2 - 4);
+                ctx.lineTo(-palmW / 2, -palmH / 2 + 4);
+                ctx.quadraticCurveTo(-palmW / 2, -palmH / 2, -palmW / 2 + 4, -palmH / 2);
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.moveTo(-palmW / 2 + 4, palmH / 2 + 6);
+                ctx.lineTo(palmW / 2 - 4, palmH / 2 + 6);
+                ctx.stroke();
+
+                function drawFinger(baseX, length, curlOffset, isThumb) {
+                    const curl = (Math.sin(phase + curlOffset) + 1) * 0.5;
+                    const a1 = -curl * 0.6, a2 = -curl * 0.85, a3 = -curl * 0.7;
+                    ctx.save();
+                    ctx.translate(baseX, -palmH / 2);
+                    if (isThumb) ctx.rotate(-Math.PI * 0.4);
+                    const seg = length / 3;
+                    ctx.rotate(a1);
+                    ctx.beginPath();
+                    ctx.moveTo(-2, 0); ctx.lineTo(-2, -seg); ctx.lineTo(2, -seg); ctx.lineTo(2, 0);
+                    ctx.stroke();
+                    ctx.translate(0, -seg);
+                    ctx.beginPath(); ctx.arc(0, 0, 2, 0, Math.PI * 2); ctx.stroke();
+                    ctx.rotate(a2);
+                    ctx.beginPath();
+                    ctx.moveTo(-1.7, 0); ctx.lineTo(-1.7, -seg); ctx.lineTo(1.7, -seg); ctx.lineTo(1.7, 0);
+                    ctx.stroke();
+                    ctx.translate(0, -seg);
+                    ctx.beginPath(); ctx.arc(0, 0, 1.6, 0, Math.PI * 2); ctx.stroke();
+                    ctx.rotate(a3);
+                    ctx.beginPath();
+                    ctx.moveTo(-1.4, 0); ctx.lineTo(-1.4, -seg * 0.8);
+                    ctx.quadraticCurveTo(0, -seg * 0.95, 1.4, -seg * 0.8); ctx.lineTo(1.4, 0);
+                    ctx.stroke();
+                    ctx.restore();
+                }
+
+                drawFinger(-13, 30, 0.0, false);
+                drawFinger(-4, 34, 0.5, false);
+                drawFinger(5, 32, 1.0, false);
+                drawFinger(13, 28, 1.5, false);
+                drawFinger(-palmW / 2, 26, 2.0, true);
+
+                ctx.restore();
+            }
+
+            // Two-finger gripper (smaller, simpler than full arm)
+            function drawGripper(a, t) {
+                const phase = a.phase + t * a.phaseSpeed;
+                ctx.save();
+                ctx.translate(a.x, a.y);
+                ctx.rotate(a.rot);
+                ctx.scale(a.scale * a.flip, a.scale);
+                ctx.lineWidth = 1.3;
+                ctx.lineCap = 'round';
+
+                const open = 6 + Math.abs(Math.sin(phase * 1.4)) * 10;
+                // Body
+                ctx.beginPath();
+                ctx.moveTo(-18, -8); ctx.lineTo(0, -8); ctx.lineTo(0, 8); ctx.lineTo(-18, 8);
+                ctx.stroke();
+                // Pivot circle
+                ctx.beginPath(); ctx.arc(-9, 0, 3, 0, Math.PI * 2); ctx.stroke();
+                // Upper finger
+                ctx.beginPath();
+                ctx.moveTo(0, -open); ctx.lineTo(20, -open); ctx.lineTo(22, -open - 2);
+                ctx.moveTo(0, -open + 2); ctx.lineTo(18, -open + 2);
+                ctx.stroke();
+                // Lower finger
+                ctx.beginPath();
+                ctx.moveTo(0, open); ctx.lineTo(20, open); ctx.lineTo(22, open + 2);
+                ctx.moveTo(0, open - 2); ctx.lineTo(18, open - 2);
+                ctx.stroke();
+                // Connecting bar
+                ctx.beginPath();
+                ctx.moveTo(0, -open - 1); ctx.lineTo(0, open + 1);
+                ctx.stroke();
+
+                ctx.restore();
+            }
+
+            // Gear cluster
+            function drawGearTeeth(radius, teeth) {
+                ctx.beginPath();
+                for (let i = 0; i < teeth; i++) {
+                    const ang = (i / teeth) * Math.PI * 2;
+                    const inner = radius * 0.78, outer = radius;
+                    const half = (Math.PI * 2 / teeth) * 0.32;
+                    const x1 = Math.cos(ang - half) * inner, y1 = Math.sin(ang - half) * inner;
+                    const x2 = Math.cos(ang - half * 0.55) * outer, y2 = Math.sin(ang - half * 0.55) * outer;
+                    const x3 = Math.cos(ang + half * 0.55) * outer, y3 = Math.sin(ang + half * 0.55) * outer;
+                    const x4 = Math.cos(ang + half) * inner, y4 = Math.sin(ang + half) * inner;
+                    if (i === 0) ctx.moveTo(x1, y1); else ctx.lineTo(x1, y1);
+                    ctx.lineTo(x2, y2); ctx.lineTo(x3, y3); ctx.lineTo(x4, y4);
+                }
+                ctx.closePath();
+                ctx.stroke();
+                ctx.beginPath(); ctx.arc(0, 0, radius * 0.28, 0, Math.PI * 2); ctx.stroke();
+                for (let i = 0; i < 4; i++) {
+                    const ang = (i / 4) * Math.PI * 2 + Math.PI / 4;
+                    ctx.beginPath();
+                    ctx.moveTo(Math.cos(ang) * radius * 0.28, Math.sin(ang) * radius * 0.28);
+                    ctx.lineTo(Math.cos(ang) * radius * 0.7, Math.sin(ang) * radius * 0.7);
+                    ctx.stroke();
                 }
             }
+
+            function drawGears(a, t) {
+                ctx.save();
+                ctx.translate(a.x, a.y);
+                ctx.rotate(a.rot);
+                ctx.scale(a.scale, a.scale);
+                ctx.lineWidth = 1.1;
+                const r1 = 26, r2 = 18;
+                const meshDist = r1 + r2 - 3;
+
+                ctx.save();
+                ctx.rotate(t * 0.0015);
+                drawGearTeeth(r1, 12);
+                ctx.restore();
+
+                ctx.save();
+                ctx.translate(meshDist, 0);
+                ctx.rotate(-t * 0.0015 * (12 / 9));
+                drawGearTeeth(r2, 9);
+                ctx.restore();
+
+                ctx.restore();
+            }
+
+            // Quadcopter drone (top view)
+            function drawDrone(a, t) {
+                const phase = a.phase + t * a.phaseSpeed;
+                ctx.save();
+                ctx.translate(a.x, a.y);
+                ctx.rotate(a.rot);
+                ctx.scale(a.scale, a.scale);
+                ctx.lineWidth = 1.3;
+                ctx.lineCap = 'round';
+
+                // Center body
+                ctx.beginPath();
+                ctx.moveTo(-9, -9); ctx.lineTo(9, -9); ctx.lineTo(9, 9); ctx.lineTo(-9, 9); ctx.closePath();
+                ctx.stroke();
+                // Camera dot
+                ctx.beginPath(); ctx.arc(0, 0, 2.5, 0, Math.PI * 2); ctx.stroke();
+
+                // 4 arms diagonally
+                const armLen = 28;
+                for (let i = 0; i < 4; i++) {
+                    const ang = (Math.PI / 4) + i * (Math.PI / 2);
+                    const px = Math.cos(ang) * armLen, py = Math.sin(ang) * armLen;
+                    // Arm
+                    ctx.beginPath();
+                    ctx.moveTo(Math.cos(ang) * 8, Math.sin(ang) * 8);
+                    ctx.lineTo(px, py);
+                    ctx.stroke();
+                    // Motor
+                    ctx.beginPath(); ctx.arc(px, py, 4, 0, Math.PI * 2); ctx.stroke();
+                    // Spinning rotor (suggested by a subtle circle that pulses)
+                    const rotorR = 11 + Math.sin(phase * 5 + i) * 0.5;
+                    ctx.save();
+                    ctx.globalAlpha = ctx.globalAlpha * 0.4;
+                    ctx.beginPath(); ctx.arc(px, py, rotorR, 0, Math.PI * 2); ctx.stroke();
+                    // Blur lines suggesting spin
+                    for (let k = 0; k < 3; k++) {
+                        const bang = phase * 8 + i + k * (Math.PI * 2 / 3);
+                        ctx.beginPath();
+                        ctx.moveTo(px + Math.cos(bang) * 3, py + Math.sin(bang) * 3);
+                        ctx.lineTo(px + Math.cos(bang) * rotorR, py + Math.sin(bang) * rotorR);
+                        ctx.stroke();
+                    }
+                    ctx.restore();
+                }
+
+                ctx.restore();
+            }
+
+            // Humanoid figure (side view, simplified)
+            function drawHumanoid(a, t) {
+                const phase = a.phase + t * a.phaseSpeed;
+                ctx.save();
+                ctx.translate(a.x, a.y);
+                ctx.rotate(a.rot);
+                ctx.scale(a.scale * a.flip, a.scale);
+                ctx.lineWidth = 1.3;
+                ctx.lineCap = 'round';
+                ctx.lineJoin = 'round';
+
+                const armSwing = Math.sin(phase * 1.5) * 0.4;
+                const legSwing = Math.sin(phase * 1.5 + Math.PI) * 0.35;
+
+                // Head
+                ctx.beginPath(); ctx.arc(0, -50, 10, 0, Math.PI * 2); ctx.stroke();
+                // Eye sensor
+                ctx.beginPath(); ctx.arc(3, -50, 1.5, 0, Math.PI * 2); ctx.fill();
+
+                // Neck
+                ctx.beginPath();
+                ctx.moveTo(0, -40); ctx.lineTo(0, -36);
+                ctx.stroke();
+
+                // Torso (rectangle)
+                ctx.beginPath();
+                ctx.moveTo(-12, -36); ctx.lineTo(12, -36);
+                ctx.lineTo(10, -8); ctx.lineTo(-10, -8); ctx.closePath();
+                ctx.stroke();
+                // Chest indicator
+                ctx.beginPath();
+                ctx.moveTo(-6, -28); ctx.lineTo(6, -28);
+                ctx.stroke();
+
+                // Arms: shoulder pivot animated
+                ctx.save();
+                ctx.translate(-12, -34);
+                ctx.rotate(armSwing);
+                ctx.beginPath();
+                ctx.moveTo(-3, 0); ctx.lineTo(-3, 14); ctx.lineTo(3, 14); ctx.lineTo(3, 0);
+                ctx.stroke();
+                ctx.translate(0, 14);
+                ctx.beginPath(); ctx.arc(0, 0, 2.5, 0, Math.PI * 2); ctx.stroke();
+                ctx.rotate(-armSwing * 0.5);
+                ctx.beginPath();
+                ctx.moveTo(-2.5, 0); ctx.lineTo(-2.5, 14); ctx.lineTo(2.5, 14); ctx.lineTo(2.5, 0);
+                ctx.stroke();
+                ctx.restore();
+
+                ctx.save();
+                ctx.translate(12, -34);
+                ctx.rotate(-armSwing);
+                ctx.beginPath();
+                ctx.moveTo(-3, 0); ctx.lineTo(-3, 14); ctx.lineTo(3, 14); ctx.lineTo(3, 0);
+                ctx.stroke();
+                ctx.translate(0, 14);
+                ctx.beginPath(); ctx.arc(0, 0, 2.5, 0, Math.PI * 2); ctx.stroke();
+                ctx.rotate(armSwing * 0.5);
+                ctx.beginPath();
+                ctx.moveTo(-2.5, 0); ctx.lineTo(-2.5, 14); ctx.lineTo(2.5, 14); ctx.lineTo(2.5, 0);
+                ctx.stroke();
+                ctx.restore();
+
+                // Pelvis joint
+                ctx.beginPath();
+                ctx.moveTo(-10, -8); ctx.lineTo(10, -8);
+                ctx.stroke();
+
+                // Legs
+                ctx.save();
+                ctx.translate(-5, -8);
+                ctx.rotate(legSwing);
+                ctx.beginPath();
+                ctx.moveTo(-3, 0); ctx.lineTo(-3, 18); ctx.lineTo(3, 18); ctx.lineTo(3, 0);
+                ctx.stroke();
+                ctx.translate(0, 18);
+                ctx.beginPath(); ctx.arc(0, 0, 2.5, 0, Math.PI * 2); ctx.stroke();
+                ctx.rotate(-legSwing * 0.7);
+                ctx.beginPath();
+                ctx.moveTo(-2.5, 0); ctx.lineTo(-2.5, 16); ctx.lineTo(2.5, 16); ctx.lineTo(2.5, 0);
+                ctx.stroke();
+                // Foot
+                ctx.translate(0, 16);
+                ctx.beginPath();
+                ctx.moveTo(-3, 0); ctx.lineTo(7, 0); ctx.lineTo(7, 2); ctx.lineTo(-3, 2); ctx.closePath();
+                ctx.stroke();
+                ctx.restore();
+
+                ctx.save();
+                ctx.translate(5, -8);
+                ctx.rotate(-legSwing);
+                ctx.beginPath();
+                ctx.moveTo(-3, 0); ctx.lineTo(-3, 18); ctx.lineTo(3, 18); ctx.lineTo(3, 0);
+                ctx.stroke();
+                ctx.translate(0, 18);
+                ctx.beginPath(); ctx.arc(0, 0, 2.5, 0, Math.PI * 2); ctx.stroke();
+                ctx.rotate(legSwing * 0.7);
+                ctx.beginPath();
+                ctx.moveTo(-2.5, 0); ctx.lineTo(-2.5, 16); ctx.lineTo(2.5, 16); ctx.lineTo(2.5, 0);
+                ctx.stroke();
+                ctx.translate(0, 16);
+                ctx.beginPath();
+                ctx.moveTo(-3, 0); ctx.lineTo(7, 0); ctx.lineTo(7, 2); ctx.lineTo(-3, 2); ctx.closePath();
+                ctx.stroke();
+                ctx.restore();
+
+                ctx.restore();
+            }
+
+            // Magnetic coil (stellarator-inspired twisted toroidal field)
+            function drawCoil(a, t) {
+                const phase = a.phase + t * a.phaseSpeed;
+                ctx.save();
+                ctx.translate(a.x, a.y);
+                ctx.rotate(a.rot);
+                ctx.scale(a.scale, a.scale);
+                ctx.lineWidth = 1.1;
+
+                const R = 38;
+                const r = 14;
+                const turns = 16;
+
+                // Outer toroidal frame (ellipse)
+                ctx.beginPath();
+                ctx.ellipse(0, 0, R, r, 0, 0, Math.PI * 2);
+                ctx.stroke();
+
+                // Helical coil winding
+                ctx.beginPath();
+                for (let i = 0; i <= 200; i++) {
+                    const tt = i / 200;
+                    const ang = tt * Math.PI * 2;
+                    const tilt = Math.sin(ang * turns + phase * 2) * (r * 0.85);
+                    const x = Math.cos(ang) * R;
+                    const y = Math.sin(ang) * r + tilt * Math.cos(ang) * 0.2;
+                    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+                }
+                ctx.stroke();
+
+                // Cross-section markers
+                for (let i = 0; i < 6; i++) {
+                    const ang = (i / 6) * Math.PI * 2;
+                    const cx = Math.cos(ang) * R;
+                    const cy = Math.sin(ang) * r;
+                    ctx.beginPath(); ctx.arc(cx, cy, 1.8, 0, Math.PI * 2); ctx.fill();
+                }
+
+                ctx.restore();
+            }
+
+            // Atomic orbital (electron orbit-style physics motif)
+            function drawOrbital(a, t) {
+                const phase = a.phase + t * a.phaseSpeed;
+                ctx.save();
+                ctx.translate(a.x, a.y);
+                ctx.rotate(a.rot + t * 0.0004);
+                ctx.scale(a.scale, a.scale);
+                ctx.lineWidth = 1;
+
+                // Nucleus
+                ctx.beginPath(); ctx.arc(0, 0, 3, 0, Math.PI * 2); ctx.fill();
+
+                // 3 electron orbits at different angles
+                const radii = [22, 30, 38];
+                for (let i = 0; i < 3; i++) {
+                    ctx.save();
+                    ctx.rotate((i / 3) * Math.PI * 2);
+                    ctx.beginPath();
+                    ctx.ellipse(0, 0, radii[i], radii[i] * 0.4, 0, 0, Math.PI * 2);
+                    ctx.stroke();
+                    // Electron
+                    const ePhase = phase * (1 + i * 0.3) + i * 1.5;
+                    const ex = Math.cos(ePhase) * radii[i];
+                    const ey = Math.sin(ePhase) * radii[i] * 0.4;
+                    ctx.beginPath(); ctx.arc(ex, ey, 2, 0, Math.PI * 2); ctx.fill();
+                    ctx.restore();
+                }
+
+                ctx.restore();
+            }
+
+            // Servo motor (compact rotational actuator)
+            function drawServo(a, t) {
+                const phase = a.phase + t * a.phaseSpeed;
+                ctx.save();
+                ctx.translate(a.x, a.y);
+                ctx.rotate(a.rot);
+                ctx.scale(a.scale, a.scale);
+                ctx.lineWidth = 1.2;
+
+                // Body (rectangle)
+                ctx.beginPath();
+                ctx.moveTo(-16, -10); ctx.lineTo(16, -10);
+                ctx.lineTo(16, 10); ctx.lineTo(-16, 10); ctx.closePath();
+                ctx.stroke();
+                // Mounting tabs
+                ctx.beginPath();
+                ctx.moveTo(-22, -8); ctx.lineTo(-16, -8);
+                ctx.moveTo(-22, 8); ctx.lineTo(-16, 8);
+                ctx.moveTo(22, -8); ctx.lineTo(16, -8);
+                ctx.moveTo(22, 8); ctx.lineTo(16, 8);
+                ctx.stroke();
+                // Mounting holes
+                ctx.beginPath(); ctx.arc(-20, -8, 1.5, 0, Math.PI * 2); ctx.stroke();
+                ctx.beginPath(); ctx.arc(-20, 8, 1.5, 0, Math.PI * 2); ctx.stroke();
+                ctx.beginPath(); ctx.arc(20, -8, 1.5, 0, Math.PI * 2); ctx.stroke();
+                ctx.beginPath(); ctx.arc(20, 8, 1.5, 0, Math.PI * 2); ctx.stroke();
+                // Output shaft (rotating)
+                ctx.save();
+                ctx.translate(8, 0);
+                ctx.rotate(phase * 1.8);
+                ctx.beginPath(); ctx.arc(0, 0, 5, 0, Math.PI * 2); ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(-4, 0); ctx.lineTo(4, 0);
+                ctx.moveTo(0, -4); ctx.lineTo(0, 4);
+                ctx.stroke();
+                ctx.restore();
+                // Wire pigtail
+                ctx.beginPath();
+                ctx.moveTo(-16, 0);
+                ctx.bezierCurveTo(-22, 2, -24, -2, -28, 1);
+                ctx.stroke();
+
+                ctx.restore();
+            }
+
+            // Circuit trace (PCB-style)
+            function drawCircuit(a, t) {
+                const phase = a.phase + t * a.phaseSpeed;
+                ctx.save();
+                ctx.translate(a.x, a.y);
+                ctx.rotate(a.rot);
+                ctx.scale(a.scale, a.scale);
+                ctx.lineWidth = 1.1;
+
+                // Trace path with right angles (PCB-style)
+                ctx.beginPath();
+                ctx.moveTo(-40, -10);
+                ctx.lineTo(-20, -10);
+                ctx.lineTo(-20, 10);
+                ctx.lineTo(0, 10);
+                ctx.lineTo(0, -15);
+                ctx.lineTo(20, -15);
+                ctx.lineTo(20, 5);
+                ctx.lineTo(40, 5);
+                ctx.stroke();
+
+                // Pads at junctions
+                const pads = [[-40, -10], [-20, -10], [-20, 10], [0, 10], [0, -15], [20, -15], [20, 5], [40, 5]];
+                for (const [px, py] of pads) {
+                    ctx.beginPath(); ctx.arc(px, py, 2.5, 0, Math.PI * 2); ctx.stroke();
+                }
+                // Animated signal pulse traveling along the trace
+                const pulseT = (phase % (Math.PI * 2)) / (Math.PI * 2);
+                if (pulseT < 1) {
+                    const idx = Math.floor(pulseT * (pads.length - 1));
+                    const sub = pulseT * (pads.length - 1) - idx;
+                    if (idx < pads.length - 1) {
+                        const px = pads[idx][0] + (pads[idx + 1][0] - pads[idx][0]) * sub;
+                        const py = pads[idx][1] + (pads[idx + 1][1] - pads[idx][1]) * sub;
+                        ctx.save();
+                        ctx.fillStyle = COL_PLASMA;
+                        ctx.beginPath(); ctx.arc(px, py, 3, 0, Math.PI * 2); ctx.fill();
+                        ctx.restore();
+                    }
+                }
+
+                ctx.restore();
+            }
+
+            // ========== SECTION DETECTION ==========
+            function detectSection() {
+                const viewportMid = window.scrollY + window.innerHeight / 2;
+                const els = document.querySelectorAll('[data-bg-section]');
+                let closest = SECTIONS[0];
+                let closestDist = Infinity;
+                els.forEach(el => {
+                    const tag = el.getAttribute('data-bg-section');
+                    if (!SECTIONS.includes(tag)) return;
+                    const rect = el.getBoundingClientRect();
+                    const elMid = window.scrollY + rect.top + rect.height / 2;
+                    const dist = Math.abs(viewportMid - elMid);
+                    if (dist < closestDist) {
+                        closestDist = dist;
+                        closest = tag;
+                    }
+                });
+                return closest;
+            }
+
+            // Build agents for a given section
+            function rebuildAgents(section) {
+                const types = SECTION_ELEMENTS[section] || ['arm'];
+                agents = types.map(type => spawnAgent(type));
+                // Set initial fade target
+                for (const a of agents) {
+                    a.fadeIn = 0;
+                    a.targetFade = 1;
+                }
+            }
+
+            // ========== MAIN LOOP ==========
             function step(t) {
+                // Detect section change
+                const newSection = detectSection();
+                if (newSection !== currentSection) {
+                    currentSection = newSection;
+                    rebuildAgents(currentSection);
+                }
+
+                // Track scroll velocity for parallax
+                const sy = window.scrollY;
+                scrollVel = (sy - lastScrollY) * 0.3;
+                lastScrollY = sy;
+
                 ctx.clearRect(0, 0, w, h);
-                for (let i = 0; i < nodes.length; i++) {
-                    for (let j = i + 1; j < nodes.length; j++) {
-                        const a = nodes[i], b = nodes[j];
-                        const dx = a.x - b.x, dy = a.y - b.y;
-                        const d2 = dx*dx + dy*dy, maxD = 140;
-                        if (d2 < maxD*maxD) {
-                            const alpha = (1 - Math.sqrt(d2)/maxD) * 0.18;
-                            ctx.strokeStyle = `rgba(125,211,252,${alpha})`;
-                            ctx.lineWidth = 0.5;
-                            ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
-                        }
+
+                for (const a of agents) {
+                    // Animate fade in
+                    a.fadeIn += (a.targetFade - a.fadeIn) * 0.04;
+
+                    // Position update (drift + scroll parallax)
+                    a.x += a.vx;
+                    a.y += a.vy + scrollVel * (a.scale * 0.5);
+                    a.rot += a.rotSpeed;
+
+                    // Wrap
+                    const margin = 200;
+                    if (a.x < -margin) a.x = w + margin;
+                    if (a.x > w + margin) a.x = -margin;
+                    if (a.y < -margin) a.y = h + margin;
+                    if (a.y > h + margin) a.y = -margin;
+
+                    // Breathing pulse for opacity
+                    const breath = 0.7 + Math.sin(a.breathPhase + t * a.breathSpeed) * 0.3;
+
+                    // Final opacity: section-fade * breath * base
+                    const baseOpacity = 0.20;
+                    const opacity = a.fadeIn * breath * baseOpacity;
+
+                    // Color choice based on type
+                    let strokeCol, fillCol;
+                    if (a.type === 'orbital' || a.type === 'coil') {
+                        strokeCol = `rgba(125,211,252,${opacity * 4})`;
+                        fillCol = `rgba(125,211,252,${opacity * 3})`;
+                    } else {
+                        strokeCol = `rgba(245,161,66,${opacity * 4})`;
+                        fillCol = `rgba(245,161,66,${opacity * 3})`;
+                    }
+                    ctx.strokeStyle = strokeCol;
+                    ctx.fillStyle = fillCol;
+                    ctx.globalAlpha = 1;
+
+                    // Dispatch to drawer
+                    switch (a.type) {
+                        case 'arm': drawArm(a, t); break;
+                        case 'hand': drawHand(a, t); break;
+                        case 'gripper': drawGripper(a, t); break;
+                        case 'gear': drawGears(a, t); break;
+                        case 'drone': drawDrone(a, t); break;
+                        case 'humanoid': drawHumanoid(a, t); break;
+                        case 'coil': drawCoil(a, t); break;
+                        case 'orbital': drawOrbital(a, t); break;
+                        case 'servo': drawServo(a, t); break;
+                        case 'circuit': drawCircuit(a, t); break;
                     }
                 }
-                for (const n of nodes) {
-                    n.x += n.vx; n.y += n.vy;
-                    if (n.x < -10) n.x = w + 10; if (n.x > w + 10) n.x = -10;
-                    if (n.y < -10) n.y = h + 10; if (n.y > h + 10) n.y = -10;
-                    const pulse = 0.7 + Math.sin(t * 0.001 + n.phase) * 0.3;
-                    let color;
-                    if (n.type === 'ember') color = `rgba(245,161,66,${0.55 * pulse})`;
-                    else if (n.type === 'white') color = `rgba(255,255,255,${0.5 * pulse})`;
-                    else color = `rgba(125,211,252,${0.4 * pulse})`;
-                    ctx.fillStyle = color;
-                    ctx.beginPath(); ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2); ctx.fill();
-                    if (n.type === 'ember') {
-                        const grad = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, n.r * 5);
-                        grad.addColorStop(0, `rgba(245,161,66,${0.18 * pulse})`);
-                        grad.addColorStop(1, 'rgba(245,161,66,0)');
-                        ctx.fillStyle = grad;
-                        ctx.beginPath(); ctx.arc(n.x, n.y, n.r * 5, 0, Math.PI * 2); ctx.fill();
-                    }
-                }
+
                 requestAnimationFrame(step);
             }
-            init(); step(0);
-            window.addEventListener('resize', () => { init(); });
+
+            function start() {
+                resize();
+                rebuildAgents(detectSection());
+                step(0);
+                window.addEventListener('resize', () => {
+                    resize();
+                    rebuildAgents(currentSection);
+                });
+            }
+
+            start();
         })();
     </script>
 
@@ -157,7 +785,7 @@
     </nav>
 
     <!-- Hero -->
-    <section class="pt-32 pb-16 px-6">
+    <section data-bg-section="hero" class="pt-32 pb-16 px-6">
         <div class="max-w-[1240px] mx-auto">
             <div class="grid lg:grid-cols-12 gap-10 items-start">
                 <div class="lg:col-span-7">
@@ -223,7 +851,7 @@
     </section>
 
     <!-- Manifesto -->
-    <section class="py-16 px-6">
+    <section data-bg-section="principle" class="py-16 px-6">
         <div class="max-w-[1240px] mx-auto">
             <div class="grid lg:grid-cols-12 gap-10">
                 <div class="lg:col-span-3">
@@ -246,7 +874,7 @@
     </section>
 
     <!-- Topology -->
-    <section id="topology" class="py-16 px-6 border-t border-white/5">
+    <section data-bg-section="topology" id="topology" class="py-16 px-6 border-t border-white/5">
         <div class="max-w-[1240px] mx-auto">
             <div class="grid lg:grid-cols-12 gap-10 mb-12">
                 <div class="lg:col-span-3">
@@ -338,7 +966,7 @@
     </section>
 
     <!-- Subsystems -->
-    <section id="subsystems" class="py-16 px-6 border-t border-white/5">
+    <section data-bg-section="subsystems" id="subsystems" class="py-16 px-6 border-t border-white/5">
         <div class="max-w-[1240px] mx-auto">
             <div class="grid lg:grid-cols-12 gap-10 mb-12">
                 <div class="lg:col-span-3">
@@ -483,7 +1111,7 @@
     </section>
 
     <!-- Status table -->
-    <section class="py-16 px-6 border-t border-white/5">
+    <section data-bg-section="status" class="py-16 px-6 border-t border-white/5">
         <div class="max-w-[1240px] mx-auto">
             <div class="grid lg:grid-cols-12 gap-10 mb-8">
                 <div class="lg:col-span-3">
@@ -547,7 +1175,7 @@
     </section>
 
     <!-- Roadmap -->
-    <section class="py-16 px-6 border-t border-white/5">
+    <section data-bg-section="roadmap" class="py-16 px-6 border-t border-white/5">
         <div class="max-w-[1240px] mx-auto">
             <div class="grid lg:grid-cols-12 gap-10">
                 <div class="lg:col-span-3">
