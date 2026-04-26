@@ -3,791 +3,1060 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Swan Yi Htet's Personal Website</title>
+    <title>Swan Yi Htet · Applied Physics &amp; Robotics</title>
+    <meta name="description" content="Applied Physicist and Robotics Engineer. Computational plasma fusion research at Columbia. Builder of the ORION robotics ecosystem.">
+
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['$', '$']], displayMath: [['$$', '$$']] },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700;9..144,800;9..144,900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     fontFamily: {
-                        sans: ['Plus Jakarta Sans', 'sans-serif'],
-                        display: ['Outfit', 'sans-serif'],
-                        mono: ['JetBrains Mono', 'monospace'],
+                        display: ['Fraunces', 'serif'],
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
                     },
                     colors: {
-                        brand: {
-                            50: '#f0f9ff',
-                            100: '#e0f2fe',
-                            200: '#bae6fd',
-                            300: '#7dd3fc',
-                            400: '#38bdf8',
-                            500: '#0ea5e9',
-                            600: '#0284c7',
-                            700: '#0369a1',
-                            800: '#075985',
-                            900: '#0c4a6e',
-                            950: '#082f49',
-                        },
-                        slate: {
-                            850: '#1e293b',
-                            950: '#020617',
-                        }
+                        ink: { DEFAULT: '#070b14', deep: '#04060c', soft: '#0c1220', panel: '#10172a' },
+                        ember: { 300: '#fbbf67', 400: '#f5a142', 500: '#e8842a', 600: '#c66a1c' },
+                        plasma: { 300: '#7dd3fc', 400: '#38bdf8', 500: '#0ea5e9' },
                     },
                     animation: {
-                        'float': 'float 6s ease-in-out infinite',
-                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'fade-up': 'fadeUp 0.9s ease-out forwards',
+                        'pulse-soft': 'pulseSoft 4s ease-in-out infinite',
+                        'drift': 'drift 18s ease-in-out infinite',
                     },
                     keyframes: {
-                        float: {
-                            '0%, 100%': { transform: 'translateY(0)' },
-                            '50%': { transform: 'translateY(-20px)' },
-                        }
+                        fadeUp: { '0%': { opacity: '0', transform: 'translateY(14px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } },
+                        pulseSoft: { '0%,100%': { opacity: '0.35' }, '50%': { opacity: '0.85' } },
+                        drift: { '0%,100%': { transform: 'translate(0,0)' }, '50%': { transform: 'translate(8px,-12px)' } },
                     }
                 }
             }
         }
     </script>
+
     <style>
         body {
-            color: #e2e8f0;
+            background: #04060c;
+            color: #d8dde6;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
         }
-        .glass {
-            background: rgba(15, 23, 42, 0.6);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+
+        /* Subtle dot-grid like a lab notebook */
+        .lab-grid {
+            background-image:
+                radial-gradient(circle, rgba(125,211,252,0.06) 1px, transparent 1px),
+                radial-gradient(circle, rgba(232,132,42,0.04) 1px, transparent 1px);
+            background-size: 36px 36px, 72px 72px;
+            background-position: 0 0, 18px 18px;
         }
-        .hero-gradient {
-            background: radial-gradient(circle at 50% 50%, rgba(14, 165, 233, 0.15) 0%, rgba(2, 6, 23, 0) 70%);
+
+        /* Editorial rule */
+        .editorial-rule {
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: rgba(245,161,66,0.85);
         }
-        .text-gradient {
-            background: linear-gradient(to right, #38bdf8, #818cf8);
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .section-padding {
-            padding-top: 5rem;
-            padding-bottom: 5rem;
-        }
-        .card-hover:hover {
-            transform: translateY(-5px);
-            border-color: rgba(56, 189, 248, 0.4);
-            box-shadow: 0 10px 30px -10px rgba(14, 165, 233, 0.3);
-        }
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #020617;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #1e293b;
-            border-radius: 10px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #334155;
-        }
-        /* Circuit board background animations */
-        .circuit-line {
-            position: absolute;
-            background: linear-gradient(90deg, transparent, rgba(14, 165, 233, 0.08), transparent);
+        .editorial-rule::before {
+            content: '';
+            width: 28px;
             height: 1px;
-            animation: circuit-flow 8s linear infinite;
+            background: rgba(245,161,66,0.6);
         }
-        .circuit-line-v {
+
+        /* Number marker · scientific paper section */
+        .section-num {
+            font-family: 'Fraunces', serif;
+            font-feature-settings: 'lnum';
+            font-size: 13px;
+            color: rgba(245,161,66,0.55);
+            letter-spacing: 0.05em;
+        }
+
+        .display-serif { font-family: 'Fraunces', serif; }
+        .mono-tag { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; }
+
+        /* Subtle frame for instrument-style panels */
+        .instrument-panel {
+            position: relative;
+            background: linear-gradient(180deg, rgba(16,23,42,0.5), rgba(7,11,20,0.7));
+            border: 1px solid rgba(125,211,252,0.08);
+            border-radius: 4px;
+        }
+        .instrument-panel::before {
+            content: '';
             position: absolute;
-            background: linear-gradient(180deg, transparent, rgba(14, 165, 233, 0.08), transparent);
-            width: 1px;
-            animation: circuit-flow-v 10s linear infinite;
+            top: -1px; left: -1px;
+            width: 14px; height: 14px;
+            border-top: 1px solid rgba(245,161,66,0.5);
+            border-left: 1px solid rgba(245,161,66,0.5);
         }
-        @keyframes circuit-flow {
-            0% { transform: translateX(-100%); opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { transform: translateX(100vw); opacity: 0; }
-        }
-        @keyframes circuit-flow-v {
-            0% { transform: translateY(-100%); opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { transform: translateY(100vh); opacity: 0; }
-        }
-        .node-dot {
+        .instrument-panel::after {
+            content: '';
             position: absolute;
-            width: 3px;
-            height: 3px;
-            background: rgba(14, 165, 233, 0.15);
+            bottom: -1px; right: -1px;
+            width: 14px; height: 14px;
+            border-bottom: 1px solid rgba(245,161,66,0.5);
+            border-right: 1px solid rgba(245,161,66,0.5);
+        }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #04060c; }
+        ::-webkit-scrollbar-thumb { background: #1a2238; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #e8842a; }
+
+        /* Glow that's restrained, not flashy */
+        .ember-glow { box-shadow: 0 0 0 1px rgba(232,132,42,0.15), 0 12px 40px -12px rgba(232,132,42,0.25); }
+
+        /* Selective serif italic for callouts */
+        .pull-quote {
+            font-family: 'Fraunces', serif;
+            font-style: italic;
+            font-weight: 300;
+            letter-spacing: -0.01em;
+        }
+
+        /* Hero portrait styling · clean editorial */
+        .portrait-frame {
+            position: relative;
+            border: 1px solid rgba(245,161,66,0.25);
+            box-shadow: 0 0 0 8px rgba(7,11,20,0.6), 0 30px 80px -20px rgba(0,0,0,0.7);
+        }
+        .portrait-frame::after {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            background: linear-gradient(135deg, transparent 60%, rgba(245,161,66,0.15) 100%);
+            pointer-events: none;
+        }
+
+        /* Equation styling */
+        mjx-container { font-size: 1em !important; }
+        .equation-block {
+            font-family: 'Fraunces', serif;
+            font-weight: 400;
+            color: rgba(125,211,252,0.85);
+        }
+
+        /* Project card hover pull */
+        .project-card { transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.3s; }
+        .project-card:hover { transform: translateY(-2px); border-color: rgba(245,161,66,0.35); }
+
+        /* ORION subsystem connectors */
+        .orion-node-line { stroke: rgba(125,211,252,0.25); stroke-dasharray: 4 4; }
+
+        /* Reading-rhythm constraint */
+        .prose-band { max-width: 680px; }
+
+        /* Custom amber blip for status dots */
+        .blip {
+            display: inline-block;
+            width: 6px; height: 6px;
             border-radius: 50%;
-            box-shadow: 0 0 6px rgba(14, 165, 233, 0.1);
+            background: #f5a142;
+            box-shadow: 0 0 6px rgba(245,161,66,0.8);
+            animation: pulseSoft 2s ease-in-out infinite;
+        }
+
+        /* Index page heading underline */
+        .heading-mark {
+            position: relative;
+            padding-bottom: 4px;
+        }
+        .heading-mark::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 36px;
+            height: 2px;
+            background: rgba(245,161,66,0.7);
         }
     </style>
 </head>
-<body class="selection:bg-brand-500/30 selection:text-brand-200">
+<body class="selection:bg-ember-500/30 selection:text-ember-300">
 
-    <!-- Enhanced background with circuit traces -->
-    <div class="fixed inset-0 -z-50 pointer-events-none">
-        <div class="absolute inset-0 bg-[#020617]"></div>
-        <div class="absolute inset-0 opacity-[0.03]"
-            style="background-image: linear-gradient(#38bdf8 1px, transparent 1px),
-            linear-gradient(90deg, #38bdf8 1px, transparent 1px);
-            background-size: 40px 40px;">
-        </div>
-        <div class="absolute top-0 left-0 w-[500px] h-[500px] bg-brand-500/10 rounded-full blur-[100px] -translate-x-1/2 -translate-y-1/2"></div>
-        <div class="absolute bottom-0 right-0 w-[500px] h-[500px] bg-indigo-500/10 rounded-full blur-[100px] translate-x-1/2 translate-y-1/2"></div>
-        <!-- Animated circuit traces -->
-        <div class="circuit-line" style="top: 20%; width: 40%; left: -10%; animation-delay: 0s;"></div>
-        <div class="circuit-line" style="top: 45%; width: 35%; left: -5%; animation-delay: 3s;"></div>
-        <div class="circuit-line" style="top: 70%; width: 45%; left: -15%; animation-delay: 6s;"></div>
-        <div class="circuit-line" style="top: 85%; width: 30%; left: -8%; animation-delay: 1.5s;"></div>
-        <div class="circuit-line-v" style="left: 15%; height: 35%; top: -10%; animation-delay: 2s;"></div>
-        <div class="circuit-line-v" style="left: 55%; height: 40%; top: -5%; animation-delay: 5s;"></div>
-        <div class="circuit-line-v" style="left: 80%; height: 30%; top: -12%; animation-delay: 7s;"></div>
-        <!-- Circuit nodes -->
-        <div class="node-dot" style="top: 20%; left: 30%;"></div>
-        <div class="node-dot" style="top: 45%; left: 55%;"></div>
-        <div class="node-dot" style="top: 70%; left: 15%;"></div>
-        <div class="node-dot" style="top: 35%; left: 80%;"></div>
-        <div class="node-dot" style="top: 60%; left: 42%;"></div>
-        <div class="node-dot" style="top: 85%; left: 68%;"></div>
-        <div class="node-dot" style="top: 15%; left: 65%;"></div>
-        <div class="node-dot" style="top: 50%; left: 25%;"></div>
+    <!-- Atmospheric backdrop with animated network -->
+    <div class="fixed inset-0 -z-50 pointer-events-none overflow-hidden">
+        <div class="absolute inset-0 lab-grid opacity-50"></div>
+        <canvas id="bg-network" class="absolute inset-0 w-full h-full"></canvas>
+        <div class="absolute top-0 right-0 w-[700px] h-[700px] bg-ember-500/8 rounded-full blur-[180px] animate-drift"></div>
+        <div class="absolute bottom-[-10%] left-[-5%] w-[600px] h-[600px] bg-plasma-500/6 rounded-full blur-[160px]"></div>
+        <div class="absolute top-[30%] left-[40%] w-[400px] h-[400px] bg-ember-300/4 rounded-full blur-[140px]"></div>
     </div>
 
-    <!-- Navigation -->
-    <nav class="fixed top-0 w-full z-50 glass">
-        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-            <div class="flex items-center cursor-default group">
-                <span class="font-mono text-xl sm:text-2xl font-bold tracking-tighter">
-                    <span class="text-brand-500 mr-1 transition-colors group-hover:text-white">&lt;</span>
-                    <span class="bg-gradient-to-r from-white via-brand-200 to-brand-500 text-transparent bg-clip-text pb-1">Swan Yi Htet</span>
-                    <span class="text-brand-500 ml-1 transition-colors group-hover:text-white">/&gt;</span>
-                </span>
+    <script>
+        // Animated network: drifting nodes that connect when close, subtle technical motif
+        (function() {
+            const canvas = document.getElementById('bg-network');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            let w, h, nodes = [];
+            const DPR = Math.min(window.devicePixelRatio || 1, 2);
+
+            function resize() {
+                w = canvas.clientWidth;
+                h = canvas.clientHeight;
+                canvas.width = w * DPR;
+                canvas.height = h * DPR;
+                ctx.scale(DPR, DPR);
+            }
+
+            function init() {
+                resize();
+                const count = Math.min(60, Math.floor((w * h) / 22000));
+                nodes = [];
+                for (let i = 0; i < count; i++) {
+                    nodes.push({
+                        x: Math.random() * w,
+                        y: Math.random() * h,
+                        vx: (Math.random() - 0.5) * 0.12,
+                        vy: (Math.random() - 0.5) * 0.12,
+                        r: Math.random() * 1.2 + 0.6,
+                        // Some nodes ember-tinted, most plasma-tinted, a few white
+                        type: Math.random() < 0.15 ? 'ember' : (Math.random() < 0.85 ? 'plasma' : 'white'),
+                        phase: Math.random() * Math.PI * 2,
+                    });
+                }
+            }
+
+            function step(t) {
+                ctx.clearRect(0, 0, w, h);
+
+                // Draw connections first (behind nodes)
+                for (let i = 0; i < nodes.length; i++) {
+                    for (let j = i + 1; j < nodes.length; j++) {
+                        const a = nodes[i], b = nodes[j];
+                        const dx = a.x - b.x, dy = a.y - b.y;
+                        const d2 = dx*dx + dy*dy;
+                        const maxD = 140;
+                        if (d2 < maxD*maxD) {
+                            const alpha = (1 - Math.sqrt(d2)/maxD) * 0.18;
+                            ctx.strokeStyle = `rgba(125,211,252,${alpha})`;
+                            ctx.lineWidth = 0.5;
+                            ctx.beginPath();
+                            ctx.moveTo(a.x, a.y);
+                            ctx.lineTo(b.x, b.y);
+                            ctx.stroke();
+                        }
+                    }
+                }
+
+                // Draw nodes
+                for (const n of nodes) {
+                    n.x += n.vx;
+                    n.y += n.vy;
+                    if (n.x < -10) n.x = w + 10;
+                    if (n.x > w + 10) n.x = -10;
+                    if (n.y < -10) n.y = h + 10;
+                    if (n.y > h + 10) n.y = -10;
+
+                    const pulse = 0.7 + Math.sin(t * 0.001 + n.phase) * 0.3;
+
+                    let color;
+                    if (n.type === 'ember') {
+                        color = `rgba(245,161,66,${0.55 * pulse})`;
+                    } else if (n.type === 'white') {
+                        color = `rgba(255,255,255,${0.5 * pulse})`;
+                    } else {
+                        color = `rgba(125,211,252,${0.4 * pulse})`;
+                    }
+
+                    ctx.fillStyle = color;
+                    ctx.beginPath();
+                    ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    // Subtle glow halo on ember nodes
+                    if (n.type === 'ember') {
+                        const grad = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, n.r * 5);
+                        grad.addColorStop(0, `rgba(245,161,66,${0.18 * pulse})`);
+                        grad.addColorStop(1, 'rgba(245,161,66,0)');
+                        ctx.fillStyle = grad;
+                        ctx.beginPath();
+                        ctx.arc(n.x, n.y, n.r * 5, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                }
+
+                requestAnimationFrame(step);
+            }
+
+            init();
+            step(0);
+            window.addEventListener('resize', () => { init(); });
+        })();
+    </script>
+
+    <!-- ============== NAV ============== -->
+    <nav class="fixed top-0 w-full z-50 backdrop-blur-md bg-ink-deep/70 border-b border-white/5">
+        <div class="max-w-[1240px] mx-auto px-6 h-16 flex items-center justify-between">
+            <a href="#top" class="flex items-center gap-3 group">
+                <!-- Monogram mark -->
+                <div class="relative w-7 h-7 flex items-center justify-center border border-ember-500/40 rounded-sm bg-ink-deep group-hover:border-ember-500/80 transition-colors">
+                    <span class="display-serif text-[13px] font-semibold text-white leading-none tracking-tight">S<span class="text-ember-400">·</span>Y</span>
+                </div>
+                <div class="leading-tight">
+                    <div class="text-white text-sm font-medium tracking-tight">Swan Yi Htet</div>
+                    <div class="mono-tag text-ember-400 text-[9px]">applied physicist · roboticist</div>
+                </div>
+            </a>
+            <div class="hidden md:flex items-center gap-7 text-[13px] text-zinc-400">
+                <a href="#research" class="hover:text-ember-300 transition-colors">Research</a>
+                <a href="#orion" class="hover:text-ember-300 transition-colors">ORION</a>
+                <a href="#projects" class="hover:text-ember-300 transition-colors">Projects</a>
+                <a href="#cv" class="hover:text-ember-300 transition-colors">CV</a>
+                <a href="./SwanYiHtet_TechnicalResume.pdf" download class="hover:text-ember-300 transition-colors inline-flex items-center gap-1">
+                    Resume
+                    <svg class="w-3 h-3 opacity-60" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                </a>
+                <a href="#contact" class="hover:text-ember-300 transition-colors">Contact</a>
             </div>
-            <div class="hidden md:flex items-center space-x-8 text-sm font-medium text-slate-400">
-                <a href="#about" class="hover:text-brand-400 transition-colors">About</a>
-                <a href="#education" class="hover:text-brand-400 transition-colors">Education</a>
-                <a href="#research" class="hover:text-brand-400 transition-colors">Research</a>
-                <a href="#projects" class="hover:text-brand-400 transition-colors">Projects</a>
-                <a href="#awards" class="hover:text-brand-400 transition-colors">Awards</a>
-                <a href="#skills" class="hover:text-brand-400 transition-colors">Skills</a>
-                <a href="#contact" class="px-5 py-2.5 bg-brand-600/10 border border-brand-500/20 rounded-full text-brand-400 hover:bg-brand-600 hover:text-white transition-all duration-300">Contact</a>
-            </div>
-            <button id="mobile-menu-btn" class="md:hidden text-slate-400">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
-                </svg>
-            </button>
-        </div>
-        <!-- Mobile Menu -->
-        <div id="mobile-menu" class="hidden md:hidden px-6 pb-6 pt-2 border-t border-slate-800/50">
-            <div class="flex flex-col space-y-4 text-sm font-medium text-slate-400">
-                <a href="#about" class="hover:text-brand-400 transition-colors py-2">About</a>
-                <a href="#education" class="hover:text-brand-400 transition-colors py-2">Education</a>
-                <a href="#research" class="hover:text-brand-400 transition-colors py-2">Research</a>
-                <a href="#projects" class="hover:text-brand-400 transition-colors py-2">Projects</a>
-                <a href="#awards" class="hover:text-brand-400 transition-colors py-2">Awards</a>
-                <a href="#skills" class="hover:text-brand-400 transition-colors py-2">Skills</a>
-                <a href="#contact" class="px-5 py-2.5 bg-brand-600/10 border border-brand-500/20 rounded-full text-brand-400 hover:bg-brand-600 hover:text-white transition-all text-center">Contact</a>
-            </div>
+            <a href="https://github.com/shtet100" target="_blank" class="text-zinc-500 hover:text-white transition-colors">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+            </a>
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section class="relative min-h-screen flex items-center pt-20 overflow-hidden">
-        <div class="absolute inset-0 hero-gradient -z-10"></div>
-        <div class="absolute top-1/4 left-10 w-2 h-2 bg-brand-500 rounded-full animate-pulse-slow"></div>
-        <div class="absolute top-3/4 right-20 w-3 h-3 bg-indigo-500 rounded-full animate-float"></div>
-        <div class="absolute bottom-1/4 left-1/3 w-1.5 h-1.5 bg-brand-400 rounded-full animate-pulse"></div>
+    <!-- ============== HERO · editorial layout ============== -->
+    <section id="top" class="relative pt-28 md:pt-36 pb-20 px-6">
+        <div class="max-w-[1240px] mx-auto">
+            <div class="grid lg:grid-cols-12 gap-10 lg:gap-16 items-start">
 
-        <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
-            <div class="space-y-8 animate-in fade-in slide-in-from-left duration-1000">
-                <div class="inline-flex items-center space-x-3 px-3 py-1 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-400 text-sm font-medium">
-                    <span class="flex h-2 w-2 rounded-full bg-brand-400"></span>
-                    <span>Columbia University Student Researcher</span>
-                </div>
-                <h1 class="font-display text-5xl md:text-7xl font-bold leading-tight">
-                    Swan Yi <span class="text-gradient">Htet</span>
-                </h1>
-                <p class="text-xl text-slate-400 font-light leading-relaxed max-w-lg">
-                    Undergraduate Researcher specializing in <span class="text-white font-medium">Applied Physics</span> and <span class="text-white font-medium">Data Science</span>. Exploring the frontiers of plasma dynamics and robotics.
-                </p>
-                <div class="flex flex-wrap gap-4 pt-4">
-                    <a href="#research" class="px-8 py-4 bg-brand-600 hover:bg-brand-500 text-white rounded-2xl font-semibold transition-all shadow-xl shadow-brand-600/20 flex items-center group">
-                        View Research
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                        </svg>
-                    </a>
-                    <a href="mailto:swanyihtet0713@gmail.com" class="px-8 py-4 bg-slate-800 hover:bg-slate-700 text-white rounded-2xl font-semibold transition-all border border-slate-700">
-                        Get in Touch
-                    </a>
-                </div>
-            </div>
-            <div class="relative flex justify-center animate-fade-in-up" style="animation-delay: 0.2s;">
-                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[100%] h-[105%] bg-gradient-to-br from-brand-500/30 to-cyan-400/30 rounded-[3rem] blur-[60px] animate-pulse-slow"></div>
-                <div class="relative w-full max-w-[340px] lg:max-w-[400px] h-[500px] lg:h-[600px] p-2 rounded-[2.5rem] border border-white/10 bg-white/5 backdrop-blur-sm transition-transform duration-500 hover:scale-[1.02]">
-                    <div class="w-full h-full rounded-[2rem] overflow-hidden relative group bg-slate-900">
-                        <img src="./profile.jpg" alt="Profile Picture in Plasma Lab" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700">
-                        <div class="absolute inset-0 bg-brand-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <!-- Left: Editorial headline -->
+                <div class="lg:col-span-7 animate-fade-up">
+                    <!-- Massive serif headline -->
+                    <h1 class="display-serif text-[58px] md:text-[88px] leading-[0.95] tracking-[-0.025em] text-white font-light mb-8">
+                        Applied<br>
+                        <span class="font-semibold">physicist</span><span class="text-ember-400">.</span><br>
+                        Robotics<br>
+                        <span class="italic font-light text-zinc-300">engineer</span><span class="text-ember-400">.</span>
+                    </h1>
+
+                    <!-- Tagline paragraph -->
+                    <p class="prose-band text-[17px] text-zinc-400 leading-relaxed mb-8 font-light">
+                        I work between two worlds: computational plasma fusion at Columbia, and the modular robotics ecosystem I'm building from scratch. Both reduce to the same question: how do you write physics that survives contact with reality?
+                    </p>
+
+                    <!-- Status row -->
+                    <div class="flex flex-wrap items-center gap-x-6 gap-y-3 mb-10 text-[13px]">
+                        <span class="flex items-center gap-2 text-zinc-300">
+                            <span class="blip"></span>
+                            <span>B.S.E. Applied Physics, Columbia '27</span>
+                        </span>
                     </div>
-                    <div class="absolute -bottom-4 -right-4 bg-slate-900/80 border border-white/10 p-3 rounded-xl shadow-xl backdrop-blur-md animate-float">
-                        <div class="flex items-center gap-2">
-                            <span class="w-2 h-2 bg-brand-400 rounded-full animate-pulse"></span>
-                            <a href="https://fusion.columbia.edu/" target="_blank" class="text-xs font-mono text-brand-300 hover:text-brand-100 transition-colors">Columbia Plasma Fusion Research Center</a>
+
+                    <!-- CTA group -->
+                    <div class="flex flex-wrap gap-3">
+                        <a href="#orion" class="group inline-flex items-center gap-2 px-5 py-3 bg-ember-500 hover:bg-ember-400 text-ink-deep font-semibold text-[13px] rounded-sm transition-all ember-glow">
+                            Explore ORION
+                            <svg class="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                        </a>
+                        <a href="#research" class="inline-flex items-center gap-2 px-5 py-3 bg-transparent border border-plasma-400/40 hover:border-plasma-400/80 text-plasma-300 text-[13px] rounded-sm transition-all">
+                            Read the Research
+                        </a>
+                        <a href="./SwanYiHtet_TechnicalResume.pdf" download class="inline-flex items-center gap-2 px-5 py-3 bg-transparent border border-ember-500/40 hover:border-ember-500/80 text-ember-300 text-[13px] rounded-sm transition-all">
+                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                            Resume
+                        </a>
+                        <a href="#contact" class="inline-flex items-center gap-2 px-5 py-3 bg-transparent border border-zinc-700 hover:border-zinc-500 text-zinc-300 text-[13px] rounded-sm transition-all">
+                            Get in Touch
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Right: Portrait + meta panel -->
+                <div class="lg:col-span-5 animate-fade-up" style="animation-delay:0.1s">
+                    <div class="relative">
+                        <!-- Portrait -->
+                        <div class="portrait-frame rounded-sm overflow-hidden bg-ink-soft aspect-[4/5] max-w-[420px] ml-auto">
+                            <img src="./Profile.jpg" alt="Swan Yi Htet" class="w-full h-full object-cover">
+                        </div>
+
+                        <!-- Floating meta tag -->
+                        <div class="absolute -bottom-5 -left-3 sm:left-2 instrument-panel rounded-sm px-4 py-3 max-w-[260px]">
+                            <div class="mono-tag text-ember-400 mb-1.5">Currently</div>
+                            <div class="text-white text-sm leading-tight">Building ORION + simulating stellarator instabilities on NERSC Perlmutter.</div>
+                        </div>
+                    </div>
+
+                    <!-- Below-portrait micro stats -->
+                    <div class="mt-10 grid grid-cols-3 gap-3 max-w-[420px] ml-auto">
+                        <div class="text-center py-3 px-2 border border-white/5 rounded-sm">
+                            <div class="display-serif text-2xl text-white font-medium">3.90</div>
+                            <div class="mono-tag text-zinc-500 mt-0.5">GPA</div>
+                        </div>
+                        <div class="text-center py-3 px-2 border border-white/5 rounded-sm">
+                            <div class="display-serif text-2xl text-white font-medium">4</div>
+                            <div class="mono-tag text-zinc-500 mt-0.5">SUBSYSTEMS</div>
+                        </div>
+                        <div class="text-center py-3 px-2 border border-white/5 rounded-sm">
+                            <div class="display-serif text-2xl text-white font-medium">2</div>
+                            <div class="mono-tag text-zinc-500 mt-0.5">CONFERENCES</div>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <!-- Bottom strip · running headline -->
+            <div class="mt-24 pt-6 border-t border-white/5 flex flex-wrap items-center justify-between gap-4 text-[11px] mono-tag text-zinc-600">
+                <span>Columbia SEAS · Fu Foundation</span>
+                <span class="hidden md:inline">simsopt · VMEC2000 · MuJoCo · ROS 2 · NERSC</span>
+                <span>scroll for more ↓</span>
+            </div>
         </div>
     </section>
 
-    <!-- About Section -->
-    <section id="about" class="section-padding bg-slate-950/50">
-        <div class="max-w-4xl mx-auto px-6">
-            <h2 class="font-display text-4xl font-bold mb-12 text-center">About Me</h2>
-            <div class="space-y-8 text-slate-300 leading-relaxed text-lg font-light">
-                <div class="relative pl-6 border-l-4 border-brand-500 bg-gradient-to-r from-brand-500/5 to-transparent py-6 pr-6 rounded-r-lg">
-                    <span class="block text-brand-400 font-mono text-xs font-bold uppercase tracking-widest mb-2">Mission Statement</span>
-                    <p class="text-xl text-white font-light italic leading-relaxed">
-                        "To bridge the gap between theoretical physics and engineered systems, leveraging computational modeling to design intelligent, autonomous behaviors in the physical world."
+    <!-- ============== ABOUT · short editorial passage ============== -->
+    <section id="about" class="relative py-24 px-6">
+        <div class="max-w-[1240px] mx-auto">
+            <div class="grid lg:grid-cols-12 gap-10">
+                <div class="lg:col-span-3">
+                    <span class="section-num">§ 01</span>
+                    <h2 class="display-serif text-3xl text-white font-medium mt-2 heading-mark">About</h2>
+                </div>
+                <div class="lg:col-span-9 prose-band">
+                    <p class="text-[19px] text-zinc-200 leading-[1.7] mb-6 font-light">
+                        I'm an Applied Physics undergraduate at Columbia SEAS, conducting computational plasma fusion research under <span class="text-white">Dr. Elizabeth Paul</span> at the Columbia Fusion Energy Research Center. My work centers on stellarator optimization using <span class="font-mono text-[14px] text-plasma-300">simsopt</span>, <span class="font-mono text-[14px] text-plasma-300">VMEC2000</span>, and <span class="font-mono text-[14px] text-plasma-300">booz_xform</span> on the NERSC Perlmutter HPC cluster.
+                    </p>
+                    <p class="text-[16px] text-zinc-400 leading-[1.75] mb-6">
+                        Outside of plasma research, I co-architect <span class="text-ember-300">ORION</span>, a modular robotics ecosystem with four subsystems spanning perception, motor control, navigation, and self-calibrating physics discovery. The throughline is computational physics applied to systems that have to actually work, not just simulate cleanly.
+                    </p>
+                    <p class="pull-quote text-[20px] text-zinc-300 mt-12 leading-snug border-l-2 border-ember-500/50 pl-6">
+                        The interesting problems live in the gap between clean theory and code that survives contact with hardware. That gap is where I want to spend my career.
                     </p>
                 </div>
-                <div class="space-y-6">
-                    <p>I am an Applied Physics student at <span class="text-white font-medium underline decoration-brand-500/50">Columbia University</span> with a research focus on computational modeling of physical systems. My work is grounded in plasma physics and nonlinear dynamics, where I develop reduced computational models to analyze collective behavior, stability, and transport in complex physical systems.</p>
-                    <p>Alongside this, I am increasingly interested in robotics and autonomous systems as a natural extension of my training&#8212;particularly in how physical principles, control, and computation come together to produce intelligent, real-world behavior. I view robotics not as a separate discipline, but as a physical system that demands the same rigor as theoretical and computational physics.</p>
-                    <p>My long-term goal is to work at the intersection of physics, computation, and engineered systems, contributing both to fundamental understanding and to the design of systems that interact meaningfully with the physical world.</p>
-                </div>
             </div>
         </div>
     </section>
 
-    <!-- Education Section -->
-    <section id="education" class="section-padding relative">
-        <div class="max-w-7xl mx-auto px-6">
-            <h2 class="font-display text-4xl font-bold mb-16 text-center">Education</h2>
-            <div class="grid md:grid-cols-2 gap-8">
-                <div class="glass p-10 rounded-[2rem] card-hover transition-all duration-300 relative group overflow-hidden">
-                    <img src="./columbia-engineering-logo.png" alt="Columbia Logo" class="absolute -right-8 -bottom-8 w-64 opacity-10 grayscale group-hover:opacity-20 group-hover:scale-105 transition-all duration-500" />
-                    <span class="text-brand-400 font-mono text-xs uppercase tracking-widest mb-4 block relative z-10">2025 - Present</span>
-                    <h3 class="text-2xl font-bold mb-2 relative z-10">Columbia University</h3>
-                    <p class="text-slate-400 mb-6">The Fu Foundation School of Engineering and Applied Science</p>
-                    <div class="space-y-2">
-                        <div class="flex items-center space-x-2 text-white">
-                            <span class="w-1.5 h-1.5 bg-brand-500 rounded-full"></span>
-                            <span class="font-medium">B.S.E. in Applied Physics</span>
-                        </div>
-                        <div class="inline-flex items-center px-4 py-1.5 bg-brand-500/10 rounded-lg border border-brand-500/20 text-brand-400 text-sm font-bold">GPA: 3.9 / 4.0</div>
-                    </div>
+    <!-- ============== RESEARCH ============== -->
+    <section id="research" class="relative py-24 px-6 border-t border-white/5">
+        <div class="max-w-[1240px] mx-auto">
+            <div class="grid lg:grid-cols-12 gap-10 mb-16">
+                <div class="lg:col-span-3">
+                    <span class="section-num">§ 02</span>
+                    <h2 class="display-serif text-3xl text-white font-medium mt-2 heading-mark">Research</h2>
                 </div>
-                <div class="glass p-10 rounded-[2rem] card-hover transition-all duration-300 relative group overflow-hidden">
-                    <img src="./queens-college-logo.png" alt="Queens College Logo" class="absolute -right-8 -bottom-8 w-64 opacity-10 grayscale group-hover:opacity-20 group-hover:scale-105 transition-all duration-500" />
-                    <span class="text-brand-400 font-mono text-xs uppercase tracking-widest mb-4 block relative z-10">2022 - 2025</span>
-                    <h3 class="text-2xl font-bold mb-2 relative z-10">CUNY Queens College</h3>
-                    <p class="text-slate-400 mb-6 italic">Magna Cum Laude</p>
+                <div class="lg:col-span-9 prose-band">
+                    <p class="text-zinc-400 text-[15px] leading-relaxed">
+                        Two threads. Stellarator plasma physics for fusion energy at Columbia, ongoing. Stellar photometry calibration with TESS data at CUNY Queens, presented at TASC7 in Hawaii and TASC NYC, concluded.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Two research papers, editorial style -->
+            <div class="grid lg:grid-cols-2 gap-6">
+
+                <!-- Plasma research card -->
+                <a href="research-plasma.html" class="project-card group instrument-panel p-8 block rounded-sm">
+                    <div class="flex items-start justify-between mb-6">
+                        <div>
+                            <div class="mono-tag text-ember-400 mb-2">Active · Columbia</div>
+                            <span class="text-zinc-600 text-[10px] font-mono">2025 · present</span>
+                        </div>
+                        <span class="blip"></span>
+                    </div>
+                    <h3 class="display-serif text-2xl text-white font-medium mb-3 leading-tight group-hover:text-ember-300 transition-colors">
+                        Reduced Simulation Models for Wave-Particle Interactions
+                    </h3>
+                    <p class="text-zinc-400 text-[14px] leading-relaxed mb-6">
+                        A &delta;f Particle-in-Cell framework for the Vlasov-Poisson bump-on-tail instability. Modeling resonant transport in stellarator geometries.
+                    </p>
+
+                    <!-- Equation snippet -->
+                    <div class="bg-ink-deep/60 border border-plasma-500/15 rounded-sm p-4 mb-6 font-mono text-[12px] text-plasma-300">
+                        <div class="text-zinc-600 text-[10px] mb-1">Coordinate transform</div>
+                        u_c = u·cos(φ), &nbsp; u_s = u·sin(φ)
+                    </div>
+
+                    <div class="flex flex-wrap gap-2 mb-5">
+                        <span class="px-2 py-1 bg-ink-soft border border-zinc-800 rounded text-[11px] text-zinc-400 font-mono">Vlasov-Poisson</span>
+                        <span class="px-2 py-1 bg-ink-soft border border-zinc-800 rounded text-[11px] text-zinc-400 font-mono">Symplectic</span>
+                        <span class="px-2 py-1 bg-ink-soft border border-zinc-800 rounded text-[11px] text-zinc-400 font-mono">PIC</span>
+                    </div>
+
+                    <div class="flex items-center justify-between pt-4 border-t border-white/5">
+                        <span class="text-zinc-500 text-[12px]">Dr. Elizabeth Paul · Fusion Energy Research Center</span>
+                        <span class="text-ember-400 text-[12px] group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
+                            Read paper
+                            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                        </span>
+                    </div>
+                </a>
+
+                <!-- Stellar research card -->
+                <a href="research-stellar.html" class="project-card group instrument-panel p-8 block rounded-sm">
+                    <div class="flex items-start justify-between mb-6">
+                        <div>
+                            <div class="mono-tag text-zinc-400 mb-2">Concluded · Queens</div>
+                            <span class="text-zinc-600 text-[10px] font-mono">2023 · 2024</span>
+                        </div>
+                        <span class="w-1.5 h-1.5 rounded-full bg-zinc-600"></span>
+                    </div>
+                    <h3 class="display-serif text-2xl text-white font-medium mb-3 leading-tight group-hover:text-ember-300 transition-colors">
+                        Calibrating TESS Photometry with White Dwarfs
+                    </h3>
+                    <p class="text-zinc-400 text-[14px] leading-relaxed mb-6">
+                        Statistical analysis of 33,396 sector observations to quantify CROWDSAP errors. White dwarfs as flux standards.
+                    </p>
+
+                    <!-- Stat row -->
+                    <div class="grid grid-cols-3 gap-2 mb-6 bg-ink-deep/60 border border-plasma-500/15 rounded-sm p-4">
+                        <div>
+                            <div class="display-serif text-xl text-white">8.1k</div>
+                            <div class="mono-tag text-zinc-500 text-[9px]">white dwarfs</div>
+                        </div>
+                        <div>
+                            <div class="display-serif text-xl text-white">33k</div>
+                            <div class="mono-tag text-zinc-500 text-[9px]">observations</div>
+                        </div>
+                        <div>
+                            <div class="display-serif text-xl text-white">5σ</div>
+                            <div class="mono-tag text-zinc-500 text-[9px]">clipping</div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-wrap gap-2 mb-5">
+                        <span class="px-2 py-1 bg-ink-soft border border-zinc-800 rounded text-[11px] text-zinc-400 font-mono">TESS Pipeline</span>
+                        <span class="px-2 py-1 bg-ink-soft border border-zinc-800 rounded text-[11px] text-zinc-400 font-mono">MCMC</span>
+                        <span class="px-2 py-1 bg-ink-soft border border-zinc-800 rounded text-[11px] text-zinc-400 font-mono">Photometry</span>
+                    </div>
+
+                    <div class="flex items-center justify-between pt-4 border-t border-white/5">
+                        <span class="text-zinc-500 text-[12px]">Dr. Keaton Bell · TASC7 Hawaii · TASC NYC</span>
+                        <span class="text-ember-400 text-[12px] group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
+                            Read paper
+                            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                        </span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============== ORION SYSTEM · the connective tissue ============== -->
+    <section id="orion" class="relative py-32 px-6 border-t border-white/5">
+        <div class="max-w-[1240px] mx-auto">
+
+            <!-- Section header -->
+            <div class="grid lg:grid-cols-12 gap-10 mb-16">
+                <div class="lg:col-span-3">
+                    <span class="section-num">§ 03</span>
+                    <h2 class="display-serif text-3xl text-white font-medium mt-2 heading-mark">ORION</h2>
+                </div>
+                <div class="lg:col-span-9">
+                    <p class="prose-band text-[19px] text-zinc-200 leading-[1.7] font-light mb-6">
+                        A modular robotics ecosystem co-built with David Young. Four subsystems share state through ROS 2, each owning one layer of the perception-decision-action loop.
+                    </p>
+                    <p class="prose-band text-[15px] text-zinc-400 leading-relaxed pull-quote italic">
+                        BROTEUS sees. ORION decides. CHIRON moves. DAEDALUS calibrates.
+                    </p>
+                </div>
+            </div>
+
+            <!-- ORION System Diagram · instrumented hub-and-spoke -->
+            <div class="instrument-panel rounded-sm p-8 md:p-12 mb-12">
+                <div class="flex items-center justify-between mb-8 pb-4 border-b border-white/5">
+                    <span class="mono-tag text-ember-400">FIG · 03.1 · System topology</span>
+                    <span class="mono-tag text-zinc-600">v1.0 · phase 1 complete</span>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-10 items-center">
+                    <!-- SVG diagram -->
+                    <div class="relative">
+                        <svg viewBox="0 0 400 400" class="w-full">
+                            <!-- Connector lines (dashed) -->
+                            <line x1="200" y1="200" x2="200" y2="80" class="orion-node-line"/>
+                            <line x1="200" y1="200" x2="320" y2="200" class="orion-node-line"/>
+                            <line x1="200" y1="200" x2="200" y2="320" class="orion-node-line"/>
+                            <line x1="200" y1="200" x2="80" y2="200" class="orion-node-line"/>
+
+                            <!-- Outer circle -->
+                            <circle cx="200" cy="200" r="155" fill="none" stroke="rgba(245,161,66,0.1)" stroke-width="1" stroke-dasharray="2 4"/>
+
+                            <!-- Center: ORION hub -->
+                            <circle cx="200" cy="200" r="42" fill="rgba(232,132,42,0.12)" stroke="rgba(245,161,66,0.6)" stroke-width="1.5"/>
+                            <circle cx="200" cy="200" r="48" fill="none" stroke="rgba(245,161,66,0.2)" stroke-width="1"/>
+                            <text x="200" y="196" text-anchor="middle" fill="white" font-family="Fraunces" font-size="14" font-weight="600">ORION</text>
+                            <text x="200" y="210" text-anchor="middle" fill="rgba(245,161,66,0.9)" font-family="JetBrains Mono" font-size="8" letter-spacing="2">CORE · :8000</text>
+
+                            <!-- Top: ATHENA (navigation) -->
+                            <circle cx="200" cy="55" r="32" fill="rgba(7,11,20,0.9)" stroke="rgba(252,211,77,0.7)" stroke-width="1.5"/>
+                            <text x="200" y="52" text-anchor="middle" fill="white" font-family="Inter" font-size="11" font-weight="600">ATHENA</text>
+                            <text x="200" y="65" text-anchor="middle" fill="rgba(252,211,77,0.85)" font-family="JetBrains Mono" font-size="7">navigation</text>
+
+                            <!-- Right: BROTEUS (perception) -->
+                            <circle cx="345" cy="200" r="32" fill="rgba(7,11,20,0.9)" stroke="rgba(167,139,250,0.7)" stroke-width="1.5"/>
+                            <text x="345" y="197" text-anchor="middle" fill="white" font-family="Inter" font-size="11" font-weight="600">BROTEUS</text>
+                            <text x="345" y="210" text-anchor="middle" fill="rgba(167,139,250,0.85)" font-family="JetBrains Mono" font-size="7">perception</text>
+
+                            <!-- Bottom: CHIRON (motion) -->
+                            <circle cx="200" cy="345" r="32" fill="rgba(7,11,20,0.9)" stroke="rgba(45,212,191,0.7)" stroke-width="1.5"/>
+                            <text x="200" y="342" text-anchor="middle" fill="white" font-family="Inter" font-size="11" font-weight="600">CHIRON</text>
+                            <text x="200" y="355" text-anchor="middle" fill="rgba(45,212,191,0.85)" font-family="JetBrains Mono" font-size="7">motion</text>
+
+                            <!-- Left: DAEDALUS (physics) -->
+                            <circle cx="55" cy="200" r="32" fill="rgba(7,11,20,0.9)" stroke="rgba(244,114,182,0.7)" stroke-width="1.5"/>
+                            <text x="55" y="197" text-anchor="middle" fill="white" font-family="Inter" font-size="11" font-weight="600">DAEDALUS</text>
+                            <text x="55" y="210" text-anchor="middle" fill="rgba(244,114,182,0.85)" font-family="JetBrains Mono" font-size="7">discovery</text>
+                        </svg>
+                    </div>
+
+                    <!-- Right: explanation column -->
                     <div class="space-y-4">
-                        <div class="flex items-center space-x-2 text-white">
-                            <span class="w-1.5 h-1.5 bg-brand-500 rounded-full"></span>
-                            <span class="font-medium">B.S. in Physics</span>
+                        <div class="text-[13px] text-zinc-300 leading-relaxed">
+                            <div class="mono-tag text-ember-400 mb-2">Architecture Principle</div>
+                            <p class="mb-4">ORION is the central reasoning hub. It receives perception from BROTEUS, requests navigation plans from ATHENA, dispatches motion commands to CHIRON, and pulls calibration updates from DAEDALUS as it learns physics from real motion data.</p>
+                            <p class="text-zinc-400">Subsystems are independent FastAPI services on dedicated ports, communicating over ROS 2 Humble. No subsystem holds the others' state.</p>
                         </div>
-                        <div class="inline-flex items-center px-4 py-1.5 bg-brand-500/10 rounded-lg border border-brand-500/20 text-brand-400 text-sm font-bold">GPA: 3.9 / 4.0</div>
+
+                        <!-- Port table -->
+                        <div class="border border-white/5 rounded-sm overflow-hidden">
+                            <div class="grid grid-cols-3 px-4 py-2 bg-ink-deep/50 mono-tag text-zinc-500 text-[9px] border-b border-white/5">
+                                <span>Subsystem</span>
+                                <span>Port</span>
+                                <span>Status</span>
+                            </div>
+                            <div class="divide-y divide-white/5 text-[12px] font-mono">
+                                <div class="grid grid-cols-3 px-4 py-2.5 text-zinc-400">
+                                    <span class="text-white">ORION</span>
+                                    <span>:8000</span>
+                                    <span class="text-emerald-400">phase 1 ✓</span>
+                                </div>
+                                <div class="grid grid-cols-3 px-4 py-2.5 text-zinc-400">
+                                    <span class="text-white">BROTEUS</span>
+                                    <span>:8100</span>
+                                    <span class="text-emerald-400">live</span>
+                                </div>
+                                <div class="grid grid-cols-3 px-4 py-2.5 text-zinc-400">
+                                    <span class="text-white">CHIRON</span>
+                                    <span>:8200</span>
+                                    <span class="text-amber-400">in dev</span>
+                                </div>
+                                <div class="grid grid-cols-3 px-4 py-2.5 text-zinc-400">
+                                    <span class="text-white">DAEDALUS</span>
+                                    <span>:8300</span>
+                                    <span class="text-amber-400">in dev</span>
+                                </div>
+                                <div class="grid grid-cols-3 px-4 py-2.5 text-zinc-400">
+                                    <span class="text-white">ATHENA</span>
+                                    <span>:8400</span>
+                                    <span class="text-emerald-400">deployed</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
+            </div>
+
+            <!-- Hardware target callout -->
+            <div class="instrument-panel rounded-sm p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                <div>
+                    <div class="mono-tag text-ember-400 mb-1">Target Hardware</div>
+                    <div class="text-white font-medium">SO-ARM 101 · 6-DOF arm with camera eye</div>
+                    <div class="text-zinc-500 text-[13px] mt-1">A first physical platform to orchestrate all four subsystems.</div>
+                </div>
+                <div class="mono-tag text-zinc-600">phase 2 · summer 2026</div>
             </div>
         </div>
     </section>
 
-    <!-- Research Experience -->
-    <section id="research" class="section-padding bg-slate-900/40">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-4">
-                <div class="max-w-2xl">
-                    <p class="text-brand-400 font-mono text-sm uppercase tracking-widest mb-2">Scientific Portfolio</p>
-                    <h2 class="font-display text-4xl font-bold">Research Experience</h2>
-                </div>
-                <div class="text-slate-500 text-sm italic">Focusing on Computational &amp; Theoretical Physics</div>
-            </div>
-            <div class="space-y-12">
-                <!-- Plasma Physics -->
-                <div class="grid lg:grid-cols-12 gap-8 items-start">
-                    <div class="lg:col-span-4 sticky top-24">
-                        <div class="p-6 border-l-2 border-brand-500 space-y-4">
-                            <div class="relative w-fit">
-                                <a href="research-plasma.html" class="group/link block">
-                                    <h3 class="text-2xl font-bold text-white group-hover/link:text-brand-400 transition-colors duration-300">
-                                        Plasma Physics &amp; Fusion Energy
-                                        <span class="block max-w-0 group-hover/link:max-w-full transition-all duration-500 h-0.5 bg-brand-500 mt-1"></span>
-                                    </h3>
-                                    <div class="absolute bottom-full left-0 mb-3 px-4 py-2 bg-slate-950 border border-slate-700 rounded-lg shadow-2xl opacity-0 translate-y-2 group-hover/link:opacity-100 group-hover/link:translate-y-0 transition-all duration-300 pointer-events-none whitespace-nowrap z-20">
-                                        <div class="flex items-center space-x-2">
-                                            <span class="w-1.5 h-1.5 bg-brand-500 rounded-full animate-pulse"></span>
-                                            <span class="text-brand-100 font-mono text-xs font-bold tracking-wider">READ MORE</span>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                            <a href="https://fusion.columbia.edu/" target="_blank" class="text-brand-400 font-medium hover:text-brand-300 transition-colors">Columbia Fusion Energy Research Center</a>
-                            <div class="flex flex-col gap-2 text-sm text-slate-400">
-                                <span class="flex items-center"><svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg> Supervisor: Dr. Elizabeth Paul</span>
-                                <span class="flex items-center"><svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg> Oct 2025 - Present</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="lg:col-span-8 glass p-8 rounded-3xl">
-                        <h4 class="text-lg font-bold text-white mb-4">Wave-Particle Interactions and Reduced Simulation Models in Fusion Plasmas</h4>
-                        <ul class="space-y-4 text-slate-400">
-                            <li class="flex gap-3"><span class="mt-1.5 w-1.5 h-1.5 bg-brand-500 rounded-full shrink-0"></span>Developing reduced simulation models (passive tracer and &#8706;f methods) for nonlinear wave-particle interactions in 3D magnetic field configurations.</li>
-                            <li class="flex gap-3"><span class="mt-1.5 w-1.5 h-1.5 bg-brand-500 rounded-full shrink-0"></span>Benchmarking and extending the Vlasov-Poisson bump-on-tail model.</li>
-                            <li class="flex gap-3"><span class="mt-1.5 w-1.5 h-1.5 bg-brand-500 rounded-full shrink-0"></span>Applying data-driven methods (SINDy, autoencoder latent space mapping) to build reduced-order models of particle transport.</li>
-                        </ul>
-                        <div class="mt-6 pt-4 border-t border-slate-700/40">
-                            <a href="https://github.com/shtet100/Plasma-Bump-On-Tail" target="_blank" class="inline-flex items-center gap-2 text-sm font-mono text-brand-400 hover:text-brand-300 transition-colors">
-                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-                                View code repository
-                            </a>
-                        </div>
-                    </div>
-                </div>
+    <!-- ============== PROJECTS · three subsystem cards ============== -->
+    <section id="projects" class="relative py-24 px-6 border-t border-white/5">
+        <div class="max-w-[1240px] mx-auto">
 
-                <!-- Swarmalators -->
-                <div class="grid lg:grid-cols-12 gap-8 items-start">
-                    <div class="lg:col-span-4 sticky top-24">
-                        <div class="p-6 border-l-2 border-brand-500 space-y-4">
-                            <h3 class="text-2xl font-bold text-white">Natural Swarmalators</h3>
-                            <p class="text-brand-400 font-medium">CUNY Queens College</p>
-                            <div class="flex flex-col gap-2 text-sm text-slate-400">
-                                <span class="flex items-center"><svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg> Supervisor: Dr. Oleg Kogan</span>
-                                <span class="flex items-center"><svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg> Dec 2024 - Jun 2025</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="lg:col-span-8 glass p-8 rounded-3xl">
-                        <h4 class="text-lg font-bold text-white mb-4">Analytical and Computational Modeling of Natural Swarmalator Systems</h4>
-                        <ul class="space-y-4 text-slate-400">
-                            <li class="flex gap-3"><span class="mt-1.5 w-1.5 h-1.5 bg-brand-500 rounded-full shrink-0"></span>Conducted analytical studies of potential swarmalator systems, extracting and validating specific parameters.</li>
-                            <li class="flex gap-3"><span class="mt-1.5 w-1.5 h-1.5 bg-brand-500 rounded-full shrink-0"></span>Designed experiments and computational models to bridge theoretical swarmalator frameworks with observed synchronization and self-organization dynamics.</li>
-                        </ul>
-                    </div>
+            <div class="grid lg:grid-cols-12 gap-10 mb-16">
+                <div class="lg:col-span-3">
+                    <span class="section-num">§ 04</span>
+                    <h2 class="display-serif text-3xl text-white font-medium mt-2 heading-mark">Projects</h2>
                 </div>
-
-                <!-- Stellar Astrophysics -->
-                <div class="grid lg:grid-cols-12 gap-8 items-start">
-                    <div class="lg:col-span-4 sticky top-24">
-                        <div class="p-6 border-l-2 border-brand-500 space-y-4">
-                            <div class="relative w-fit">
-                                <a href="research-stellar.html" class="group/link block">
-                                    <h3 class="text-2xl font-bold text-white group-hover/link:text-brand-400 transition-colors duration-300">
-                                        Stellar Astrophysics
-                                        <span class="block max-w-0 group-hover/link:max-w-full transition-all duration-500 h-0.5 bg-brand-500 mt-1"></span>
-                                    </h3>
-                                    <div class="absolute bottom-full left-0 mb-3 px-4 py-2 bg-slate-950 border border-slate-700 rounded-lg shadow-2xl opacity-0 translate-y-2 group-hover/link:opacity-100 group-hover/link:translate-y-0 transition-all duration-300 pointer-events-none whitespace-nowrap z-20">
-                                        <div class="flex items-center space-x-2">
-                                            <span class="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
-                                            <span class="text-brand-100 font-mono text-xs font-bold tracking-wider">VIEW PROJECT</span>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                            <p class="text-brand-400 font-medium">Astro-computing Research</p>
-                            <div class="flex flex-col gap-2 text-sm text-slate-400">
-                                <span class="flex items-center"><svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg> Supervisor: Dr. Keaton Bell</span>
-                                <span class="flex items-center"><svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg> Oct 2022 - Jun 2025</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="lg:col-span-8 glass p-8 rounded-3xl">
-                        <h4 class="text-lg font-bold text-white mb-4">Stellar Variability and Exoplanet Detection using TESS Photometry and Gaia Catalogs</h4>
-                        <ul class="space-y-4 text-slate-400 mb-8">
-                            <li class="flex gap-3"><span class="mt-1.5 w-1.5 h-1.5 bg-brand-500 rounded-full shrink-0"></span>Observed photometric images of variable stars from NASA's TESS data to quantify uncertainty in light curves using MCMC analyses.</li>
-                            <li class="flex gap-3"><span class="mt-1.5 w-1.5 h-1.5 bg-brand-500 rounded-full shrink-0"></span>Implemented best-fit simulation models of TESS star pixel images using GAIA and TESS Input Catalog data to measure crowdedness.</li>
-                        </ul>
-                        <div class="mt-6 pt-4 border-t border-slate-700/40">
-                            <a href="https://github.com/shtet100/tess_crowdsap" target="_blank" class="inline-flex items-center gap-2 text-sm font-mono text-brand-400 hover:text-brand-300 transition-colors">
-                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-                                View code repository
-                            </a>
-                        </div>
-                    </div>
+                <div class="lg:col-span-9 prose-band">
+                    <p class="text-[16px] text-zinc-400 leading-relaxed">
+                        Three of ORION's four subsystems have working implementations. Each has a dedicated technical write-up.
+                    </p>
                 </div>
             </div>
-        </div>
-    </section>
 
-    <!-- Conferences -->
-    <section id="conferences" class="section-padding relative overflow-hidden">
-        <div class="absolute top-0 right-0 w-96 h-96 bg-brand-600/5 rounded-full blur-3xl -z-10 translate-x-1/2 -translate-y-1/2"></div>
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="mb-16">
-                <p class="text-brand-400 font-mono text-sm uppercase tracking-widest mb-2">Academic Outreach</p>
-                <h2 class="font-display text-4xl font-bold text-white">Conferences &amp; Presentations</h2>
-            </div>
-            <div class="relative space-y-8 before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-slate-700 before:to-transparent">
-                <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
-                    <div class="flex items-center justify-center w-10 h-10 rounded-full border border-brand-500 bg-slate-950 shadow-[0_0_10px_rgba(14,165,233,0.3)] shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-brand-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10l4 4v10a2 2 0 01-2 2z" /></svg>
-                    </div>
-                    <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] glass p-6 rounded-2xl border-slate-700/50 hover:border-brand-500/30 transition-all duration-300">
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-2">
-                            <span class="font-mono text-xs text-brand-400 bg-brand-500/10 px-2 py-1 rounded border border-brand-500/20">Aug 2024</span>
-                            <span class="text-slate-500 text-xs flex items-center"><svg class="w-3 h-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>Flushing, NY</span>
-                        </div>
-                        <h3 class="text-lg font-bold text-white mb-2">CIRE Research Conference</h3>
-                        <p class="text-slate-400 text-sm mb-3">Hosted by CUNY Queens College</p>
-                        <div class="p-3 bg-slate-950/50 rounded-lg border border-slate-800/50"><p class="text-slate-300 text-xs italic">"Characterizing Crowdedness in TESS Images"</p></div>
-                    </div>
-                </div>
-                <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
-                    <div class="flex items-center justify-center w-10 h-10 rounded-full border border-slate-700 bg-slate-950 group-hover:border-brand-500/50 transition-colors shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-slate-400 group-hover:text-brand-400 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                    </div>
-                    <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] glass p-6 rounded-2xl border-slate-700/50 hover:border-brand-500/30 transition-all duration-300">
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-2">
-                            <span class="font-mono text-xs text-slate-400 bg-slate-800/50 px-2 py-1 rounded border border-slate-700/50">July 2023</span>
-                            <span class="text-slate-500 text-xs flex items-center"><svg class="w-3 h-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>Honolulu, HI</span>
-                        </div>
-                        <h3 class="text-lg font-bold text-white mb-2">TASC7/KASC14 Workshop</h3>
-                        <p class="text-slate-400 text-sm mb-3">University of Hawaii &amp; TASC/KASC</p>
-                        <div class="p-3 bg-slate-950/50 rounded-lg border border-slate-800/50"><p class="text-slate-300 text-xs italic">"Characterizing Crowdedness in TESS Images"</p></div>
-                    </div>
-                </div>
-                <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
-                    <div class="flex items-center justify-center w-10 h-10 rounded-full border border-slate-700 bg-slate-950 group-hover:border-brand-500/50 transition-colors shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-slate-400 group-hover:text-brand-400 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
-                    </div>
-                    <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] glass p-6 rounded-2xl border-slate-700/50 hover:border-brand-500/30 transition-all duration-300">
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-2">
-                            <span class="font-mono text-xs text-slate-400 bg-slate-800/50 px-2 py-1 rounded border border-slate-700/50">Jan 2023</span>
-                            <span class="text-slate-500 text-xs flex items-center"><svg class="w-3 h-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>New York City, NY</span>
-                        </div>
-                        <h3 class="text-lg font-bold text-white mb-2">GothamFest Workshop</h3>
-                        <p class="text-slate-400 text-sm mb-3">Flatiron Institute &amp; Simons Foundation</p>
-                        <div class="p-3 bg-slate-950/50 rounded-lg border border-slate-800/50"><p class="text-slate-300 text-xs italic">"Measuring Crowdedness in TESS Photometric Images"</p></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+            <div class="grid md:grid-cols-3 gap-5">
 
-    <!-- ============================================================ -->
-    <!-- NEW: Technical Projects Section                               -->
-    <!-- ============================================================ -->
-    <section id="projects" class="section-padding bg-slate-900/40">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-4">
-                <div class="max-w-2xl">
-                    <p class="text-brand-400 font-mono text-sm uppercase tracking-widest mb-2">Engineering Portfolio</p>
-                    <h2 class="font-display text-4xl font-bold">Technical Projects</h2>
-                </div>
-                <div class="text-slate-500 text-sm italic">Autonomous Systems &amp; AI Infrastructure</div>
-            </div>
-
-            <div class="grid lg:grid-cols-2 gap-8">
-
-                <!-- ORION Card -->
-                <div class="glass rounded-[2rem] card-hover transition-all duration-300 relative group overflow-hidden flex flex-col">
-                    <!-- Hero Image -->
-                    <div class="relative h-48 overflow-hidden rounded-t-[2rem]">
-                        <img src="./ORION_image.jpg" alt="ORION Interface" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700" />
-                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/70 to-indigo-900/30"></div>
-                        <div class="absolute inset-0 bg-gradient-to-r from-indigo-600/10 to-transparent"></div>
-                        <!-- Title overlay on image -->
-                        <div class="absolute bottom-4 left-6 right-6">
-                            <div class="flex items-center gap-3 mb-1">
-                                <span class="font-mono text-2xl font-bold text-white tracking-tight">ORION</span>
-                                <span class="px-2 py-0.5 bg-indigo-500/20 border border-indigo-500/30 rounded-full text-indigo-300 text-[10px] font-mono uppercase tracking-widest backdrop-blur-sm">In Development</span>
-                            </div>
-                            <p class="text-indigo-200/60 text-xs font-mono">Omniscient Reasoning &amp; Intelligence Operations Network</p>
+                <!-- BROTEUS -->
+                <a href="project-broteus.html" class="project-card instrument-panel rounded-sm p-7 block group">
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="w-10 h-10 rounded-sm bg-violet-500/15 border border-violet-500/40 flex items-center justify-center">
+                            <svg class="w-5 h-5 text-violet-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
                         </div>
+                        <span class="mono-tag text-violet-300">PER_01</span>
                     </div>
-
-                    <div class="relative z-10 flex-1 flex flex-col p-8 pt-5">
-                        <p class="text-slate-400 text-sm mb-5">Personal AI Assistant System</p>
-                        <p class="text-slate-300 text-sm leading-relaxed mb-6">
-                            A JARVIS-inspired AI assistant designed as a modular brain system for future robotics platforms.
-                            Built on a FastAPI/Python backend with extensible subsystem architecture.
-                            ORION serves as the central intelligence layer, orchestrating task planning,
-                            memory, and real-time decision-making.
-                        </p>
-                        <div class="flex flex-wrap gap-2 mb-6">
-                            <span class="px-2.5 py-1 bg-slate-800/50 border border-slate-700 rounded-lg text-slate-400 font-mono text-xs">Python</span>
-                            <span class="px-2.5 py-1 bg-slate-800/50 border border-slate-700 rounded-lg text-slate-400 font-mono text-xs">FastAPI</span>
-                            <span class="px-2.5 py-1 bg-slate-800/50 border border-slate-700 rounded-lg text-slate-400 font-mono text-xs">LLM Integration</span>
-                            <span class="px-2.5 py-1 bg-slate-800/50 border border-slate-700 rounded-lg text-slate-400 font-mono text-xs">Agentic Planning</span>
-                        </div>
-                        <div class="text-xs text-slate-500 mb-6">
-                            Built with <span class="text-slate-300">David Young</span> &#8212; University of Pennsylvania
-                        </div>
-                        <div class="mt-auto pt-4 border-t border-slate-700/40">
-                            <div class="flex items-center gap-2 text-xs text-slate-500">
-                                <span class="w-1.5 h-1.5 bg-indigo-400 rounded-full animate-pulse"></span>
-                                <span class="font-mono">Phase 1 Complete</span>
-                                <span class="mx-2 text-slate-700">|</span>
-                                <span class="font-mono">Private Repository</span>
-                            </div>
-                        </div>
+                    <h3 class="display-serif text-2xl text-white font-medium mb-2 group-hover:text-violet-300 transition-colors">BROTEUS</h3>
+                    <div class="mono-tag text-zinc-500 mb-4">PERCEPTION LAYER</div>
+                    <p class="text-zinc-400 text-[13px] leading-relaxed mb-5">
+                        Real-time vision pipeline. YOLO-World detection, MediaPipe dual-hand tracking, MiDaS depth, gesture &amp; animation recognition. 21 FPS on CPU.
+                    </p>
+                    <div class="flex flex-wrap gap-1.5 mb-5">
+                        <span class="text-[10px] font-mono text-zinc-500">YOLO-World</span>
+                        <span class="text-zinc-700">·</span>
+                        <span class="text-[10px] font-mono text-zinc-500">MediaPipe</span>
+                        <span class="text-zinc-700">·</span>
+                        <span class="text-[10px] font-mono text-zinc-500">DTW</span>
                     </div>
-                </div>
-
-                <!-- ATHENA Card -->
-                <div class="glass rounded-[2rem] card-hover transition-all duration-300 relative group overflow-hidden flex flex-col">
-                    <!-- Hero Image -->
-                    <div class="relative h-48 overflow-hidden rounded-t-[2rem]">
-                        <img src="./Athena.png" alt="ATHENA Mars Simulation" class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700" />
-                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-amber-900/10"></div>
-                        <!-- Title overlay on image -->
-                        <div class="absolute bottom-4 left-6 right-6">
-                            <div class="flex items-center gap-3 mb-1">
-                                <span class="font-mono text-2xl font-bold text-white tracking-tight">ATHENA</span>
-                                <span class="px-2 py-0.5 bg-brand-500/20 border border-brand-500/30 rounded-full text-brand-300 text-[10px] font-mono uppercase tracking-widest backdrop-blur-sm">Live</span>
-                            </div>
-                            <p class="text-amber-200/60 text-xs font-mono">Autonomous Terrain &amp; Hazard Exploration Navigation Agent</p>
-                        </div>
-                    </div>
-
-                    <div class="relative z-10 flex-1 flex flex-col p-8 pt-5">
-                        <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-slate-800/50 rounded-lg border border-slate-700/50 text-xs text-slate-400 font-mono mb-4 w-fit">
-                            <span class="w-1.5 h-1.5 bg-indigo-400 rounded-full"></span>
-                            ORION Subsystem &#8212; Navigation Module
-                        </div>
-                        <p class="text-slate-300 text-sm leading-relaxed mb-4">
-                            An interactive 3D rover autonomy simulator with real-time A* pathfinding visualization,
-                            infinite procedural terrain, slope-aware hazard classification, and a live 3D engineering
-                            viewport showing rover mechanics. Watch the AI think as it plans routes across planetary surfaces.
-                        </p>
-                        <p class="text-slate-400 text-xs leading-relaxed mb-6 italic">
-                            Currently deployed on Mars (Jezero Crater). Future environments &#8212; Venus, Europa, Titan, and more &#8212; will introduce unique atmospheric pressure, gravity, visibility, and terrain constraints, with adaptive autonomy that learns from each world.
-                        </p>
-                        <div class="flex flex-wrap gap-2 mb-6">
-                            <span class="px-2.5 py-1 bg-slate-800/50 border border-slate-700 rounded-lg text-slate-400 font-mono text-xs">React</span>
-                            <span class="px-2.5 py-1 bg-slate-800/50 border border-slate-700 rounded-lg text-slate-400 font-mono text-xs">Three.js</span>
-                            <span class="px-2.5 py-1 bg-slate-800/50 border border-slate-700 rounded-lg text-slate-400 font-mono text-xs">A* Pathfinding</span>
-                            <span class="px-2.5 py-1 bg-slate-800/50 border border-slate-700 rounded-lg text-slate-400 font-mono text-xs">Procedural Generation</span>
-                            <span class="px-2.5 py-1 bg-slate-800/50 border border-slate-700 rounded-lg text-slate-400 font-mono text-xs">fBm Noise</span>
-                        </div>
-                        <div class="text-xs text-slate-500 mb-6">
-                            Built with <span class="text-slate-300">David Young</span> &#8212; University of Pennsylvania
-                        </div>
-                        <div class="mt-auto pt-4 border-t border-slate-700/40 flex flex-wrap gap-3">
-                            <a href="https://shtet100.github.io/ATHENA/" target="_blank" class="inline-flex items-center gap-2 px-5 py-2.5 bg-brand-600 hover:bg-brand-500 text-white rounded-xl font-semibold text-sm transition-all shadow-lg shadow-brand-600/20 group/btn">
-                                Launch Demo
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 group-hover/btn:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                                </svg>
-                            </a>
-                            <a href="https://github.com/shtet100/ATHENA" target="_blank" class="inline-flex items-center gap-2 px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl font-medium text-sm transition-all border border-slate-700">
-                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-                                View on GitHub
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <!-- Awards Section -->
-    <section id="awards" class="section-padding">
-        <div class="max-w-7xl mx-auto px-6">
-            <h2 class="font-display text-4xl font-bold mb-12 text-center">Honors &amp; Awards</h2>
-            <div class="grid gap-6">
-                <div class="glass p-6 rounded-2xl flex flex-col md:flex-row md:items-center justify-between group card-hover transition-all border border-brand-500/20">
-                    <div class="flex items-center space-x-6">
-                        <div class="hidden sm:flex w-14 h-14 bg-gradient-to-br from-brand-500/20 to-brand-900/20 rounded-2xl items-center justify-center text-brand-400 group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(14,165,233,0.15)] shrink-0">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
-                        </div>
-                        <div><h3 class="text-xl font-bold text-white group-hover:text-brand-400 transition-colors">Molly Weinstein Prize</h3><p class="text-slate-400 text-sm max-w-xl mt-1">For distinguished scholarship &amp; intent to pursue a career in college teaching.</p></div>
-                    </div>
-                    <div class="mt-4 md:mt-0 flex flex-col items-end min-w-fit pl-4"><span class="text-brand-300 font-mono text-lg font-bold">$5,000</span><span class="text-slate-500 text-xs uppercase tracking-widest font-semibold">May 2025</span></div>
-                </div>
-                <div class="glass p-6 rounded-2xl flex flex-col md:flex-row md:items-center justify-between group card-hover transition-all">
-                    <div class="flex items-center space-x-6">
-                        <div class="hidden sm:flex w-14 h-14 bg-slate-800/50 rounded-2xl items-center justify-center text-brand-400 group-hover:text-white group-hover:bg-brand-600 transition-all shrink-0">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" /></svg>
-                        </div>
-                        <div><h3 class="text-xl font-bold text-white group-hover:text-brand-400 transition-colors">Departmental Physics Prize</h3><p class="text-slate-400 text-sm max-w-xl mt-1">Awarded for consistent enthusiasm and dedication to physics studies.</p></div>
-                    </div>
-                    <div class="mt-4 md:mt-0 flex flex-col items-end min-w-fit pl-4"><span class="text-brand-300 font-mono text-lg font-bold">$400</span><span class="text-slate-500 text-xs uppercase tracking-widest font-semibold">May 2025</span></div>
-                </div>
-                <div class="glass p-6 rounded-2xl flex flex-col md:flex-row md:items-center justify-between group card-hover transition-all">
-                    <div class="flex items-center space-x-6">
-                        <div class="hidden sm:flex w-14 h-14 bg-slate-800/50 rounded-2xl items-center justify-center text-brand-400 group-hover:text-white group-hover:bg-brand-600 transition-all shrink-0">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" /></svg>
-                        </div>
-                        <div><h3 class="text-xl font-bold text-white group-hover:text-brand-400 transition-colors">Phi Beta Kappa Honor Society</h3><p class="text-slate-400 text-sm max-w-xl mt-1">Inducted into the nation's most prestigious academic honor society.</p></div>
-                    </div>
-                    <div class="mt-4 md:mt-0 flex flex-col items-end min-w-fit pl-4"><span class="text-white font-mono text-sm font-bold bg-brand-900/50 px-3 py-1 rounded border border-brand-500/30">Invited Member</span><span class="text-slate-500 text-xs uppercase tracking-widest font-semibold mt-1">Sep 2024</span></div>
-                </div>
-                <div class="glass p-6 rounded-2xl flex flex-col md:flex-row md:items-center justify-between group card-hover transition-all">
-                    <div class="flex items-center space-x-6">
-                        <div class="hidden sm:flex w-14 h-14 bg-slate-800/50 rounded-2xl items-center justify-center text-brand-400 group-hover:text-white group-hover:bg-brand-600 transition-all shrink-0">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" /></svg>
-                        </div>
-                        <div><h3 class="text-xl font-bold text-white group-hover:text-brand-400 transition-colors">Summer Research Program</h3><p class="text-slate-400 text-sm max-w-xl mt-1">Outstanding contribution to the Summer Undergraduate Research Program.</p></div>
-                    </div>
-                    <div class="mt-4 md:mt-0 flex flex-col items-end min-w-fit pl-4"><span class="text-brand-300 font-mono text-lg font-bold">$2,000</span><span class="text-slate-500 text-xs uppercase tracking-widest font-semibold">Aug 2024</span></div>
-                </div>
-                <div class="glass p-6 rounded-2xl flex flex-col md:flex-row md:items-center justify-between group card-hover transition-all">
-                    <div class="flex items-center space-x-6">
-                        <div class="hidden sm:flex w-14 h-14 bg-slate-800/50 rounded-2xl items-center justify-center text-brand-400 group-hover:text-white group-hover:bg-brand-600 transition-all shrink-0">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                        </div>
-                        <div><h3 class="text-xl font-bold text-white group-hover:text-brand-400 transition-colors">Michael Craig-Scheckman Award</h3><p class="text-slate-400 text-sm max-w-xl mt-1">Recognition for impactful collaboration in intensive research.</p></div>
-                    </div>
-                    <div class="mt-4 md:mt-0 flex flex-col items-end min-w-fit pl-4"><span class="text-brand-300 font-mono text-lg font-bold">$750</span><span class="text-slate-500 text-xs uppercase tracking-widest font-semibold">Jun 2023</span></div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Skills Section -->
-    <section id="skills" class="section-padding relative">
-        <div class="max-w-7xl mx-auto px-6">
-            <h2 class="font-display text-4xl font-bold mb-16 text-center">Technical Arsenal</h2>
-            <div class="grid md:grid-cols-3 gap-6">
-
-                <!-- Languages & Frameworks -->
-                <div class="glass p-7 rounded-[2rem] card-hover transition-all duration-300 relative overflow-hidden group">
-                    <div class="absolute top-0 right-0 p-5 opacity-5 group-hover:opacity-10 transition-opacity pointer-events-none">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-24 w-24" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>
-                    </div>
-                    <h3 class="text-brand-400 font-mono text-xs uppercase tracking-widest mb-5 flex items-center"><span class="w-1.5 h-1.5 bg-brand-500 rounded-full mr-3"></span>Languages &amp; Frameworks</h3>
-                    <div class="flex flex-wrap gap-2">
-                        <span class="px-3 py-1.5 bg-slate-800/50 border border-slate-700 rounded-lg text-slate-300 font-mono text-sm hover:border-brand-500/50 hover:text-white transition-all cursor-default">Python</span>
-                        <span class="px-3 py-1.5 bg-slate-800/50 border border-slate-700 rounded-lg text-slate-300 font-mono text-sm hover:border-brand-500/50 hover:text-white transition-all cursor-default">C++</span>
-                        <span class="px-3 py-1.5 bg-slate-800/50 border border-slate-700 rounded-lg text-slate-300 font-mono text-sm hover:border-brand-500/50 hover:text-white transition-all cursor-default">Java</span>
-                        <span class="px-3 py-1.5 bg-slate-800/50 border border-slate-700 rounded-lg text-slate-300 font-mono text-sm hover:border-brand-500/50 hover:text-white transition-all cursor-default">JavaScript</span>
-                        <span class="px-3 py-1.5 bg-slate-800/50 border border-slate-700 rounded-lg text-slate-300 font-mono text-sm hover:border-brand-500/50 hover:text-white transition-all cursor-default">MATLAB</span>
-                        <span class="px-3 py-1.5 bg-slate-800/50 border border-slate-700 rounded-lg text-slate-300 font-mono text-sm hover:border-brand-500/50 hover:text-white transition-all cursor-default">Mathematica</span>
-                        <span class="px-3 py-1.5 bg-slate-800/50 border border-slate-700 rounded-lg text-slate-300 font-mono text-sm hover:border-brand-500/50 hover:text-white transition-all cursor-default">React</span>
-                        <span class="px-3 py-1.5 bg-slate-800/50 border border-slate-700 rounded-lg text-slate-300 font-mono text-sm hover:border-brand-500/50 hover:text-white transition-all cursor-default">FastAPI</span>
-                        <span class="px-3 py-1.5 bg-slate-800/50 border border-slate-700 rounded-lg text-slate-300 font-mono text-sm hover:border-brand-500/50 hover:text-white transition-all cursor-default">Three.js</span>
-                        <span class="px-3 py-1.5 bg-slate-800/50 border border-slate-700 rounded-lg text-slate-300 font-mono text-sm hover:border-brand-500/50 hover:text-white transition-all cursor-default">HTML/CSS</span>
-                        <span class="px-3 py-1.5 bg-slate-800/50 border border-slate-700 rounded-lg text-slate-300 font-mono text-sm hover:border-brand-500/50 hover:text-white transition-all cursor-default">PIC Assembly</span>
-                    </div>
-                </div>
-
-                <!-- Computational & ML -->
-                <div class="glass p-7 rounded-[2rem] card-hover transition-all duration-300 relative overflow-hidden group">
-                    <div class="absolute top-0 right-0 p-5 opacity-5 group-hover:opacity-10 transition-opacity pointer-events-none">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-24 w-24" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
-                    </div>
-                    <h3 class="text-brand-400 font-mono text-xs uppercase tracking-widest mb-5 flex items-center"><span class="w-1.5 h-1.5 bg-brand-500 rounded-full mr-3"></span>Computational &amp; ML</h3>
-                    <div class="flex flex-wrap gap-2">
-                        <span class="px-3 py-1.5 bg-slate-800/50 border border-slate-700 rounded-lg text-slate-300 font-mono text-sm hover:border-brand-500/50 hover:text-white transition-all cursor-default">NumPy/SciPy</span>
-                        <span class="px-3 py-1.5 bg-slate-800/50 border border-slate-700 rounded-lg text-slate-300 font-mono text-sm hover:border-brand-500/50 hover:text-white transition-all cursor-default">PyTorch</span>
-                        <span class="px-3 py-1.5 bg-slate-800/50 border border-slate-700 rounded-lg text-slate-300 font-mono text-sm hover:border-brand-500/50 hover:text-white transition-all cursor-default">MuJoCo</span>
-                        <span class="px-3 py-1.5 bg-slate-800/50 border border-slate-700 rounded-lg text-slate-300 font-mono text-sm hover:border-brand-500/50 hover:text-white transition-all cursor-default">SINDy</span>
-                        <span class="px-3 py-1.5 bg-slate-800/50 border border-slate-700 rounded-lg text-slate-300 font-mono text-sm hover:border-brand-500/50 hover:text-white transition-all cursor-default">Reinforcement Learning</span>
-                        <span class="px-3 py-1.5 bg-slate-800/50 border border-slate-700 rounded-lg text-slate-300 font-mono text-sm hover:border-brand-500/50 hover:text-white transition-all cursor-default">Monte Carlo Methods</span>
-                        <span class="px-3 py-1.5 bg-slate-800/50 border border-slate-700 rounded-lg text-slate-300 font-mono text-sm hover:border-brand-500/50 hover:text-white transition-all cursor-default">Autoencoders</span>
-                        <span class="px-3 py-1.5 bg-slate-800/50 border border-slate-700 rounded-lg text-slate-300 font-mono text-sm hover:border-brand-500/50 hover:text-white transition-all cursor-default">Qiskit</span>
-                    </div>
-                </div>
-
-                <!-- Tools & Infrastructure -->
-                <div class="glass p-7 rounded-[2rem] card-hover transition-all duration-300 relative overflow-hidden group">
-                    <div class="absolute top-0 right-0 p-5 opacity-5 group-hover:opacity-10 transition-opacity pointer-events-none">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-24 w-24" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01" /></svg>
-                    </div>
-                    <h3 class="text-brand-400 font-mono text-xs uppercase tracking-widest mb-5 flex items-center"><span class="w-1.5 h-1.5 bg-brand-500 rounded-full mr-3"></span>Tools &amp; Infrastructure</h3>
-                    <div class="flex flex-wrap gap-2">
-                        <span class="px-3 py-1.5 bg-slate-800/50 border border-slate-700 rounded-lg text-slate-300 font-mono text-sm hover:border-brand-500/50 hover:text-white transition-all cursor-default">Git</span>
-                        <span class="px-3 py-1.5 bg-slate-800/50 border border-slate-700 rounded-lg text-slate-300 font-mono text-sm hover:border-brand-500/50 hover:text-white transition-all cursor-default">Docker</span>
-                        <span class="px-3 py-1.5 bg-slate-800/50 border border-slate-700 rounded-lg text-slate-300 font-mono text-sm hover:border-brand-500/50 hover:text-white transition-all cursor-default">Linux/Bash</span>
-                        <span class="px-3 py-1.5 bg-slate-800/50 border border-slate-700 rounded-lg text-slate-300 font-mono text-sm hover:border-brand-500/50 hover:text-white transition-all cursor-default">NERSC HPC</span>
-                        <span class="px-3 py-1.5 bg-slate-800/50 border border-slate-700 rounded-lg text-slate-300 font-mono text-sm hover:border-brand-500/50 hover:text-white transition-all cursor-default">LaTeX</span>
-                        <span class="px-3 py-1.5 bg-slate-800/50 border border-slate-700 rounded-lg text-slate-300 font-mono text-sm hover:border-brand-500/50 hover:text-white transition-all cursor-default">Conda</span>
-                        <span class="px-3 py-1.5 bg-slate-800/50 border border-slate-700 rounded-lg text-slate-300 font-mono text-sm hover:border-brand-500/50 hover:text-white transition-all cursor-default">VS Code</span>
-                    </div>
-                </div>
-
-            </div>
-
-            <!-- Domain Expertise row -->
-            <div class="mt-6 glass p-7 rounded-[2rem] card-hover transition-all duration-300">
-                <h3 class="text-brand-400 font-mono text-xs uppercase tracking-widest mb-5 flex items-center"><span class="w-1.5 h-1.5 bg-brand-500 rounded-full mr-3"></span>Domain Expertise</h3>
-                <div class="flex flex-wrap gap-2">
-                    <span class="px-3 py-1.5 bg-brand-500/10 border border-brand-500/20 rounded-lg text-brand-300 font-mono text-sm cursor-default">Plasma Dynamics &amp; Fusion</span>
-                    <span class="px-3 py-1.5 bg-brand-500/10 border border-brand-500/20 rounded-lg text-brand-300 font-mono text-sm cursor-default">Nonlinear Wave-Particle Interactions</span>
-                    <span class="px-3 py-1.5 bg-brand-500/10 border border-brand-500/20 rounded-lg text-brand-300 font-mono text-sm cursor-default">Robot Kinematics &amp; Control</span>
-                    <span class="px-3 py-1.5 bg-brand-500/10 border border-brand-500/20 rounded-lg text-brand-300 font-mono text-sm cursor-default">Autonomous Navigation</span>
-                    <span class="px-3 py-1.5 bg-brand-500/10 border border-brand-500/20 rounded-lg text-brand-300 font-mono text-sm cursor-default">Astrophysical Data Pipelines</span>
-                    <span class="px-3 py-1.5 bg-brand-500/10 border border-brand-500/20 rounded-lg text-brand-300 font-mono text-sm cursor-default">Dynamical Systems</span>
-                    <span class="px-3 py-1.5 bg-brand-500/10 border border-brand-500/20 rounded-lg text-brand-300 font-mono text-sm cursor-default">Reduced-Order Modeling</span>
-                    <span class="px-3 py-1.5 bg-brand-500/10 border border-brand-500/20 rounded-lg text-brand-300 font-mono text-sm cursor-default">Mechatronics</span>
-                    <span class="px-3 py-1.5 bg-brand-500/10 border border-brand-500/20 rounded-lg text-brand-300 font-mono text-sm cursor-default">Quantum Computing</span>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section id="contact" class="section-padding">
-        <div class="max-w-4xl mx-auto px-6 text-center">
-            <h2 class="font-display text-4xl font-bold mb-8">Get In Touch</h2>
-            <p class="text-slate-400 text-lg mb-12 max-w-2xl mx-auto">Currently open to collaborative research opportunities and academic discussions. Feel free to reach out via any of the platforms below.</p>
-            <div class="grid sm:grid-cols-3 gap-6 mb-16">
-                <a href="mailto:swanyihtet0713@gmail.com" class="glass p-8 rounded-3xl card-hover transition-all group">
-                    <div class="w-12 h-12 bg-brand-600/10 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-brand-600 group-hover:text-white text-brand-400 transition-all">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
-                    </div>
-                    <span class="block text-white font-semibold">Email Me</span>
-                    <span class="text-slate-500 text-xs mt-1 block">swanyihtet0713@gmail.com</span>
+                    <span class="text-violet-300 text-[12px] inline-flex items-center gap-1 group-hover:gap-2 transition-all">
+                        Deep dive
+                        <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                    </span>
                 </a>
-                <a href="https://linkedin.com/in/swan-yi-htet-87b5751b8" target="_blank" class="glass p-8 rounded-3xl card-hover transition-all group">
-                    <div class="w-12 h-12 bg-brand-600/10 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-brand-600 group-hover:text-white text-brand-400 transition-all">
-                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.761 0 5-2.239 5-5v-14c0-2.761-2.239-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+
+                <!-- CHIRON -->
+                <a href="project-chiron.html" class="project-card instrument-panel rounded-sm p-7 block group">
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="w-10 h-10 rounded-sm bg-teal-500/15 border border-teal-500/40 flex items-center justify-center">
+                            <svg class="w-5 h-5 text-teal-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                        </div>
+                        <span class="mono-tag text-teal-300">CHI_01</span>
                     </div>
-                    <span class="block text-white font-semibold">LinkedIn</span>
-                    <span class="text-slate-500 text-xs mt-1 block">Professional Profile</span>
+                    <h3 class="display-serif text-2xl text-white font-medium mb-2 group-hover:text-teal-300 transition-colors">CHIRON</h3>
+                    <div class="mono-tag text-zinc-500 mb-4">MOTOR CORTEX</div>
+                    <p class="text-zinc-400 text-[13px] leading-relaxed mb-5">
+                        Self-measuring gripper. Geometry-based grasp planning. 9-phase pick-and-place sequencer with grasp verification &amp; auto-retry. 500 Hz physics.
+                    </p>
+                    <div class="flex flex-wrap gap-1.5 mb-5">
+                        <span class="text-[10px] font-mono text-zinc-500">MuJoCo</span>
+                        <span class="text-zinc-700">·</span>
+                        <span class="text-[10px] font-mono text-zinc-500">DLS-IK</span>
+                        <span class="text-zinc-700">·</span>
+                        <span class="text-[10px] font-mono text-zinc-500">FastAPI</span>
+                    </div>
+                    <span class="text-teal-300 text-[12px] inline-flex items-center gap-1 group-hover:gap-2 transition-all">
+                        Deep dive
+                        <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                    </span>
                 </a>
-                <a href="https://github.com/shtet100" target="_blank" class="glass p-8 rounded-3xl card-hover transition-all group">
-                    <div class="w-12 h-12 bg-brand-600/10 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-brand-600 group-hover:text-white text-brand-400 transition-all">
-                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+
+                <!-- ATHENA (deployed) -->
+                <a href="project-athena.html" class="project-card instrument-panel rounded-sm p-7 block group relative overflow-hidden">
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="w-10 h-10 rounded-sm bg-amber-500/15 border border-amber-500/40 flex items-center justify-center">
+                            <svg class="w-5 h-5 text-amber-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        </div>
+                        <span class="mono-tag text-amber-300">NAV_01</span>
                     </div>
-                    <span class="block text-white font-semibold">GitHub</span>
-                    <span class="text-slate-500 text-xs mt-1 block">Code Repositories</span>
+                    <h3 class="display-serif text-2xl text-white font-medium mb-2 group-hover:text-amber-300 transition-colors">ATHENA</h3>
+                    <div class="mono-tag text-zinc-500 mb-4">NAVIGATION LAYER</div>
+                    <p class="text-zinc-400 text-[13px] leading-relaxed mb-5">
+                        4 algorithms (A*, Dijkstra, RRT, D* Lite). Infinite procedural terrain. 4 planetary environments: Mars, Venus, Europa, Titan. Browser-native.
+                    </p>
+                    <div class="flex flex-wrap gap-1.5 mb-5">
+                        <span class="text-[10px] font-mono text-zinc-500">Three.js</span>
+                        <span class="text-zinc-700">·</span>
+                        <span class="text-[10px] font-mono text-zinc-500">React</span>
+                        <span class="text-zinc-700">·</span>
+                        <span class="text-[10px] font-mono text-zinc-500">D* Lite</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-amber-300 text-[12px] inline-flex items-center gap-1 group-hover:gap-2 transition-all">
+                            Deep dive
+                            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                        </span>
+                        <span class="mono-tag text-emerald-400 text-[9px] inline-flex items-center gap-1">
+                            <span class="w-1 h-1 rounded-full bg-emerald-400"></span> live
+                        </span>
+                    </div>
                 </a>
             </div>
-            <a href="mailto:swanyihtet0713@gmail.com" class="inline-flex items-center space-x-4 px-10 py-5 bg-gradient-to-r from-brand-600 to-brand-500 rounded-full font-bold text-lg shadow-2xl shadow-brand-500/30 hover:scale-105 transition-all">
-                <span>Start a Conversation</span>
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+
+            <!-- Live demo callout -->
+            <a href="https://shtet100.github.io/ATHENA/" target="_blank" class="mt-5 instrument-panel rounded-sm p-5 flex items-center justify-between hover:border-amber-500/40 transition-colors group block">
+                <div class="flex items-center gap-4">
+                    <span class="text-[28px]">↗</span>
+                    <div>
+                        <div class="text-white text-[14px] font-medium">Try ATHENA live in your browser</div>
+                        <div class="mono-tag text-zinc-500 mt-0.5">shtet100.github.io/ATHENA</div>
+                    </div>
+                </div>
+                <span class="mono-tag text-amber-300 group-hover:translate-x-1 transition-transform">launch demo →</span>
             </a>
         </div>
     </section>
 
-    <footer class="py-8 text-center border-t border-white/5 mt-12">
-        <p class="text-zinc-600 font-mono text-xs">&copy; 2026 Swan Yi Htet. All systems nominal.</p>
+    <!-- ============== CV · education, awards, conferences ============== -->
+    <section id="cv" class="relative py-24 px-6 border-t border-white/5">
+        <div class="max-w-[1240px] mx-auto">
+            <div class="grid lg:grid-cols-12 gap-10 mb-16">
+                <div class="lg:col-span-3">
+                    <span class="section-num">§ 05</span>
+                    <h2 class="display-serif text-3xl text-white font-medium mt-2 heading-mark">Curriculum Vitae</h2>
+                </div>
+            </div>
+
+            <div class="grid lg:grid-cols-12 gap-10">
+
+                <!-- Education -->
+                <div class="lg:col-span-7 space-y-6">
+                    <div class="mono-tag text-zinc-500 mb-2">EDUCATION</div>
+
+                    <!-- Columbia -->
+                    <div class="instrument-panel rounded-sm p-6">
+                        <div class="flex items-start gap-5">
+                            <img src="./columbia-engineering-logo.png" alt="Columbia" class="w-14 h-14 object-contain opacity-90 flex-shrink-0">
+                            <div class="flex-grow">
+                                <div class="flex items-start justify-between mb-1 flex-wrap gap-2">
+                                    <h3 class="display-serif text-xl text-white font-medium">Columbia University</h3>
+                                    <span class="mono-tag text-ember-400">2024 · 2027</span>
+                                </div>
+                                <div class="text-zinc-400 text-[13px] mb-3">Fu Foundation School of Engineering and Applied Science</div>
+                                <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-[13px] text-zinc-300 mb-3">
+                                    <span>B.S.E. Applied Physics</span>
+                                    <span class="text-zinc-700">|</span>
+                                    <span class="text-ember-400">GPA 3.90</span>
+                                </div>
+                                <div class="text-[12px] text-zinc-500 leading-relaxed">
+                                    Mechatronics · Robot Learning · Kinematics of Machines &amp; Robots · Applied Physics Laboratory · Plasma Physics
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Queens -->
+                    <div class="instrument-panel rounded-sm p-6">
+                        <div class="flex items-start gap-5">
+                            <img src="./queens-college-logo.png" alt="Queens College" class="w-14 h-14 object-contain opacity-90 flex-shrink-0">
+                            <div class="flex-grow">
+                                <div class="flex items-start justify-between mb-1 flex-wrap gap-2">
+                                    <h3 class="display-serif text-xl text-white font-medium">CUNY Queens College</h3>
+                                    <span class="mono-tag text-zinc-500">2022 · 2024</span>
+                                </div>
+                                <div class="text-zinc-400 text-[13px] mb-3">Macaulay Honors · Pre-Engineering Track</div>
+                                <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-[13px] text-zinc-300 mb-3">
+                                    <span>Physics &amp; Mathematics</span>
+                                    <span class="text-zinc-700">|</span>
+                                    <span class="text-ember-400">GPA 3.90</span>
+                                </div>
+                                <div class="text-[12px] text-zinc-500 leading-relaxed">
+                                    Stellar photometry research · TASC7 Hawaii presenter · TASC NYC presenter
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Awards / conferences -->
+                <div class="lg:col-span-5 space-y-6">
+                    <div class="mono-tag text-zinc-500 mb-2">SELECTED HONORS</div>
+
+                    <div class="instrument-panel rounded-sm p-5">
+                        <div class="flex items-start gap-4">
+                            <div class="display-serif text-2xl text-ember-400 font-medium leading-none">★</div>
+                            <div>
+                                <h4 class="text-white text-[14px] font-medium">Departmental Physics Prize</h4>
+                                <p class="text-zinc-500 text-[12px] mt-1 leading-relaxed">Awarded for sustained excellence in physics studies.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="instrument-panel rounded-sm p-5">
+                        <div class="flex items-start gap-4">
+                            <div class="display-serif text-2xl text-ember-400 font-medium leading-none">★</div>
+                            <div>
+                                <h4 class="text-white text-[14px] font-medium">Outstanding Research Award · Physics</h4>
+                                <p class="text-zinc-500 text-[12px] mt-1 leading-relaxed">Recognition for the TESS White Dwarf calibration project.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="instrument-panel rounded-sm p-5">
+                        <div class="flex items-start gap-4">
+                            <div class="display-serif text-2xl text-ember-400 font-medium leading-none">★</div>
+                            <div>
+                                <h4 class="text-white text-[14px] font-medium">Michael Craig-Scheckman Award</h4>
+                                <p class="text-zinc-500 text-[12px] mt-1 leading-relaxed">Impactful collaboration in undergraduate research.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Conferences inline -->
+                    <div class="instrument-panel rounded-sm p-5">
+                        <div class="mono-tag text-ember-400 mb-3">Conference Talks</div>
+                        <div class="space-y-2 text-[12px] text-zinc-400">
+                            <div class="flex items-baseline justify-between gap-3">
+                                <span>TASC7 / KASC14 Workshop</span>
+                                <span class="text-zinc-600 font-mono text-[11px]">Hawaii · 2024</span>
+                            </div>
+                            <div class="flex items-baseline justify-between gap-3">
+                                <span>TASC NYC Workshop</span>
+                                <span class="text-zinc-600 font-mono text-[11px]">CUNY · 2023</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============== TECHNICAL STACK ============== -->
+    <section id="stack" class="relative py-24 px-6 border-t border-white/5">
+        <div class="max-w-[1240px] mx-auto">
+            <div class="grid lg:grid-cols-12 gap-10 mb-12">
+                <div class="lg:col-span-3">
+                    <span class="section-num">§ 06</span>
+                    <h2 class="display-serif text-3xl text-white font-medium mt-2 heading-mark">Stack</h2>
+                </div>
+                <div class="lg:col-span-9 prose-band">
+                    <p class="text-zinc-400 text-[15px] leading-relaxed">
+                        Tools I reach for, organized by where they live in the workflow.
+                    </p>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="instrument-panel rounded-sm p-5">
+                    <div class="mono-tag text-ember-400 mb-3">Languages</div>
+                    <div class="space-y-2 text-[12px] font-mono">
+                        <div class="text-zinc-300">Python</div>
+                        <div class="text-zinc-300">C++</div>
+                        <div class="text-zinc-300">Java</div>
+                        <div class="text-zinc-300">JavaScript</div>
+                        <div class="text-zinc-400">MATLAB · Mathematica</div>
+                        <div class="text-zinc-400">PIC Assembly</div>
+                    </div>
+                </div>
+
+                <div class="instrument-panel rounded-sm p-5">
+                    <div class="mono-tag text-ember-400 mb-3">Physics &amp; HPC</div>
+                    <div class="space-y-2 text-[12px] font-mono">
+                        <div class="text-zinc-300">simsopt</div>
+                        <div class="text-zinc-300">VMEC2000</div>
+                        <div class="text-zinc-300">booz_xform</div>
+                        <div class="text-zinc-300">NERSC Perlmutter</div>
+                        <div class="text-zinc-400">SLURM · Conda · MPI</div>
+                    </div>
+                </div>
+
+                <div class="instrument-panel rounded-sm p-5">
+                    <div class="mono-tag text-ember-400 mb-3">Robotics &amp; ML</div>
+                    <div class="space-y-2 text-[12px] font-mono">
+                        <div class="text-zinc-300">ROS 2 Humble</div>
+                        <div class="text-zinc-300">MuJoCo · Genesis</div>
+                        <div class="text-zinc-300">PyTorch</div>
+                        <div class="text-zinc-300">SINDy</div>
+                        <div class="text-zinc-400">RL · Monte Carlo</div>
+                    </div>
+                </div>
+
+                <div class="instrument-panel rounded-sm p-5">
+                    <div class="mono-tag text-ember-400 mb-3">Frameworks &amp; Tools</div>
+                    <div class="space-y-2 text-[12px] font-mono">
+                        <div class="text-zinc-300">FastAPI</div>
+                        <div class="text-zinc-300">React · Three.js</div>
+                        <div class="text-zinc-300">Docker · Linux</div>
+                        <div class="text-zinc-300">Git · LaTeX</div>
+                        <div class="text-zinc-400">VS Code · Vim</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Domain expertise band -->
+            <div class="mt-6 instrument-panel rounded-sm p-6">
+                <div class="mono-tag text-ember-400 mb-4">Domain Expertise</div>
+                <div class="flex flex-wrap gap-2">
+                    <span class="px-3 py-1.5 bg-ember-500/10 border border-ember-500/25 rounded-sm text-ember-300 font-mono text-[11px]">Plasma Dynamics &amp; Fusion</span>
+                    <span class="px-3 py-1.5 bg-ember-500/10 border border-ember-500/25 rounded-sm text-ember-300 font-mono text-[11px]">Wave-Particle Interactions</span>
+                    <span class="px-3 py-1.5 bg-ember-500/10 border border-ember-500/25 rounded-sm text-ember-300 font-mono text-[11px]">Stellarator Optimization</span>
+                    <span class="px-3 py-1.5 bg-ember-500/10 border border-ember-500/25 rounded-sm text-ember-300 font-mono text-[11px]">Robot Kinematics</span>
+                    <span class="px-3 py-1.5 bg-ember-500/10 border border-ember-500/25 rounded-sm text-ember-300 font-mono text-[11px]">Autonomous Navigation</span>
+                    <span class="px-3 py-1.5 bg-ember-500/10 border border-ember-500/25 rounded-sm text-ember-300 font-mono text-[11px]">Reduced-Order Modeling</span>
+                    <span class="px-3 py-1.5 bg-ember-500/10 border border-ember-500/25 rounded-sm text-ember-300 font-mono text-[11px]">Symplectic Integration</span>
+                    <span class="px-3 py-1.5 bg-ember-500/10 border border-ember-500/25 rounded-sm text-ember-300 font-mono text-[11px]">Mechatronics</span>
+                    <span class="px-3 py-1.5 bg-ember-500/10 border border-ember-500/25 rounded-sm text-ember-300 font-mono text-[11px]">Astrophysical Pipelines</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============== CONTACT · quiet closer ============== -->
+    <section id="contact" class="relative py-32 px-6 border-t border-white/5">
+        <div class="max-w-[1240px] mx-auto">
+            <div class="max-w-3xl">
+                <span class="section-num">§ 07</span>
+                <h2 class="display-serif text-5xl md:text-6xl text-white font-medium mt-3 mb-6 leading-tight">
+                    Open to research collaborations and engineering work that takes physics seriously<span class="text-ember-400">.</span>
+                </h2>
+                <p class="text-zinc-400 text-[16px] leading-relaxed mb-12 max-w-2xl">
+                    Reach out about: undergraduate or summer research, robotics partnerships, fusion-related opportunities, or just to talk through an interesting problem.
+                </p>
+
+                <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-12">
+                    <a href="mailto:swanyihtet0713@gmail.com" class="instrument-panel rounded-sm p-5 block group hover:border-ember-500/40 transition-colors">
+                        <div class="mono-tag text-ember-400 mb-2">Email</div>
+                        <div class="text-white text-[13px] font-medium group-hover:text-ember-300 transition-colors break-all">swanyihtet0713@gmail.com</div>
+                    </a>
+                    <a href="https://linkedin.com/in/swan-yi-htet-87b5751b8" target="_blank" class="instrument-panel rounded-sm p-5 block group hover:border-ember-500/40 transition-colors">
+                        <div class="mono-tag text-ember-400 mb-2">LinkedIn</div>
+                        <div class="text-white text-[13px] font-medium group-hover:text-ember-300 transition-colors">swan-yi-htet</div>
+                    </a>
+                    <a href="https://github.com/shtet100" target="_blank" class="instrument-panel rounded-sm p-5 block group hover:border-ember-500/40 transition-colors">
+                        <div class="mono-tag text-ember-400 mb-2">GitHub</div>
+                        <div class="text-white text-[13px] font-medium group-hover:text-ember-300 transition-colors">shtet100</div>
+                    </a>
+                    <a href="./SwanYiHtet_TechnicalResume.pdf" download class="instrument-panel rounded-sm p-5 block group hover:border-ember-500/40 transition-colors">
+                        <div class="mono-tag text-ember-400 mb-2 inline-flex items-center gap-1.5">
+                            Resume
+                            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                        </div>
+                        <div class="text-white text-[13px] font-medium group-hover:text-ember-300 transition-colors">Download PDF</div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============== FOOTER ============== -->
+    <footer class="border-t border-white/5 py-12 px-6">
+        <div class="max-w-[1240px] mx-auto">
+            <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+                <div class="flex items-center gap-4">
+                    <!-- Vertical accent rule -->
+                    <div class="w-[3px] h-12 bg-gradient-to-b from-ember-500 via-ember-500/50 to-transparent"></div>
+                    <div>
+                        <div class="display-serif text-[15px] text-white font-medium leading-tight">Swan Yi Htet</div>
+                        <div class="mono-tag text-zinc-500 text-[9px] mt-0.5">applied physics · robotics · NYC</div>
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap gap-x-5 gap-y-2 text-[12px] mono-tag text-zinc-600">
+                    <a href="#research" class="hover:text-ember-300 transition-colors">research</a>
+                    <a href="#orion" class="hover:text-ember-300 transition-colors">orion</a>
+                    <a href="#projects" class="hover:text-ember-300 transition-colors">projects</a>
+                    <a href="#cv" class="hover:text-ember-300 transition-colors">cv</a>
+                    <a href="#contact" class="hover:text-ember-300 transition-colors">contact</a>
+                </div>
+            </div>
+
+            <div class="mt-8 pt-6 border-t border-white/5 flex flex-col sm:flex-row justify-between items-center gap-3 text-[10px] mono-tag text-zinc-700">
+                <span>© 2026 Swan Yi Htet</span>
+                <span class="hidden sm:inline">designed &amp; built from scratch · 2026</span>
+                <span>"the gap is where I want to spend my career"</span>
+            </div>
+        </div>
     </footer>
 
-    <script>
-        const nav = document.querySelector('nav');
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 100) {
-                nav.classList.add('py-4', 'bg-slate-950/80');
-                nav.classList.remove('h-20');
-            } else {
-                nav.classList.remove('py-4', 'bg-slate-950/80');
-                nav.classList.add('h-20');
-            }
-        });
-        const observerOptions = { threshold: 0.1 };
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('opacity-100', 'translate-y-0');
-                    entry.target.classList.remove('opacity-0', 'translate-y-8');
-                }
-            });
-        }, observerOptions);
-        document.querySelectorAll('section').forEach(section => { observer.observe(section); });
-        const menuBtn = document.getElementById('mobile-menu-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
-        menuBtn.addEventListener('click', () => { mobileMenu.classList.toggle('hidden'); });
-        mobileMenu.querySelectorAll('a').forEach(link => { link.addEventListener('click', () => { mobileMenu.classList.add('hidden'); }); });
-    </script>
 </body>
 </html>

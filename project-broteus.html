@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BROTEUS · Real-Time Perception System | Swan Yi Htet</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700;9..144,800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: { extend: {
+                fontFamily: { display: ['Fraunces', 'serif'], sans: ['Inter', 'sans-serif'], mono: ['"JetBrains Mono"', 'monospace'] },
+                colors: {
+                    ink: { DEFAULT: '#070b14', deep: '#04060c', soft: '#0c1220' },
+                    ember: { 300: '#fbbf67', 400: '#f5a142', 500: '#e8842a' },
+                    plasma: { 300: '#7dd3fc', 400: '#38bdf8' },
+                    bro: { 300: '#c4b5fd', 400: '#a78bfa', 500: '#8b5cf6' },
+                }
+            }}
+        }
+    </script>
+    <style>
+        body { background: #04060c; color: #d8dde6; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+        .lab-grid {
+            background-image: radial-gradient(circle, rgba(167,139,250,0.07) 1px, transparent 1px), radial-gradient(circle, rgba(232,132,42,0.04) 1px, transparent 1px);
+            background-size: 36px 36px, 72px 72px; background-position: 0 0, 18px 18px;
+        }
+        .display-serif { font-family: 'Fraunces', serif; }
+        .mono-tag { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; }
+        .section-num { font-family: 'Fraunces', serif; font-size: 13px; color: rgba(167,139,250,0.55); letter-spacing: 0.05em; }
+        .heading-mark { position: relative; padding-bottom: 4px; }
+        .heading-mark::after { content: ''; position: absolute; left: 0; bottom: 0; width: 36px; height: 2px; background: rgba(167,139,250,0.7); }
+        .instrument-panel { position: relative; background: linear-gradient(180deg, rgba(16,23,42,0.5), rgba(7,11,20,0.7)); border: 1px solid rgba(167,139,250,0.1); border-radius: 4px; }
+        .instrument-panel::before { content: ''; position: absolute; top: -1px; left: -1px; width: 14px; height: 14px; border-top: 1px solid rgba(167,139,250,0.55); border-left: 1px solid rgba(167,139,250,0.55); }
+        .instrument-panel::after { content: ''; position: absolute; bottom: -1px; right: -1px; width: 14px; height: 14px; border-bottom: 1px solid rgba(167,139,250,0.55); border-right: 1px solid rgba(167,139,250,0.55); }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #04060c; }
+        ::-webkit-scrollbar-thumb { background: #2a1a4a; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #8b5cf6; }
+        .pull-quote { font-family: 'Fraunces', serif; font-style: italic; font-weight: 300; letter-spacing: -0.01em; }
+        .blip { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #a78bfa; box-shadow: 0 0 6px rgba(167,139,250,0.8); animation: pulseSoft 2s ease-in-out infinite; }
+        @keyframes pulseSoft { 0%,100% { opacity: 0.35; } 50% { opacity: 0.85; } }
+        .video-frame { position: relative; border: 1px solid rgba(167,139,250,0.3); box-shadow: 0 0 0 1px rgba(0,0,0,0.4), 0 20px 60px -10px rgba(139,92,246,0.2), 0 0 90px -20px rgba(167,139,250,0.25); }
+        .feature-seg { background: linear-gradient(145deg, rgba(139,92,246,0.15), rgba(139,92,246,0.04)); border: 1px solid rgba(139,92,246,0.25); transition: all 0.3s; }
+        .feature-seg:hover { background: linear-gradient(145deg, rgba(139,92,246,0.3), rgba(167,139,250,0.08)); border-color: rgba(167,139,250,0.55); transform: translateY(-2px); }
+        .arch-diagram { max-width: 780px; margin: 0 auto; font-family: 'JetBrains Mono', monospace; }
+        .arch-frame { border: 1.5px solid rgba(139,92,246,0.35); background: rgba(20,10,34,0.45); border-radius: 4px; padding: 22px; position: relative; }
+        .arch-header { text-align: center; padding-bottom: 14px; margin-bottom: 16px; border-bottom: 1px dashed rgba(139,92,246,0.22); }
+        .arch-header-title { color: white; font-size: 13px; font-weight: 600; letter-spacing: 0.08em; }
+        .arch-header-sub { color: rgba(167,139,250,0.95); font-size: 11px; margin-top: 4px; letter-spacing: 0.05em; }
+        .arch-node { display: flex; flex-direction: column; justify-content: center; border: 1px solid rgba(139,92,246,0.3); background: linear-gradient(145deg, rgba(139,92,246,0.12), rgba(139,92,246,0.03)); border-radius: 3px; padding: 11px 14px; text-align: center; transition: all 0.25s; }
+        .arch-node-name { color: white; font-size: 12px; font-weight: 500; }
+        .arch-node-meta { color: rgba(196,181,253,0.78); font-size: 10px; margin-top: 3px; }
+        .arch-node-primary { border-color: rgba(139,92,246,0.55); background: linear-gradient(145deg, rgba(139,92,246,0.2), rgba(139,92,246,0.06)); box-shadow: 0 0 20px -8px rgba(139,92,246,0.4); }
+        .arch-subnode { border: 1px solid rgba(167,139,250,0.35); background: rgba(139,92,246,0.12); border-radius: 2px; padding: 6px 10px; margin-top: 10px; text-align: center; }
+        .arch-subnode-name { color: rgba(196,181,253,1); font-size: 10px; font-weight: 500; }
+        .arch-subnode-meta { color: rgba(167,139,250,0.8); font-size: 9px; margin-top: 2px; }
+        .arch-parallel-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+        .arch-flow { height: 22px; position: relative; }
+        .arch-flow::before { content: ''; position: absolute; left: 50%; top: 0; width: 1px; height: 15px; background: rgba(139,92,246,0.5); transform: translateX(-0.5px); }
+        .arch-flow::after { content: ''; position: absolute; left: 50%; top: 12px; width: 0; height: 0; border-left: 4px solid transparent; border-right: 4px solid transparent; border-top: 6px solid rgba(167,139,250,0.7); transform: translateX(-4px); }
+        .arch-merge-3 { height: 32px; position: relative; }
+        .arch-merge-3-b { position: absolute; top: 0; width: 1px; height: 14px; background: rgba(139,92,246,0.5); }
+        .arch-merge-3-l { left: 16.67%; }
+        .arch-merge-3-c { left: 50%; transform: translateX(-0.5px); }
+        .arch-merge-3-r { right: 16.67%; }
+        .arch-merge-3-bar { position: absolute; top: 14px; left: 16.67%; right: 16.67%; height: 1px; background: rgba(139,92,246,0.5); }
+        .arch-merge-3-tail { position: absolute; top: 14px; left: 50%; width: 1px; height: 12px; background: rgba(139,92,246,0.5); transform: translateX(-0.5px); }
+        .arch-merge-3-arrow { position: absolute; top: 26px; left: 50%; width: 0; height: 0; border-left: 4px solid transparent; border-right: 4px solid transparent; border-top: 6px solid rgba(167,139,250,0.7); transform: translateX(-4px); }
+        .arch-bridge { display: flex; flex-direction: column; align-items: center; padding: 2px 0; }
+        .arch-bridge-line { width: 1px; height: 14px; background: rgba(139,92,246,0.5); }
+        .arch-bridge-label { font-size: 10px; color: rgba(167,139,250,1); letter-spacing: 0.14em; text-transform: uppercase; padding: 5px 14px; background: rgba(139,92,246,0.05); border: 1px solid rgba(139,92,246,0.3); border-radius: 3px; margin: 4px 0; }
+        .arch-bridge-line-arrow { width: 1px; height: 16px; background: rgba(139,92,246,0.5); position: relative; }
+        .arch-bridge-line-arrow::after { content: ''; position: absolute; bottom: -6px; left: 50%; width: 0; height: 0; border-left: 4px solid transparent; border-right: 4px solid transparent; border-top: 6px solid rgba(167,139,250,0.8); transform: translateX(-4px); }
+        @media (max-width: 640px) { .arch-parallel-3 { grid-template-columns: 1fr; gap: 8px; } .arch-merge-3-l, .arch-merge-3-r, .arch-merge-3-bar { display: none; } }
+    </style>
+</head>
+<body class="selection:bg-bro-500/30 selection:text-bro-300">
+
+    <div class="fixed inset-0 -z-50 pointer-events-none overflow-hidden">
+        <div class="absolute inset-0 lab-grid opacity-50"></div>
+        <canvas id="bg-network" class="absolute inset-0 w-full h-full"></canvas>
+        <div class="absolute top-0 right-0 w-[700px] h-[700px] bg-bro-500/12 rounded-full blur-[180px]"></div>
+        <div class="absolute bottom-[-10%] left-[-5%] w-[600px] h-[600px] bg-fuchsia-500/8 rounded-full blur-[160px]"></div>
+    </div>
+
+    <script>
+        (function() {
+            const canvas = document.getElementById('bg-network');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            let w, h, nodes = [];
+            const DPR = Math.min(window.devicePixelRatio || 1, 2);
+            function resize() { w = canvas.clientWidth; h = canvas.clientHeight; canvas.width = w * DPR; canvas.height = h * DPR; ctx.scale(DPR, DPR); }
+            function init() { resize(); const count = Math.min(60, Math.floor((w*h)/22000)); nodes = []; for (let i=0;i<count;i++) nodes.push({x:Math.random()*w,y:Math.random()*h,vx:(Math.random()-0.5)*0.12,vy:(Math.random()-0.5)*0.12,r:Math.random()*1.2+0.6,type:Math.random()<0.2?'bro':'plasma',phase:Math.random()*Math.PI*2}); }
+            function step(t) {
+                ctx.clearRect(0,0,w,h);
+                for (let i=0;i<nodes.length;i++) for (let j=i+1;j<nodes.length;j++) {
+                    const a=nodes[i],b=nodes[j],dx=a.x-b.x,dy=a.y-b.y,d2=dx*dx+dy*dy,maxD=140;
+                    if (d2<maxD*maxD) { ctx.strokeStyle=`rgba(167,139,250,${(1-Math.sqrt(d2)/maxD)*0.18})`; ctx.lineWidth=0.5; ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke(); }
+                }
+                for (const n of nodes) {
+                    n.x+=n.vx; n.y+=n.vy;
+                    if (n.x<-10) n.x=w+10; if (n.x>w+10) n.x=-10; if (n.y<-10) n.y=h+10; if (n.y>h+10) n.y=-10;
+                    const pulse=0.7+Math.sin(t*0.001+n.phase)*0.3;
+                    ctx.fillStyle = n.type==='bro' ? `rgba(167,139,250,${0.55*pulse})` : `rgba(125,211,252,${0.4*pulse})`;
+                    ctx.beginPath(); ctx.arc(n.x,n.y,n.r,0,Math.PI*2); ctx.fill();
+                }
+                requestAnimationFrame(step);
+            }
+            init(); step(0); window.addEventListener('resize',init);
+        })();
+    </script>
+
+    <nav class="fixed top-0 w-full z-50 backdrop-blur-md bg-ink-deep/70 border-b border-white/5">
+        <div class="max-w-[1240px] mx-auto px-6 h-16 flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-2 text-zinc-400 hover:text-bro-300 transition-colors group">
+                <svg class="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                <span class="text-[13px]">return to portfolio</span>
+            </a>
+            <a href="./SwanYiHtet_TechnicalResume.pdf" download class="hidden md:inline-flex items-center gap-1.5 text-[12px] text-zinc-400 hover:text-ember-300 transition-colors mr-4"><svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>Resume</a><div class="flex items-center gap-3">
+                <span class="hidden sm:inline-flex items-center gap-1.5 mono-tag text-bro-300"><span class="blip"></span> PERCEPTION_LIVE</span>
+                <span class="mono-tag text-zinc-600 border border-white/5 px-2.5 py-1 rounded-sm">SYSTEM_ID: PER_01</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="pt-32 pb-16 px-6">
+        <div class="max-w-[1240px] mx-auto">
+            <div class="grid lg:grid-cols-12 gap-10 items-start">
+                <div class="lg:col-span-7">
+                    <div class="mono-tag text-bro-300 mb-6 flex items-center gap-3">
+                        <span class="h-px w-7 bg-bro-500/60"></span>
+                        ORION · Perception Layer
+                    </div>
+                    <h1 class="display-serif text-[58px] md:text-[88px] leading-[0.95] tracking-[-0.025em] text-white font-light mb-6">
+                        BRO<span class="font-semibold">TE</span>US<span class="text-bro-400">.</span>
+                    </h1>
+                    <p class="font-mono text-[13px] text-bro-300/85 tracking-wider mb-8">
+                        Biometric Recognition &amp; Object-Tracking Engagement with Universal Sensing
+                    </p>
+                    <p class="text-[18px] text-zinc-300 leading-relaxed mb-4 font-light max-w-2xl">
+                        A real-time vision system that detects objects, tracks hands, recognizes gestures, and understands hand animations, all running simultaneously in a single pipeline.
+                    </p>
+                    <p class="text-zinc-400 leading-relaxed mb-8 max-w-2xl">
+                        The entire system runs on CPU at ~21 FPS. No GPU required.
+                    </p>
+
+                    <div class="flex flex-wrap gap-3">
+                        <a href="https://github.com/shtet100/BROTEUS" target="_blank" class="inline-flex items-center gap-2 px-5 py-3 bg-bro-500 hover:bg-bro-400 text-white font-semibold text-[13px] rounded-sm transition-all shadow-[0_0_24px_rgba(139,92,246,0.4)]">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                            Source on GitHub
+                        </a>
+                        <a href="#detect" class="inline-flex items-center gap-2 px-5 py-3 bg-transparent border border-bro-400/40 hover:border-bro-400/80 text-bro-300 text-[13px] rounded-sm transition-all">
+                            View Live Detection
+                        </a>
+                    </div>
+
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-10">
+                        <div class="border border-white/5 p-4 rounded-sm">
+                            <div class="display-serif text-2xl text-white font-medium">21<span class="text-sm text-bro-400 ml-1">FPS</span></div>
+                            <div class="mono-tag text-zinc-500 mt-1">CPU Throughput</div>
+                        </div>
+                        <div class="border border-white/5 p-4 rounded-sm">
+                            <div class="display-serif text-2xl text-white font-medium">87<span class="text-sm text-bro-400 ml-1">%</span></div>
+                            <div class="mono-tag text-zinc-500 mt-1">Confidence</div>
+                        </div>
+                        <div class="border border-white/5 p-4 rounded-sm">
+                            <div class="display-serif text-2xl text-white font-medium">42</div>
+                            <div class="mono-tag text-zinc-500 mt-1">Hand Keypoints</div>
+                        </div>
+                        <div class="border border-white/5 p-4 rounded-sm">
+                            <div class="display-serif text-2xl text-white font-medium">35<span class="text-sm text-bro-400 ml-1">-d</span></div>
+                            <div class="mono-tag text-zinc-500 mt-1">Feature Vector</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-5">
+                    <div class="instrument-panel rounded-sm p-6 sticky top-24">
+                        <div class="flex items-start justify-between mb-6 pb-4 border-b border-white/5">
+                            <div>
+                                <div class="mono-tag text-bro-300 mb-1">Project Classification</div>
+                                <div class="text-white display-serif text-lg">Perception Pipeline</div>
+                            </div>
+                            <span class="mono-tag text-bro-300 inline-flex items-center gap-1.5"><span class="blip"></span> LIVE</span>
+                        </div>
+                        <div class="space-y-3 text-[13px]">
+                            <div class="flex justify-between"><span class="mono-tag text-zinc-500">Role</span><span class="text-zinc-300 font-mono text-[12px]">Perception Layer</span></div>
+                            <div class="flex justify-between"><span class="mono-tag text-zinc-500">Port</span><span class="text-zinc-300 font-mono text-[12px]">localhost:8100</span></div>
+                            <div class="flex justify-between"><span class="mono-tag text-zinc-500">Detector</span><span class="text-zinc-300 font-mono text-[12px]">YOLO-World</span></div>
+                            <div class="flex justify-between"><span class="mono-tag text-zinc-500">Depth</span><span class="text-zinc-300 font-mono text-[12px]">MiDaS (mono)</span></div>
+                            <div class="flex justify-between"><span class="mono-tag text-zinc-500">Hands</span><span class="text-zinc-300 font-mono text-[12px]">MediaPipe</span></div>
+                            <div class="flex justify-between"><span class="mono-tag text-zinc-500">Stack</span><span class="text-zinc-300 font-mono text-[12px]">PyTorch · FastAPI</span></div>
+                        </div>
+                        <div class="mt-6 pt-4 border-t border-white/5">
+                            <div class="mono-tag text-bro-300 mb-2">Built By</div>
+                            <div class="text-zinc-200 text-[13px] font-medium">Swan Yi Htet</div>
+                            <div class="text-zinc-500 text-[11px] mono-tag">+ David Young</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pipeline Overview -->
+    <section class="py-16 px-6 border-t border-white/5">
+        <div class="max-w-[1240px] mx-auto">
+            <div class="grid lg:grid-cols-12 gap-10 mb-10">
+                <div class="lg:col-span-3">
+                    <span class="section-num">§ 01</span>
+                    <h2 class="display-serif text-2xl text-white font-medium mt-2 heading-mark">Pipeline Overview</h2>
+                </div>
+                <div class="lg:col-span-9 max-w-2xl">
+                    <p class="text-[17px] text-zinc-200 leading-relaxed mb-4 font-light">
+                        A camera feed is processed through four parallel subsystems running simultaneously: YOLO-World detection, MediaPipe dual-hand tracking, learning-based gesture classification, and DTW-based animation recognition.
+                    </p>
+                    <p class="text-zinc-400 leading-relaxed">
+                        Clicking a detected object triggers a grasp affordance heatmap showing optimal contact surfaces. Every subsystem runs in real-time on CPU.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Object Detection -->
+    <section id="detect" class="py-16 px-6 border-t border-white/5">
+        <div class="max-w-[1240px] mx-auto">
+            <div class="grid lg:grid-cols-12 gap-10 mb-8">
+                <div class="lg:col-span-3">
+                    <span class="section-num">§ 02</span>
+                    <h2 class="display-serif text-2xl text-white font-medium mt-2 heading-mark">Object Detection</h2>
+                </div>
+                <div class="lg:col-span-9 max-w-2xl">
+                    <p class="text-zinc-400 leading-relaxed text-[14px]">Open-vocabulary detection using YOLO-World. The operator decides what exists in the scene.</p>
+                </div>
+            </div>
+
+            <div class="grid lg:grid-cols-5 gap-8 items-start">
+                <div class="lg:col-span-3">
+                    <div class="video-frame rounded-sm overflow-hidden bg-black">
+                        <video autoplay muted loop playsinline class="w-full h-auto block">
+                            <source src="./videos/broteus_obj_detect.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <p class="mt-3 text-xs text-zinc-500 italic leading-relaxed">Real-time detection with user-driven search list. Classes added and removed on the fly.</p>
+                </div>
+
+                <div class="lg:col-span-2">
+                    <p class="text-zinc-300 leading-relaxed mb-4">
+                        Traditional YOLO is locked to 80 COCO classes. <span class="text-bro-300">YOLO-World accepts arbitrary text queries at runtime.</span>
+                    </p>
+                    <p class="text-zinc-400 leading-relaxed text-[14px] mb-4">
+                        BROTEUS starts with zero classes. The operator adds object names through the UI, and BROTEUS begins searching for them. Removing a class is a single click. The search list persists across restarts.
+                    </p>
+                    <div class="space-y-2 mt-6">
+                        <div class="flex items-center justify-between p-3 instrument-panel rounded-sm"><span class="mono-tag text-zinc-500">Confidence</span><span class="font-mono text-[12px] text-white">79-87%</span></div>
+                        <div class="flex items-center justify-between p-3 instrument-panel rounded-sm"><span class="mono-tag text-zinc-500">Throughput</span><span class="font-mono text-[12px] text-white">21 FPS · CPU</span></div>
+                        <div class="flex items-center justify-between p-3 instrument-panel rounded-sm"><span class="mono-tag text-zinc-500">Tracking</span><span class="font-mono text-[12px] text-white">IoU · Persistent IDs</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gesture Recognition -->
+    <section class="py-16 px-6 border-t border-white/5">
+        <div class="max-w-[1240px] mx-auto">
+            <div class="grid lg:grid-cols-12 gap-10 mb-8">
+                <div class="lg:col-span-3">
+                    <span class="section-num">§ 03</span>
+                    <h2 class="display-serif text-2xl text-white font-medium mt-2 heading-mark">Gesture Recognition</h2>
+                </div>
+                <div class="lg:col-span-9 max-w-2xl">
+                    <p class="text-zinc-400 leading-relaxed text-[14px]">Static hand pose classification with rotation-invariant 35-dimensional encoding.</p>
+                </div>
+            </div>
+
+            <div class="grid lg:grid-cols-5 gap-8 items-start mb-12">
+                <div class="lg:col-span-3">
+                    <div class="video-frame rounded-sm overflow-hidden bg-black">
+                        <video autoplay muted loop playsinline class="w-full h-auto block">
+                            <source src="./videos/broteus_gesture.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <p class="mt-3 text-xs text-zinc-500 italic leading-relaxed">Dual-hand recognition with independent left/right tracking.</p>
+                </div>
+                <div class="lg:col-span-2">
+                    <p class="text-zinc-300 leading-relaxed mb-4">BROTEUS tracks up to two hands using MediaPipe HandLandmarker, giving <span class="text-bro-300">21 3D keypoints per hand</span>.</p>
+                    <p class="text-zinc-400 leading-relaxed text-[14px]">Left and right are tracked independently with separate classifiers, separate memory, and separate state. Each hand pose is compressed into a 35-dimensional feature vector.</p>
+                </div>
+            </div>
+
+            <!-- 35-D Feature Vector -->
+            <div class="instrument-panel rounded-sm p-8">
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <div class="mono-tag text-bro-300 mb-1">Feature Vector Breakdown</div>
+                        <h3 class="display-serif text-xl text-white font-medium">The 35-Dimensional Encoding</h3>
+                    </div>
+                    <div class="text-right">
+                        <div class="display-serif text-3xl text-bro-400 font-medium">35-d</div>
+                        <div class="mono-tag text-zinc-500 text-[9px]">per hand pose</div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-2 mb-4">
+                    <div class="feature-seg rounded-sm p-3 text-center"><div class="display-serif text-2xl text-white">5</div><div class="mono-tag text-bro-300 text-[9px] mt-1">finger curls</div></div>
+                    <div class="feature-seg rounded-sm p-3 text-center"><div class="display-serif text-2xl text-white">5</div><div class="mono-tag text-bro-300 text-[9px] mt-1">tip-palm dist</div></div>
+                    <div class="feature-seg rounded-sm p-3 text-center"><div class="display-serif text-2xl text-white">10</div><div class="mono-tag text-bro-300 text-[9px] mt-1">inter-tip dist</div></div>
+                    <div class="feature-seg rounded-sm p-3 text-center"><div class="display-serif text-2xl text-white">5</div><div class="mono-tag text-bro-300 text-[9px] mt-1">z-depth ratios</div></div>
+                    <div class="feature-seg rounded-sm p-3 text-center"><div class="display-serif text-2xl text-white">4</div><div class="mono-tag text-bro-300 text-[9px] mt-1">thumb proximity</div></div>
+                    <div class="feature-seg rounded-sm p-3 text-center"><div class="display-serif text-2xl text-white">3</div><div class="mono-tag text-bro-300 text-[9px] mt-1">palm normal</div></div>
+                    <div class="feature-seg rounded-sm p-3 text-center"><div class="display-serif text-2xl text-white">3</div><div class="mono-tag text-bro-300 text-[9px] mt-1">palm direction</div></div>
+                </div>
+
+                <p class="text-zinc-400 text-[14px] leading-relaxed mt-5 max-w-3xl">
+                    The <span class="text-bro-300">palm orientation features</span> separate this from typical "is the finger up or down" approaches. When a hand rotates, curl angles barely change but the palm normal flips completely. That signal is encoded.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Animation Recognition -->
+    <section class="py-16 px-6 border-t border-white/5">
+        <div class="max-w-[1240px] mx-auto">
+            <div class="grid lg:grid-cols-12 gap-10 mb-8">
+                <div class="lg:col-span-3">
+                    <span class="section-num">§ 04</span>
+                    <h2 class="display-serif text-2xl text-white font-medium mt-2 heading-mark">Animation Recognition</h2>
+                </div>
+                <div class="lg:col-span-9 max-w-2xl">
+                    <p class="text-zinc-400 leading-relaxed text-[14px]">Temporal motion recognition via Dynamic Time Warping with Sakoe-Chiba band constraint.</p>
+                </div>
+            </div>
+
+            <div class="grid lg:grid-cols-5 gap-8 items-start">
+                <div class="lg:col-span-3">
+                    <div class="video-frame rounded-sm overflow-hidden bg-black">
+                        <video autoplay muted loop playsinline class="w-full h-auto block">
+                            <source src="./videos/broteus_animation.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <p class="mt-3 text-xs text-zinc-500 italic leading-relaxed">Recognizing a learned hand animation in real-time.</p>
+                </div>
+                <div class="lg:col-span-2">
+                    <p class="text-zinc-300 leading-relaxed mb-4">Static gestures capture frozen poses. Animations capture <span class="text-bro-300">movements</span>: a beckoning curl, a wave, a circular spin.</p>
+                    <p class="text-zinc-400 leading-relaxed text-[14px] mb-4">BROTEUS solves this with <span class="text-white">Dynamic Time Warping</span>. A 12-d temporal feature vector (curls + palm normal + position + velocity) is pushed into a sliding window covering the last ~3 seconds.</p>
+                    <p class="text-zinc-400 leading-relaxed text-[14px]">DTW handles speed variation naturally: a fast wave and slow wave produce different frame counts but share the same motion shape.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Architecture -->
+    <section class="py-16 px-6 border-t border-white/5">
+        <div class="max-w-[1240px] mx-auto">
+            <div class="grid lg:grid-cols-12 gap-10 mb-8">
+                <div class="lg:col-span-3">
+                    <span class="section-num">§ 05</span>
+                    <h2 class="display-serif text-2xl text-white font-medium mt-2 heading-mark">Architecture</h2>
+                </div>
+            </div>
+
+            <div class="instrument-panel rounded-sm p-6 md:p-10">
+                <div class="arch-diagram">
+                    <div class="arch-frame">
+                        <div class="arch-header">
+                            <div class="arch-header-title">BROTEUS Server</div>
+                            <div class="arch-header-sub">FastAPI · Port 8100</div>
+                        </div>
+                        <div class="arch-parallel-3">
+                            <div class="arch-node">
+                                <div class="arch-node-name">YOLO-World</div>
+                                <div class="arch-node-meta">Detection</div>
+                            </div>
+                            <div class="arch-node">
+                                <div class="arch-node-name">MediaPipe</div>
+                                <div class="arch-node-meta">Dual Hands</div>
+                                <div class="arch-subnode">
+                                    <div class="arch-subnode-name">Gesture 35D</div>
+                                    <div class="arch-subnode-meta">Anim 12D + DTW</div>
+                                </div>
+                            </div>
+                            <div class="arch-node">
+                                <div class="arch-node-name">MiDaS</div>
+                                <div class="arch-node-meta">Depth</div>
+                            </div>
+                        </div>
+                        <div class="arch-merge-3">
+                            <div class="arch-merge-3-b arch-merge-3-l"></div>
+                            <div class="arch-merge-3-b arch-merge-3-c"></div>
+                            <div class="arch-merge-3-b arch-merge-3-r"></div>
+                            <div class="arch-merge-3-bar"></div>
+                            <div class="arch-merge-3-tail"></div>
+                            <div class="arch-merge-3-arrow"></div>
+                        </div>
+                        <div class="arch-node arch-node-primary">
+                            <div class="arch-node-name">IoU Object Tracker</div>
+                            <div class="arch-node-meta">Persistent IDs · Class-vote stability</div>
+                        </div>
+                        <div class="arch-flow"></div>
+                        <div class="arch-node">
+                            <div class="arch-node-name">Grasp Affordance Scorer</div>
+                        </div>
+                        <div class="arch-flow"></div>
+                        <div class="arch-node">
+                            <div class="arch-node-name">WebSocket Frame Streaming</div>
+                        </div>
+                    </div>
+                    <div class="arch-bridge">
+                        <div class="arch-bridge-line"></div>
+                        <div class="arch-bridge-label">WebSocket / JSON</div>
+                        <div class="arch-bridge-line-arrow"></div>
+                    </div>
+                    <div class="arch-frame">
+                        <div class="arch-node">
+                            <div class="arch-node-name">Live Dashboard</div>
+                            <div class="arch-node-meta">Browser · localhost:8100</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-white/5 py-10 px-6 mt-16">
+        <div class="max-w-[1240px] mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-start gap-6">
+                <div>
+                    <div class="display-serif text-lg text-white mb-1">BROTEUS</div>
+                    <div class="mono-tag text-zinc-500">built by Swan Yi Htet &amp; David Young</div>
+                </div>
+                <div class="flex flex-wrap gap-4 text-[12px] mono-tag">
+                    <a href="index.html" class="text-zinc-500 hover:text-bro-300 transition-colors">← portfolio</a>
+                    <a href="project-orion.html" class="text-zinc-500 hover:text-ember-300 transition-colors">ORION</a>
+                    <a href="project-chiron.html" class="text-zinc-500 hover:text-teal-300 transition-colors">CHIRON →</a>
+                    <a href="project-athena.html" class="text-zinc-500 hover:text-amber-300 transition-colors">ATHENA →</a>
+                    <a href="https://github.com/shtet100/BROTEUS" target="_blank" class="text-zinc-500 hover:text-white transition-colors">repo ↗</a>
+                </div>
+            </div>
+            <div class="mt-6 pt-4 border-t border-white/5 flex flex-col sm:flex-row justify-between items-center gap-2 text-[10px] mono-tag text-zinc-700">
+                <span>© 2026 Swan Yi Htet</span>
+                <span>SYSTEM_ID: PER_01</span>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

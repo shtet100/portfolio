@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ORION · Modular Robotics Ecosystem | Swan Yi Htet</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700;9..144,800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        display: ['Fraunces', 'serif'],
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                    },
+                    colors: {
+                        ink: { DEFAULT: '#070b14', deep: '#04060c', soft: '#0c1220', panel: '#10172a' },
+                        ember: { 300: '#fbbf67', 400: '#f5a142', 500: '#e8842a', 600: '#c66a1c' },
+                        plasma: { 300: '#7dd3fc', 400: '#38bdf8', 500: '#0ea5e9' },
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background: #04060c; color: #d8dde6; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+        .lab-grid {
+            background-image:
+                radial-gradient(circle, rgba(125,211,252,0.06) 1px, transparent 1px),
+                radial-gradient(circle, rgba(232,132,42,0.04) 1px, transparent 1px);
+            background-size: 36px 36px, 72px 72px;
+            background-position: 0 0, 18px 18px;
+        }
+        .display-serif { font-family: 'Fraunces', serif; }
+        .mono-tag { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; }
+        .section-num { font-family: 'Fraunces', serif; font-size: 13px; color: rgba(245,161,66,0.55); letter-spacing: 0.05em; }
+        .heading-mark { position: relative; padding-bottom: 4px; }
+        .heading-mark::after { content: ''; position: absolute; left: 0; bottom: 0; width: 36px; height: 2px; background: rgba(245,161,66,0.7); }
+        .instrument-panel {
+            position: relative;
+            background: linear-gradient(180deg, rgba(16,23,42,0.5), rgba(7,11,20,0.7));
+            border: 1px solid rgba(125,211,252,0.08);
+            border-radius: 4px;
+        }
+        .instrument-panel::before {
+            content: ''; position: absolute; top: -1px; left: -1px;
+            width: 14px; height: 14px;
+            border-top: 1px solid rgba(245,161,66,0.5);
+            border-left: 1px solid rgba(245,161,66,0.5);
+        }
+        .instrument-panel::after {
+            content: ''; position: absolute; bottom: -1px; right: -1px;
+            width: 14px; height: 14px;
+            border-bottom: 1px solid rgba(245,161,66,0.5);
+            border-right: 1px solid rgba(245,161,66,0.5);
+        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #04060c; }
+        ::-webkit-scrollbar-thumb { background: #1a2238; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #e8842a; }
+        .pull-quote { font-family: 'Fraunces', serif; font-style: italic; font-weight: 300; letter-spacing: -0.01em; }
+        .blip {
+            display: inline-block; width: 6px; height: 6px; border-radius: 50%;
+            background: #f5a142; box-shadow: 0 0 6px rgba(245,161,66,0.8);
+            animation: pulseSoft 2s ease-in-out infinite;
+        }
+        @keyframes pulseSoft { 0%,100% { opacity: 0.35; } 50% { opacity: 0.85; } }
+        .orion-flow-line { stroke: rgba(245,161,66,0.3); stroke-dasharray: 4 4; }
+        .arrow-down { width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 7px solid rgba(245,161,66,0.6); margin: 0 auto; }
+    </style>
+</head>
+<body class="selection:bg-ember-500/30 selection:text-ember-300">
+
+    <!-- Animated backdrop -->
+    <div class="fixed inset-0 -z-50 pointer-events-none overflow-hidden">
+        <div class="absolute inset-0 lab-grid opacity-50"></div>
+        <canvas id="bg-network" class="absolute inset-0 w-full h-full"></canvas>
+        <div class="absolute top-0 right-0 w-[700px] h-[700px] bg-ember-500/8 rounded-full blur-[180px]"></div>
+        <div class="absolute bottom-[-10%] left-[-5%] w-[600px] h-[600px] bg-plasma-500/6 rounded-full blur-[160px]"></div>
+    </div>
+
+    <script>
+        (function() {
+            const canvas = document.getElementById('bg-network');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            let w, h, nodes = [];
+            const DPR = Math.min(window.devicePixelRatio || 1, 2);
+            function resize() { w = canvas.clientWidth; h = canvas.clientHeight; canvas.width = w * DPR; canvas.height = h * DPR; ctx.scale(DPR, DPR); }
+            function init() {
+                resize();
+                const count = Math.min(60, Math.floor((w * h) / 22000));
+                nodes = [];
+                for (let i = 0; i < count; i++) {
+                    nodes.push({ x: Math.random() * w, y: Math.random() * h, vx: (Math.random() - 0.5) * 0.12, vy: (Math.random() - 0.5) * 0.12, r: Math.random() * 1.2 + 0.6, type: Math.random() < 0.15 ? 'ember' : (Math.random() < 0.85 ? 'plasma' : 'white'), phase: Math.random() * Math.PI * 2 });
+                }
+            }
+            function step(t) {
+                ctx.clearRect(0, 0, w, h);
+                for (let i = 0; i < nodes.length; i++) {
+                    for (let j = i + 1; j < nodes.length; j++) {
+                        const a = nodes[i], b = nodes[j];
+                        const dx = a.x - b.x, dy = a.y - b.y;
+                        const d2 = dx*dx + dy*dy, maxD = 140;
+                        if (d2 < maxD*maxD) {
+                            const alpha = (1 - Math.sqrt(d2)/maxD) * 0.18;
+                            ctx.strokeStyle = `rgba(125,211,252,${alpha})`;
+                            ctx.lineWidth = 0.5;
+                            ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+                        }
+                    }
+                }
+                for (const n of nodes) {
+                    n.x += n.vx; n.y += n.vy;
+                    if (n.x < -10) n.x = w + 10; if (n.x > w + 10) n.x = -10;
+                    if (n.y < -10) n.y = h + 10; if (n.y > h + 10) n.y = -10;
+                    const pulse = 0.7 + Math.sin(t * 0.001 + n.phase) * 0.3;
+                    let color;
+                    if (n.type === 'ember') color = `rgba(245,161,66,${0.55 * pulse})`;
+                    else if (n.type === 'white') color = `rgba(255,255,255,${0.5 * pulse})`;
+                    else color = `rgba(125,211,252,${0.4 * pulse})`;
+                    ctx.fillStyle = color;
+                    ctx.beginPath(); ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2); ctx.fill();
+                    if (n.type === 'ember') {
+                        const grad = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, n.r * 5);
+                        grad.addColorStop(0, `rgba(245,161,66,${0.18 * pulse})`);
+                        grad.addColorStop(1, 'rgba(245,161,66,0)');
+                        ctx.fillStyle = grad;
+                        ctx.beginPath(); ctx.arc(n.x, n.y, n.r * 5, 0, Math.PI * 2); ctx.fill();
+                    }
+                }
+                requestAnimationFrame(step);
+            }
+            init(); step(0);
+            window.addEventListener('resize', () => { init(); });
+        })();
+    </script>
+
+    <!-- Nav -->
+    <nav class="fixed top-0 w-full z-50 backdrop-blur-md bg-ink-deep/70 border-b border-white/5">
+        <div class="max-w-[1240px] mx-auto px-6 h-16 flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-2 text-zinc-400 hover:text-ember-300 transition-colors group">
+                <svg class="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                <span class="text-[13px]">return to portfolio</span>
+            </a>
+            <a href="./SwanYiHtet_TechnicalResume.pdf" download class="hidden md:inline-flex items-center gap-1.5 text-[12px] text-zinc-400 hover:text-ember-300 transition-colors mr-4"><svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>Resume</a><div class="flex items-center gap-3">
+                <span class="hidden sm:inline-flex items-center gap-1.5 mono-tag text-ember-400">
+                    <span class="blip"></span> ECOSYSTEM
+                </span>
+                <span class="mono-tag text-zinc-600 border border-white/5 px-2.5 py-1 rounded-sm">SYSTEM_ID: ORN_00</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="pt-32 pb-16 px-6">
+        <div class="max-w-[1240px] mx-auto">
+            <div class="grid lg:grid-cols-12 gap-10 items-start">
+                <div class="lg:col-span-7">
+                    <div class="mono-tag text-ember-400 mb-6 flex items-center gap-3">
+                        <span class="h-px w-7 bg-ember-500/60"></span>
+                        Vol. 01 · Modular Robotics Ecosystem
+                    </div>
+
+                    <h1 class="display-serif text-[58px] md:text-[88px] leading-[0.95] tracking-[-0.025em] text-white font-light mb-6">
+                        ORI<span class="font-semibold">ON</span><span class="text-ember-400">.</span>
+                    </h1>
+                    <p class="font-mono text-[13px] text-ember-300/85 tracking-wider mb-8">
+                        Omniscient Reasoning &amp; Intelligence Operations Network
+                    </p>
+
+                    <p class="text-[18px] text-zinc-300 leading-relaxed mb-4 font-light max-w-2xl">
+                        A modular robotics ecosystem with four subsystems sharing state through ROS 2. Each subsystem owns one layer of the perception-decision-action loop. Each can run independently or as part of the full stack.
+                    </p>
+                    <p class="text-zinc-400 leading-relaxed mb-8 max-w-2xl">
+                        Co-built with David Young. Phase 1 of the central reasoning core is complete. Three of the four subsystems have working implementations.
+                    </p>
+
+                    <div class="flex flex-wrap gap-3">
+                        <a href="#topology" class="inline-flex items-center gap-2 px-5 py-3 bg-ember-500 hover:bg-ember-400 text-ink-deep font-semibold text-[13px] rounded-sm transition-all">
+                            View Topology
+                        </a>
+                        <a href="#subsystems" class="inline-flex items-center gap-2 px-5 py-3 bg-transparent border border-plasma-400/40 hover:border-plasma-400/80 text-plasma-300 text-[13px] rounded-sm transition-all">
+                            Explore Subsystems
+                        </a>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-5">
+                    <div class="instrument-panel rounded-sm p-6">
+                        <div class="flex items-start justify-between mb-6 pb-4 border-b border-white/5">
+                            <div>
+                                <div class="mono-tag text-ember-400 mb-1">Project Classification</div>
+                                <div class="text-white display-serif text-lg">Robotics Platform</div>
+                            </div>
+                            <span class="mono-tag text-ember-400 inline-flex items-center gap-1.5">
+                                <span class="blip"></span> PHASE 1
+                            </span>
+                        </div>
+
+                        <div class="space-y-3 text-[13px]">
+                            <div class="flex justify-between"><span class="mono-tag text-zinc-500">Role</span><span class="text-zinc-300 font-mono text-[12px]">Central reasoning hub</span></div>
+                            <div class="flex justify-between"><span class="mono-tag text-zinc-500">Port</span><span class="text-zinc-300 font-mono text-[12px]">localhost:8000</span></div>
+                            <div class="flex justify-between"><span class="mono-tag text-zinc-500">Subsystems</span><span class="text-zinc-300 font-mono text-[12px]">4</span></div>
+                            <div class="flex justify-between"><span class="mono-tag text-zinc-500">Comms</span><span class="text-zinc-300 font-mono text-[12px]">ROS 2 Humble</span></div>
+                            <div class="flex justify-between"><span class="mono-tag text-zinc-500">Target HW</span><span class="text-zinc-300 font-mono text-[12px]">SO-ARM 101</span></div>
+                            <div class="flex justify-between"><span class="mono-tag text-zinc-500">Stack</span><span class="text-zinc-300 font-mono text-[12px]">Python · FastAPI</span></div>
+                        </div>
+
+                        <div class="mt-6 pt-4 border-t border-white/5">
+                            <div class="mono-tag text-ember-400 mb-2">Built By</div>
+                            <div class="text-zinc-200 text-[13px] font-medium">Swan Yi Htet</div>
+                            <div class="text-zinc-500 text-[11px] mono-tag">+ David Young</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Manifesto -->
+    <section class="py-16 px-6">
+        <div class="max-w-[1240px] mx-auto">
+            <div class="grid lg:grid-cols-12 gap-10">
+                <div class="lg:col-span-3">
+                    <span class="section-num">§ 01</span>
+                    <h2 class="display-serif text-2xl text-white font-medium mt-2 heading-mark">Design Principle</h2>
+                </div>
+                <div class="lg:col-span-9 max-w-2xl">
+                    <p class="pull-quote text-2xl text-zinc-200 mb-8 leading-snug border-l-2 border-ember-500/50 pl-6">
+                        BROTEUS sees. ORION decides. CHIRON moves. DAEDALUS calibrates.
+                    </p>
+                    <p class="text-zinc-400 leading-relaxed mb-4">
+                        The ecosystem is split along the natural seams of a robot's cognition. Perception turns sensor data into structured world state. Reasoning evaluates that state and chooses what to do. Motion translates intent into joint-space control. Discovery watches what actually happened and updates the underlying physics model.
+                    </p>
+                    <p class="text-zinc-400 leading-relaxed">
+                        Each layer is a separate FastAPI service. They communicate over ROS 2 with typed messages. No subsystem holds another's state. Any one of them can be replaced, restarted, or run in isolation without breaking the others.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Topology -->
+    <section id="topology" class="py-16 px-6 border-t border-white/5">
+        <div class="max-w-[1240px] mx-auto">
+            <div class="grid lg:grid-cols-12 gap-10 mb-12">
+                <div class="lg:col-span-3">
+                    <span class="section-num">§ 02</span>
+                    <h2 class="display-serif text-2xl text-white font-medium mt-2 heading-mark">Topology</h2>
+                </div>
+                <div class="lg:col-span-9 max-w-2xl">
+                    <p class="text-zinc-400 leading-relaxed">
+                        ORION sits at the center as the reasoning hub. Each subsystem connects through a typed ROS 2 message channel. Below: the data flow during a single perception-action cycle.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Big topology diagram -->
+            <div class="instrument-panel rounded-sm p-8 md:p-12">
+                <div class="flex items-center justify-between mb-8 pb-4 border-b border-white/5">
+                    <span class="mono-tag text-ember-400">FIG · 02.1 · Cognitive cycle</span>
+                    <span class="mono-tag text-zinc-600">orchestration model</span>
+                </div>
+
+                <svg viewBox="0 0 900 480" class="w-full max-w-4xl mx-auto">
+                    <!-- Background -->
+                    <defs>
+                        <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+                            <path d="M0,0 L0,6 L9,3 z" fill="rgba(245,161,66,0.7)"/>
+                        </marker>
+                    </defs>
+
+                    <!-- Stage 1: World/Sensors (left) -->
+                    <text x="60" y="40" fill="rgba(125,211,252,0.65)" font-family="JetBrains Mono" font-size="10" letter-spacing="2">01 · INPUT</text>
+                    <rect x="40" y="60" width="160" height="60" rx="3" fill="rgba(7,11,20,0.6)" stroke="rgba(125,211,252,0.3)" stroke-width="1"/>
+                    <text x="120" y="86" text-anchor="middle" fill="white" font-family="Fraunces" font-size="14" font-weight="500">World</text>
+                    <text x="120" y="105" text-anchor="middle" fill="rgba(125,211,252,0.7)" font-family="JetBrains Mono" font-size="9">camera · sensors</text>
+
+                    <!-- Stage 2: BROTEUS -->
+                    <text x="280" y="40" fill="rgba(167,139,250,0.7)" font-family="JetBrains Mono" font-size="10" letter-spacing="2">02 · PERCEIVE</text>
+                    <rect x="260" y="60" width="160" height="60" rx="3" fill="rgba(7,11,20,0.85)" stroke="rgba(167,139,250,0.6)" stroke-width="1.2"/>
+                    <text x="340" y="86" text-anchor="middle" fill="white" font-family="Fraunces" font-size="14" font-weight="600">BROTEUS</text>
+                    <text x="340" y="105" text-anchor="middle" fill="rgba(167,139,250,0.8)" font-family="JetBrains Mono" font-size="9">perception · :8100</text>
+
+                    <!-- Stage 3: ORION (center, large) -->
+                    <text x="500" y="40" fill="rgba(245,161,66,0.75)" font-family="JetBrains Mono" font-size="10" letter-spacing="2">03 · REASON</text>
+                    <rect x="480" y="50" width="180" height="80" rx="3" fill="rgba(232,132,42,0.12)" stroke="rgba(245,161,66,0.7)" stroke-width="1.5"/>
+                    <text x="570" y="82" text-anchor="middle" fill="white" font-family="Fraunces" font-size="18" font-weight="700">ORION</text>
+                    <text x="570" y="100" text-anchor="middle" fill="rgba(245,161,66,0.9)" font-family="JetBrains Mono" font-size="9">reasoning core · :8000</text>
+                    <text x="570" y="116" text-anchor="middle" fill="rgba(245,161,66,0.6)" font-family="JetBrains Mono" font-size="8" letter-spacing="1">central hub</text>
+
+                    <!-- Stage 4: CHIRON (right) -->
+                    <text x="720" y="40" fill="rgba(45,212,191,0.75)" font-family="JetBrains Mono" font-size="10" letter-spacing="2">04 · ACT</text>
+                    <rect x="700" y="60" width="160" height="60" rx="3" fill="rgba(7,11,20,0.85)" stroke="rgba(45,212,191,0.6)" stroke-width="1.2"/>
+                    <text x="780" y="86" text-anchor="middle" fill="white" font-family="Fraunces" font-size="14" font-weight="600">CHIRON</text>
+                    <text x="780" y="105" text-anchor="middle" fill="rgba(45,212,191,0.8)" font-family="JetBrains Mono" font-size="9">motor cortex · :8200</text>
+
+                    <!-- Arrows: World → BROTEUS → ORION → CHIRON -->
+                    <line x1="200" y1="90" x2="255" y2="90" stroke="rgba(245,161,66,0.5)" stroke-width="1" marker-end="url(#arrow)"/>
+                    <line x1="420" y1="90" x2="475" y2="90" stroke="rgba(245,161,66,0.5)" stroke-width="1" marker-end="url(#arrow)"/>
+                    <line x1="660" y1="90" x2="695" y2="90" stroke="rgba(245,161,66,0.5)" stroke-width="1" marker-end="url(#arrow)"/>
+
+                    <!-- Below ORION: ATHENA on left, DAEDALUS on right -->
+                    <text x="250" y="200" fill="rgba(252,211,77,0.75)" font-family="JetBrains Mono" font-size="10" letter-spacing="2">PLAN</text>
+                    <rect x="230" y="220" width="160" height="60" rx="3" fill="rgba(7,11,20,0.85)" stroke="rgba(252,211,77,0.6)" stroke-width="1.2"/>
+                    <text x="310" y="246" text-anchor="middle" fill="white" font-family="Fraunces" font-size="14" font-weight="600">ATHENA</text>
+                    <text x="310" y="265" text-anchor="middle" fill="rgba(252,211,77,0.8)" font-family="JetBrains Mono" font-size="9">navigation · :8400</text>
+
+                    <text x="720" y="200" fill="rgba(244,114,182,0.7)" font-family="JetBrains Mono" font-size="10" letter-spacing="2">CALIBRATE</text>
+                    <rect x="700" y="220" width="160" height="60" rx="3" fill="rgba(7,11,20,0.85)" stroke="rgba(244,114,182,0.6)" stroke-width="1.2"/>
+                    <text x="780" y="246" text-anchor="middle" fill="white" font-family="Fraunces" font-size="14" font-weight="600">DAEDALUS</text>
+                    <text x="780" y="265" text-anchor="middle" fill="rgba(244,114,182,0.8)" font-family="JetBrains Mono" font-size="9">discovery · :8300</text>
+
+                    <!-- Lines from ORION to ATHENA & DAEDALUS -->
+                    <path d="M 530 130 Q 460 200 390 220" fill="none" stroke="rgba(252,211,77,0.4)" stroke-width="1" stroke-dasharray="3 3" marker-end="url(#arrow)"/>
+                    <path d="M 610 130 Q 680 200 740 220" fill="none" stroke="rgba(244,114,182,0.4)" stroke-width="1" stroke-dasharray="3 3" marker-end="url(#arrow)"/>
+
+                    <!-- Feedback loop: CHIRON → DAEDALUS -->
+                    <text x="640" y="170" fill="rgba(244,114,182,0.5)" font-family="JetBrains Mono" font-size="8">trajectory data</text>
+                    <path d="M 780 130 L 780 215" fill="none" stroke="rgba(244,114,182,0.4)" stroke-width="1" stroke-dasharray="3 3" marker-end="url(#arrow)"/>
+
+                    <!-- Bottom: target hardware -->
+                    <text x="450" y="380" fill="rgba(125,211,252,0.6)" font-family="JetBrains Mono" font-size="10" letter-spacing="2" text-anchor="middle">TARGET HARDWARE</text>
+                    <rect x="350" y="395" width="200" height="55" rx="3" fill="rgba(7,11,20,0.6)" stroke="rgba(125,211,252,0.3)" stroke-width="1"/>
+                    <text x="450" y="420" text-anchor="middle" fill="white" font-family="Fraunces" font-size="14" font-weight="500">SO-ARM 101</text>
+                    <text x="450" y="438" text-anchor="middle" fill="rgba(125,211,252,0.7)" font-family="JetBrains Mono" font-size="9">6-DOF · camera eye</text>
+
+                    <!-- Lines from CHIRON to SO-ARM -->
+                    <path d="M 780 130 Q 780 320 550 410" fill="none" stroke="rgba(45,212,191,0.3)" stroke-width="1" stroke-dasharray="3 3"/>
+                </svg>
+            </div>
+        </div>
+    </section>
+
+    <!-- Subsystems -->
+    <section id="subsystems" class="py-16 px-6 border-t border-white/5">
+        <div class="max-w-[1240px] mx-auto">
+            <div class="grid lg:grid-cols-12 gap-10 mb-12">
+                <div class="lg:col-span-3">
+                    <span class="section-num">§ 03</span>
+                    <h2 class="display-serif text-2xl text-white font-medium mt-2 heading-mark">Subsystems</h2>
+                </div>
+                <div class="lg:col-span-9 max-w-2xl">
+                    <p class="text-zinc-400 leading-relaxed">
+                        Each subsystem has its own technical write-up, source repository, and accent color used consistently across the ecosystem.
+                    </p>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-5">
+
+                <!-- BROTEUS -->
+                <a href="project-broteus.html" class="instrument-panel rounded-sm p-7 block group hover:border-violet-500/40 transition-colors">
+                    <div class="flex items-start justify-between mb-5">
+                        <div>
+                            <div class="mono-tag text-violet-300 mb-2">PER_01 · PERCEPTION</div>
+                            <h3 class="display-serif text-2xl text-white font-medium group-hover:text-violet-300 transition-colors">BROTEUS</h3>
+                        </div>
+                        <span class="mono-tag text-emerald-400 text-[9px] inline-flex items-center gap-1"><span class="w-1 h-1 rounded-full bg-emerald-400"></span> live</span>
+                    </div>
+                    <p class="text-zinc-400 text-[13px] leading-relaxed mb-5">
+                        Real-time vision pipeline: open-vocabulary detection (YOLO-World), dual-hand 3D tracking (MediaPipe), monocular depth (MiDaS), gesture recognition with 35-d feature vectors, and animation recognition via DTW.
+                    </p>
+                    <div class="grid grid-cols-3 gap-2 mb-5 text-center">
+                        <div class="border border-white/5 py-2 rounded-sm">
+                            <div class="display-serif text-lg text-white">21</div>
+                            <div class="mono-tag text-zinc-500 text-[9px]">FPS · CPU</div>
+                        </div>
+                        <div class="border border-white/5 py-2 rounded-sm">
+                            <div class="display-serif text-lg text-white">42</div>
+                            <div class="mono-tag text-zinc-500 text-[9px]">KEYPOINTS</div>
+                        </div>
+                        <div class="border border-white/5 py-2 rounded-sm">
+                            <div class="display-serif text-lg text-white">35-d</div>
+                            <div class="mono-tag text-zinc-500 text-[9px]">FEATURE</div>
+                        </div>
+                    </div>
+                    <span class="text-violet-300 text-[12px] inline-flex items-center gap-1 group-hover:gap-2 transition-all">
+                        Deep dive
+                        <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                    </span>
+                </a>
+
+                <!-- CHIRON -->
+                <a href="project-chiron.html" class="instrument-panel rounded-sm p-7 block group hover:border-teal-500/40 transition-colors">
+                    <div class="flex items-start justify-between mb-5">
+                        <div>
+                            <div class="mono-tag text-teal-300 mb-2">CHI_01 · MOTOR CORTEX</div>
+                            <h3 class="display-serif text-2xl text-white font-medium group-hover:text-teal-300 transition-colors">CHIRON</h3>
+                        </div>
+                        <span class="mono-tag text-amber-400 text-[9px] inline-flex items-center gap-1"><span class="w-1 h-1 rounded-full bg-amber-400"></span> in dev</span>
+                    </div>
+                    <p class="text-zinc-400 text-[13px] leading-relaxed mb-5">
+                        Self-measuring gripper, geometry-based grasp planning, scene-aware motion with UP/ACROSS/DOWN decomposition, 9-phase pick-and-place with grasp verification and auto-retry.
+                    </p>
+                    <div class="grid grid-cols-3 gap-2 mb-5 text-center">
+                        <div class="border border-white/5 py-2 rounded-sm">
+                            <div class="display-serif text-lg text-white">500<span class="text-[10px] text-zinc-500">Hz</span></div>
+                            <div class="mono-tag text-zinc-500 text-[9px]">PHYSICS</div>
+                        </div>
+                        <div class="border border-white/5 py-2 rounded-sm">
+                            <div class="display-serif text-lg text-white">5<span class="text-[10px] text-zinc-500">mm</span></div>
+                            <div class="mono-tag text-zinc-500 text-[9px]">IK TOL</div>
+                        </div>
+                        <div class="border border-white/5 py-2 rounded-sm">
+                            <div class="display-serif text-lg text-white">9</div>
+                            <div class="mono-tag text-zinc-500 text-[9px]">PHASES</div>
+                        </div>
+                    </div>
+                    <span class="text-teal-300 text-[12px] inline-flex items-center gap-1 group-hover:gap-2 transition-all">
+                        Deep dive
+                        <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                    </span>
+                </a>
+
+                <!-- ATHENA -->
+                <a href="project-athena.html" class="instrument-panel rounded-sm p-7 block group hover:border-amber-500/40 transition-colors">
+                    <div class="flex items-start justify-between mb-5">
+                        <div>
+                            <div class="mono-tag text-amber-300 mb-2">NAV_01 · NAVIGATION</div>
+                            <h3 class="display-serif text-2xl text-white font-medium group-hover:text-amber-300 transition-colors">ATHENA</h3>
+                        </div>
+                        <span class="mono-tag text-emerald-400 text-[9px] inline-flex items-center gap-1"><span class="w-1 h-1 rounded-full bg-emerald-400"></span> deployed</span>
+                    </div>
+                    <p class="text-zinc-400 text-[13px] leading-relaxed mb-5">
+                        Real-time 3D rover autonomy simulator. Four pathfinding algorithms (A*, Dijkstra, RRT, D* Lite), infinite procedural terrain, four planetary environments (Mars, Venus, Europa, Titan).
+                    </p>
+                    <div class="grid grid-cols-3 gap-2 mb-5 text-center">
+                        <div class="border border-white/5 py-2 rounded-sm">
+                            <div class="display-serif text-lg text-white">4</div>
+                            <div class="mono-tag text-zinc-500 text-[9px]">ALGORITHMS</div>
+                        </div>
+                        <div class="border border-white/5 py-2 rounded-sm">
+                            <div class="display-serif text-lg text-white">4</div>
+                            <div class="mono-tag text-zinc-500 text-[9px]">PLANETS</div>
+                        </div>
+                        <div class="border border-white/5 py-2 rounded-sm">
+                            <div class="display-serif text-lg text-white">∞</div>
+                            <div class="mono-tag text-zinc-500 text-[9px]">TERRAIN</div>
+                        </div>
+                    </div>
+                    <span class="text-amber-300 text-[12px] inline-flex items-center gap-1 group-hover:gap-2 transition-all">
+                        Deep dive
+                        <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                    </span>
+                </a>
+
+                <!-- DAEDALUS -->
+                <div class="instrument-panel rounded-sm p-7 block opacity-75 hover:opacity-100 transition-opacity">
+                    <div class="flex items-start justify-between mb-5">
+                        <div>
+                            <div class="mono-tag text-pink-300 mb-2">DSC_01 · DISCOVERY</div>
+                            <h3 class="display-serif text-2xl text-white font-medium">DAEDALUS</h3>
+                        </div>
+                        <span class="mono-tag text-amber-400 text-[9px] inline-flex items-center gap-1"><span class="w-1 h-1 rounded-full bg-amber-400"></span> in dev</span>
+                    </div>
+                    <p class="text-zinc-400 text-[13px] leading-relaxed mb-5">
+                        Self-calibrating physics discovery via SINDy (Sparse Identification of Nonlinear Dynamics). Watches CHIRON's executed trajectories and updates the underlying dynamics model from observed motion. The novel research contribution.
+                    </p>
+                    <div class="grid grid-cols-3 gap-2 mb-5 text-center">
+                        <div class="border border-white/5 py-2 rounded-sm">
+                            <div class="display-serif text-lg text-zinc-400">SINDy</div>
+                            <div class="mono-tag text-zinc-500 text-[9px]">METHOD</div>
+                        </div>
+                        <div class="border border-white/5 py-2 rounded-sm">
+                            <div class="display-serif text-lg text-zinc-400">8300</div>
+                            <div class="mono-tag text-zinc-500 text-[9px]">PORT</div>
+                        </div>
+                        <div class="border border-white/5 py-2 rounded-sm">
+                            <div class="display-serif text-lg text-zinc-400">Φ</div>
+                            <div class="mono-tag text-zinc-500 text-[9px]">SYMBOLIC</div>
+                        </div>
+                    </div>
+                    <span class="text-zinc-500 text-[12px] mono-tag">in development · paper forthcoming</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Status table -->
+    <section class="py-16 px-6 border-t border-white/5">
+        <div class="max-w-[1240px] mx-auto">
+            <div class="grid lg:grid-cols-12 gap-10 mb-8">
+                <div class="lg:col-span-3">
+                    <span class="section-num">§ 04</span>
+                    <h2 class="display-serif text-2xl text-white font-medium mt-2 heading-mark">Status</h2>
+                </div>
+                <div class="lg:col-span-9 max-w-2xl">
+                    <p class="text-zinc-400 leading-relaxed text-[14px]">
+                        Live deployment status across the ecosystem.
+                    </p>
+                </div>
+            </div>
+
+            <div class="instrument-panel rounded-sm overflow-hidden">
+                <div class="grid grid-cols-5 px-6 py-3 bg-ink-deep/50 mono-tag text-zinc-500 text-[10px] border-b border-white/5">
+                    <span>Subsystem</span>
+                    <span>Role</span>
+                    <span>Port</span>
+                    <span>Stack</span>
+                    <span>Status</span>
+                </div>
+                <div class="divide-y divide-white/5 text-[13px]">
+                    <div class="grid grid-cols-5 px-6 py-4 items-center">
+                        <span class="text-white display-serif">ORION</span>
+                        <span class="text-zinc-400 font-mono text-[12px]">reasoning hub</span>
+                        <span class="text-zinc-400 font-mono text-[12px]">:8000</span>
+                        <span class="text-zinc-400 font-mono text-[12px]">FastAPI · Python</span>
+                        <span class="text-emerald-400 mono-tag text-[10px] inline-flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>phase 1 ✓</span>
+                    </div>
+                    <div class="grid grid-cols-5 px-6 py-4 items-center">
+                        <span class="text-white display-serif">BROTEUS</span>
+                        <span class="text-zinc-400 font-mono text-[12px]">perception</span>
+                        <span class="text-zinc-400 font-mono text-[12px]">:8100</span>
+                        <span class="text-zinc-400 font-mono text-[12px]">PyTorch · MediaPipe</span>
+                        <span class="text-emerald-400 mono-tag text-[10px] inline-flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>live</span>
+                    </div>
+                    <div class="grid grid-cols-5 px-6 py-4 items-center">
+                        <span class="text-white display-serif">CHIRON</span>
+                        <span class="text-zinc-400 font-mono text-[12px]">motor cortex</span>
+                        <span class="text-zinc-400 font-mono text-[12px]">:8200</span>
+                        <span class="text-zinc-400 font-mono text-[12px]">MuJoCo · Python</span>
+                        <span class="text-amber-400 mono-tag text-[10px] inline-flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>in dev</span>
+                    </div>
+                    <div class="grid grid-cols-5 px-6 py-4 items-center">
+                        <span class="text-white display-serif">DAEDALUS</span>
+                        <span class="text-zinc-400 font-mono text-[12px]">physics discovery</span>
+                        <span class="text-zinc-400 font-mono text-[12px]">:8300</span>
+                        <span class="text-zinc-400 font-mono text-[12px]">SINDy · NumPy</span>
+                        <span class="text-amber-400 mono-tag text-[10px] inline-flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>in dev</span>
+                    </div>
+                    <div class="grid grid-cols-5 px-6 py-4 items-center">
+                        <span class="text-white display-serif">ATHENA</span>
+                        <span class="text-zinc-400 font-mono text-[12px]">navigation</span>
+                        <span class="text-zinc-400 font-mono text-[12px]">:8400</span>
+                        <span class="text-zinc-400 font-mono text-[12px]">React · Three.js</span>
+                        <span class="text-emerald-400 mono-tag text-[10px] inline-flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>deployed</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Roadmap -->
+    <section class="py-16 px-6 border-t border-white/5">
+        <div class="max-w-[1240px] mx-auto">
+            <div class="grid lg:grid-cols-12 gap-10">
+                <div class="lg:col-span-3">
+                    <span class="section-num">§ 05</span>
+                    <h2 class="display-serif text-2xl text-white font-medium mt-2 heading-mark">Roadmap</h2>
+                </div>
+                <div class="lg:col-span-9">
+                    <div class="space-y-6 max-w-2xl relative pl-8 border-l border-white/10">
+                        <div class="relative">
+                            <div class="absolute -left-[37px] top-1 w-4 h-4 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(34,197,94,0.5)]"></div>
+                            <div class="mono-tag text-emerald-400 mb-1">Phase 1 · complete</div>
+                            <h3 class="text-white font-medium mb-1">Central reasoning core</h3>
+                            <p class="text-zinc-500 text-[13px] leading-relaxed">ORION FastAPI service. ROS 2 message schemas. Subsystem registration and routing.</p>
+                        </div>
+                        <div class="relative">
+                            <div class="absolute -left-[37px] top-1 w-4 h-4 rounded-full bg-ember-500 shadow-[0_0_8px_rgba(245,161,66,0.5)]"></div>
+                            <div class="mono-tag text-ember-400 mb-1">Phase 2 · in progress</div>
+                            <h3 class="text-white font-medium mb-1">Subsystem orchestration</h3>
+                            <p class="text-zinc-500 text-[13px] leading-relaxed">Wire BROTEUS, CHIRON, ATHENA, and DAEDALUS together for full perception-action loops on a single physical platform.</p>
+                        </div>
+                        <div class="relative">
+                            <div class="absolute -left-[37px] top-1 w-4 h-4 rounded-full bg-zinc-700 border border-zinc-600"></div>
+                            <div class="mono-tag text-zinc-500 mb-1">Phase 3 · planned</div>
+                            <h3 class="text-zinc-400 font-medium mb-1">SO-ARM 101 deployment</h3>
+                            <p class="text-zinc-500 text-[13px] leading-relaxed">First physical robot. 6-DOF arm with camera eye. End-to-end test of the four-subsystem stack.</p>
+                        </div>
+                        <div class="relative">
+                            <div class="absolute -left-[37px] top-1 w-4 h-4 rounded-full bg-zinc-700 border border-zinc-600"></div>
+                            <div class="mono-tag text-zinc-500 mb-1">Phase 4 · research</div>
+                            <h3 class="text-zinc-400 font-medium mb-1">DAEDALUS publication</h3>
+                            <p class="text-zinc-500 text-[13px] leading-relaxed">Self-calibrating physics discovery: paper on SINDy for sim-to-real adaptation in modular robotic systems.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-white/5 py-10 px-6 mt-16">
+        <div class="max-w-[1240px] mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-start gap-6">
+                <div>
+                    <div class="display-serif text-lg text-white mb-1">ORION</div>
+                    <div class="mono-tag text-zinc-500">built by Swan Yi Htet &amp; David Young</div>
+                </div>
+                <div class="flex flex-wrap gap-4 text-[12px] mono-tag">
+                    <a href="index.html" class="text-zinc-500 hover:text-ember-300 transition-colors">← portfolio</a>
+                    <a href="project-broteus.html" class="text-zinc-500 hover:text-violet-300 transition-colors">BROTEUS →</a>
+                    <a href="project-chiron.html" class="text-zinc-500 hover:text-teal-300 transition-colors">CHIRON →</a>
+                    <a href="project-athena.html" class="text-zinc-500 hover:text-amber-300 transition-colors">ATHENA →</a>
+                </div>
+            </div>
+            <div class="mt-6 pt-4 border-t border-white/5 flex flex-col sm:flex-row justify-between items-center gap-2 text-[10px] mono-tag text-zinc-700">
+                <span>© 2026 Swan Yi Htet</span>
+                <span>SYSTEM_ID: ORN_00 · VERSION: 1.0</span>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

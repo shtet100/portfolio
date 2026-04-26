@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ATHENA · Planetary Rover Autonomy Simulator | Swan Yi Htet</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700;9..144,800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: { extend: {
+                fontFamily: { display: ['Fraunces', 'serif'], sans: ['Inter', 'sans-serif'], mono: ['"JetBrains Mono"', 'monospace'] },
+                colors: {
+                    ink: { DEFAULT: '#070b14', deep: '#04060c' },
+                    ath: { 300: '#fcd34d', 400: '#fbbf24', 500: '#f59e0b' },
+                }
+            }}
+        }
+    </script>
+    <style>
+        body { background: #04060c; color: #d8dde6; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+        .lab-grid { background-image: radial-gradient(circle, rgba(252,211,77,0.06) 1px, transparent 1px), radial-gradient(circle, rgba(252,211,77,0.04) 1px, transparent 1px); background-size: 36px 36px, 72px 72px; background-position: 0 0, 18px 18px; }
+        .display-serif { font-family: 'Fraunces', serif; }
+        .mono-tag { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; }
+        .section-num { font-family: 'Fraunces', serif; font-size: 13px; color: rgba(245,158,11,0.55); letter-spacing: 0.05em; }
+        .heading-mark { position: relative; padding-bottom: 4px; }
+        .heading-mark::after { content: ''; position: absolute; left: 0; bottom: 0; width: 36px; height: 2px; background: rgba(245,158,11,0.7); }
+        .instrument-panel { position: relative; background: linear-gradient(180deg, rgba(16,23,42,0.5), rgba(7,11,20,0.7)); border: 1px solid rgba(245,158,11,0.1); border-radius: 4px; }
+        .instrument-panel::before { content: ''; position: absolute; top: -1px; left: -1px; width: 14px; height: 14px; border-top: 1px solid rgba(245,158,11,0.55); border-left: 1px solid rgba(245,158,11,0.55); }
+        .instrument-panel::after { content: ''; position: absolute; bottom: -1px; right: -1px; width: 14px; height: 14px; border-bottom: 1px solid rgba(245,158,11,0.55); border-right: 1px solid rgba(245,158,11,0.55); }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #04060c; }
+        ::-webkit-scrollbar-thumb { background: #1e2838; border-radius: 4px; }
+        .blip { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #fbbf24; box-shadow: 0 0 6px rgba(251,191,36,0.8); animation: pulseSoft 2s ease-in-out infinite; }
+        @keyframes pulseSoft { 0%,100% { opacity: 0.35; } 50% { opacity: 0.85; } }
+        .video-frame { border: 1px solid rgba(245,158,11,0.3); box-shadow: 0 20px 60px -10px rgba(245,158,11,0.2); }
+
+        .planet-card { position: relative; overflow: hidden; transition: transform 0.4s, border-color 0.4s; }
+        .planet-card:hover { transform: translateY(-4px); border-color: rgba(252,211,77,0.45) !important; }
+        .planet-mars { background: radial-gradient(ellipse at top, rgba(180,60,30,0.25), rgba(11,16,24,0.85)); }
+        .planet-venus { background: radial-gradient(ellipse at top, rgba(210,140,50,0.22), rgba(11,16,24,0.85)); }
+        .planet-europa { background: radial-gradient(ellipse at top, rgba(180,200,220,0.18), rgba(11,16,24,0.85)); }
+        .planet-titan { background: radial-gradient(ellipse at top, rgba(200,140,80,0.22), rgba(11,16,24,0.85)); }
+
+        .slope-bar { background: linear-gradient(90deg, rgba(34,197,94,0.7) 0%, rgba(34,197,94,0.7) 20%, rgba(250,204,21,0.75) 35%, rgba(249,115,22,0.8) 55%, rgba(239,68,68,0.85) 80%, rgba(239,68,68,0.9) 100%); }
+
+        .arch-diagram { max-width: 780px; margin: 0 auto; font-family: 'JetBrains Mono', monospace; }
+        .arch-frame { border: 1.5px solid rgba(245,158,11,0.35); background: rgba(11,16,24,0.45); border-radius: 4px; padding: 22px; }
+        .arch-header { text-align: center; padding-bottom: 14px; margin-bottom: 16px; border-bottom: 1px dashed rgba(245,158,11,0.22); }
+        .arch-header-title { color: white; font-size: 13px; font-weight: 600; letter-spacing: 0.08em; }
+        .arch-header-sub { color: rgba(252,211,77,0.95); font-size: 11px; margin-top: 4px; }
+        .arch-node { border: 1px solid rgba(245,158,11,0.3); background: linear-gradient(145deg, rgba(245,158,11,0.1), rgba(245,158,11,0.02)); border-radius: 3px; padding: 12px 14px; text-align: center; }
+        .arch-node-name { color: white; font-size: 12px; font-weight: 600; }
+        .arch-node-meta { color: rgba(252,211,77,0.8); font-size: 10px; margin-top: 3px; }
+        .arch-node-primary { border-color: rgba(245,158,11,0.55); background: linear-gradient(145deg, rgba(245,158,11,0.18), rgba(245,158,11,0.05)); box-shadow: 0 0 22px -8px rgba(245,158,11,0.45); }
+        .arch-node-list { list-style: none; padding: 0; margin: 8px 0 0 0; font-size: 10px; color: rgba(252,211,77,0.85); line-height: 1.8; font-family: 'JetBrains Mono', monospace; }
+        .arch-parallel-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+        .arch-flow { height: 22px; position: relative; }
+        .arch-flow::before { content: ''; position: absolute; left: 50%; top: 0; width: 1px; height: 15px; background: rgba(245,158,11,0.5); }
+        .arch-flow::after { content: ''; position: absolute; left: 50%; top: 12px; width: 0; height: 0; border-left: 4px solid transparent; border-right: 4px solid transparent; border-top: 6px solid rgba(252,211,77,0.75); transform: translateX(-4px); }
+        .arch-merge-3 { height: 32px; position: relative; }
+        .arch-merge-3-b { position: absolute; top: 0; width: 1px; height: 14px; background: rgba(245,158,11,0.5); }
+        .arch-merge-3-l { left: 16.67%; }
+        .arch-merge-3-c { left: 50%; transform: translateX(-0.5px); }
+        .arch-merge-3-r { right: 16.67%; }
+        .arch-merge-3-bar { position: absolute; top: 14px; left: 16.67%; right: 16.67%; height: 1px; background: rgba(245,158,11,0.5); }
+        .arch-merge-3-tail { position: absolute; top: 14px; left: 50%; width: 1px; height: 12px; background: rgba(245,158,11,0.5); transform: translateX(-0.5px); }
+        .arch-merge-3-arrow { position: absolute; top: 26px; left: 50%; width: 0; height: 0; border-left: 4px solid transparent; border-right: 4px solid transparent; border-top: 6px solid rgba(252,211,77,0.75); transform: translateX(-4px); }
+        @media (max-width: 640px) { .arch-parallel-3 { grid-template-columns: 1fr; } .arch-merge-3-l, .arch-merge-3-r, .arch-merge-3-bar { display: none; } }
+    </style>
+</head>
+<body class="selection:bg-ath-500/30 selection:text-white">
+
+    <div class="fixed inset-0 -z-50 pointer-events-none overflow-hidden">
+        <div class="absolute inset-0 lab-grid opacity-50"></div>
+        <canvas id="bg-network" class="absolute inset-0 w-full h-full"></canvas>
+        <div class="absolute top-0 right-0 w-[700px] h-[700px] bg-ath-500/10 rounded-full blur-[180px]"></div>
+        <div class="absolute bottom-[-10%] left-[-5%] w-[600px] h-[600px] bg-orange-600/8 rounded-full blur-[160px]"></div>
+    </div>
+
+    <script>
+        (function() {
+            const canvas = document.getElementById('bg-network');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            let w, h, nodes = [];
+            const DPR = Math.min(window.devicePixelRatio || 1, 2);
+            function resize() { w = canvas.clientWidth; h = canvas.clientHeight; canvas.width = w * DPR; canvas.height = h * DPR; ctx.scale(DPR, DPR); }
+            function init() { resize(); const count = Math.min(60, Math.floor((w*h)/22000)); nodes = []; for (let i=0;i<count;i++) nodes.push({x:Math.random()*w,y:Math.random()*h,vx:(Math.random()-0.5)*0.12,vy:(Math.random()-0.5)*0.12,r:Math.random()*1.2+0.6,type:Math.random()<0.2?'ath':'plasma',phase:Math.random()*Math.PI*2}); }
+            function step(t) {
+                ctx.clearRect(0,0,w,h);
+                for (let i=0;i<nodes.length;i++) for (let j=i+1;j<nodes.length;j++) {
+                    const a=nodes[i],b=nodes[j],dx=a.x-b.x,dy=a.y-b.y,d2=dx*dx+dy*dy,maxD=140;
+                    if (d2<maxD*maxD) { ctx.strokeStyle=`rgba(252,211,77,${(1-Math.sqrt(d2)/maxD)*0.18})`; ctx.lineWidth=0.5; ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke(); }
+                }
+                for (const n of nodes) {
+                    n.x+=n.vx; n.y+=n.vy;
+                    if (n.x<-10) n.x=w+10; if (n.x>w+10) n.x=-10; if (n.y<-10) n.y=h+10; if (n.y>h+10) n.y=-10;
+                    const pulse=0.7+Math.sin(t*0.001+n.phase)*0.3;
+                    ctx.fillStyle = n.type==='ath' ? `rgba(252,211,77,${0.55*pulse})` : `rgba(125,211,252,${0.4*pulse})`;
+                    ctx.beginPath(); ctx.arc(n.x,n.y,n.r,0,Math.PI*2); ctx.fill();
+                }
+                requestAnimationFrame(step);
+            }
+            init(); step(0); window.addEventListener('resize',init);
+        })();
+    </script>
+
+    <nav class="fixed top-0 w-full z-50 backdrop-blur-md bg-ink-deep/70 border-b border-white/5">
+        <div class="max-w-[1240px] mx-auto px-6 h-16 flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-2 text-zinc-400 hover:text-ath-400 transition-colors group">
+                <svg class="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                <span class="text-[13px]">return to portfolio</span>
+            </a>
+            <a href="./SwanYiHtet_TechnicalResume.pdf" download class="hidden md:inline-flex items-center gap-1.5 text-[12px] text-zinc-400 hover:text-ember-300 transition-colors mr-4"><svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>Resume</a><div class="flex items-center gap-3">
+                <span class="hidden sm:inline-flex items-center gap-1.5 mono-tag text-ath-400"><span class="blip"></span> MISSION_LIVE</span>
+                <span class="mono-tag text-zinc-600 border border-white/5 px-2.5 py-1 rounded-sm">SYSTEM_ID: NAV_01</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="pt-32 pb-16 px-6">
+        <div class="max-w-[1240px] mx-auto">
+            <div class="grid lg:grid-cols-12 gap-10 items-start">
+                <div class="lg:col-span-7">
+                    <div class="mono-tag text-ath-400 mb-6 flex items-center gap-3">
+                        <span class="h-px w-7 bg-ath-500/60"></span>
+                        ORION · Navigation Layer
+                    </div>
+                    <h1 class="display-serif text-[58px] md:text-[88px] leading-[0.95] tracking-[-0.025em] text-white font-light mb-6">
+                        ATH<span class="font-semibold">E</span>NA<span class="text-ath-400">.</span>
+                    </h1>
+                    <p class="font-mono text-[13px] text-ath-300/85 tracking-wider mb-8">
+                        Autonomous Terrain &amp; Hazard Exploration Navigation Agent
+                    </p>
+                    <p class="text-[18px] text-zinc-300 leading-relaxed mb-4 font-light max-w-2xl">
+                        A real-time 3D rover autonomy simulator with multi-algorithm pathfinding, infinite procedural terrain, and multi-planetary deployment.
+                    </p>
+                    <p class="text-zinc-400 leading-relaxed mb-8 max-w-2xl">
+                        The entire system runs in-browser. No backend required.
+                    </p>
+
+                    <div class="flex flex-wrap gap-3">
+                        <a href="https://shtet100.github.io/ATHENA/" target="_blank" class="inline-flex items-center gap-2 px-5 py-3 bg-ath-500 hover:bg-ath-400 text-black font-semibold text-[13px] rounded-sm transition-all shadow-[0_0_24px_rgba(245,158,11,0.4)]">
+                            Launch Live Demo
+                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                        </a>
+                        <a href="https://github.com/shtet100/ATHENA" target="_blank" class="inline-flex items-center gap-2 px-5 py-3 bg-transparent border border-ath-500/40 hover:border-ath-500/80 text-ath-300 text-[13px] rounded-sm transition-all">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                            GitHub
+                        </a>
+                    </div>
+
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-10">
+                        <div class="border border-white/5 p-4 rounded-sm">
+                            <div class="display-serif text-2xl text-white font-medium">4</div>
+                            <div class="mono-tag text-zinc-500 mt-1">Algorithms</div>
+                        </div>
+                        <div class="border border-white/5 p-4 rounded-sm">
+                            <div class="display-serif text-2xl text-white font-medium">4</div>
+                            <div class="mono-tag text-zinc-500 mt-1">Planets</div>
+                        </div>
+                        <div class="border border-white/5 p-4 rounded-sm">
+                            <div class="display-serif text-2xl text-white font-medium">∞</div>
+                            <div class="mono-tag text-zinc-500 mt-1">Terrain</div>
+                        </div>
+                        <div class="border border-white/5 p-4 rounded-sm">
+                            <div class="display-serif text-2xl text-white font-medium">0</div>
+                            <div class="mono-tag text-zinc-500 mt-1">Backend</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-5">
+                    <div class="instrument-panel rounded-sm p-6 sticky top-24">
+                        <div class="flex items-start justify-between mb-6 pb-4 border-b border-white/5">
+                            <div>
+                                <div class="mono-tag text-ath-400 mb-1">Project Classification</div>
+                                <div class="text-white display-serif text-lg">Rover Navigation Sim</div>
+                            </div>
+                            <span class="mono-tag text-ath-400 inline-flex items-center gap-1.5"><span class="blip"></span> LIVE</span>
+                        </div>
+                        <div class="space-y-3 text-[13px]">
+                            <div class="flex justify-between"><span class="mono-tag text-zinc-500">Role</span><span class="text-zinc-300 font-mono text-[12px]">Navigation Layer</span></div>
+                            <div class="flex justify-between"><span class="mono-tag text-zinc-500">Deployment</span><span class="text-zinc-300 font-mono text-[12px]">browser-native</span></div>
+                            <div class="flex justify-between"><span class="mono-tag text-zinc-500">Rendering</span><span class="text-zinc-300 font-mono text-[12px]">Three.js · WebGL</span></div>
+                            <div class="flex justify-between"><span class="mono-tag text-zinc-500">Framework</span><span class="text-zinc-300 font-mono text-[12px]">React 18 + Vite</span></div>
+                            <div class="pt-3 mt-3 border-t border-white/5">
+                                <div class="mono-tag text-ath-400 mb-2">Live At</div>
+                                <a href="https://shtet100.github.io/ATHENA/" target="_blank" class="text-ath-400 hover:text-ath-300 font-mono text-[12px] break-all transition-colors">shtet100.github.io/ATHENA</a>
+                            </div>
+                        </div>
+                        <div class="mt-6 pt-4 border-t border-white/5">
+                            <div class="mono-tag text-ath-400 mb-2">Built By</div>
+                            <div class="text-zinc-200 text-[13px] font-medium">Swan Yi Htet</div>
+                            <div class="text-zinc-500 text-[11px] mono-tag">+ David Young</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Demo Video -->
+    <section class="px-6 max-w-[1240px] mx-auto pb-12">
+        <div class="flex items-center gap-3 mb-6">
+            <span class="mono-tag text-white">FIG · 01 · Full Demonstration</span>
+            <span class="h-px flex-grow bg-white/10"></span>
+            <span class="mono-tag text-zinc-500 border border-white/5 px-2 py-1 rounded-sm">athena_demo.mp4</span>
+        </div>
+        <div class="video-frame rounded-sm overflow-hidden bg-black">
+            <video autoplay muted loop playsinline class="w-full h-auto block">
+                <source src="./videos/athena_demo.mp4" type="video/mp4">
+            </video>
+        </div>
+        <p class="mt-4 text-[13px] text-zinc-500 italic leading-relaxed max-w-3xl">Multi-algorithm pathfinding, manual driving, terrain controls, and planetary environment switching.</p>
+    </section>
+
+    <!-- Mission Overview -->
+    <section class="py-16 px-6 border-t border-white/5">
+        <div class="max-w-[1240px] mx-auto">
+            <div class="grid lg:grid-cols-12 gap-10 mb-8">
+                <div class="lg:col-span-3">
+                    <span class="section-num">§ 01</span>
+                    <h2 class="display-serif text-2xl text-white font-medium mt-2 heading-mark">Mission Overview</h2>
+                </div>
+            </div>
+            <div class="grid md:grid-cols-12 gap-8">
+                <div class="md:col-span-8 max-w-2xl">
+                    <p class="text-zinc-300 leading-relaxed mb-4">A rover is placed on an <span class="text-ath-300">infinite procedurally generated planetary surface</span>. The operator clicks anywhere and the rover plans a path using one of four selectable algorithms, visualizing the search in real-time.</p>
+                    <p class="text-zinc-400 leading-relaxed mb-4">The terrain extends infinitely in every direction. Slopes, craters, and rocks are generated deterministically from seeded noise.</p>
+                    <p class="text-zinc-400 leading-relaxed">Switching between Mars, Venus, Europa, and Titan rebuilds the entire terrain, sky, lighting, fog, and surface colors to match real physical conditions.</p>
+                </div>
+                <div class="md:col-span-4">
+                    <div class="instrument-panel rounded-sm p-5">
+                        <div class="mono-tag text-ath-400 mb-4">Core Capabilities</div>
+                        <div class="space-y-2 text-[12px] font-mono text-zinc-400">
+                            <div>→ Four pathfinding algorithms</div>
+                            <div>→ Real-time search viz</div>
+                            <div>→ Cost heat mapping</div>
+                            <div>→ Multi-waypoint missions</div>
+                            <div>→ Infinite procedural terrain</div>
+                            <div>→ Four planetary environments</div>
+                            <div>→ Live engineering viewport</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pathfinding Algorithms -->
+    <section class="py-16 px-6 border-t border-white/5">
+        <div class="max-w-[1240px] mx-auto">
+            <div class="grid lg:grid-cols-12 gap-10 mb-8">
+                <div class="lg:col-span-3">
+                    <span class="section-num">§ 02</span>
+                    <h2 class="display-serif text-2xl text-white font-medium mt-2 heading-mark">Pathfinding</h2>
+                </div>
+                <div class="lg:col-span-9 max-w-2xl">
+                    <p class="text-zinc-400 leading-relaxed">Four search algorithms, same slope-based cost function, fundamentally different exploration patterns.</p>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-4">
+                <div class="instrument-panel rounded-sm p-6">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="flex items-center gap-3">
+                            <span class="font-mono text-2xl text-ath-400 font-bold">A*</span>
+                            <div>
+                                <div class="text-white display-serif font-medium">A-Star Search</div>
+                                <div class="mono-tag text-zinc-500 mt-0.5">the default · focused</div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-zinc-300 text-[13px] leading-relaxed mb-3">Explores by estimated total cost: actual cost <span class="font-mono text-ath-400">(g)</span> plus heuristic <span class="font-mono text-ath-400">(h)</span>.</p>
+                    <p class="text-zinc-400 text-[12px] leading-relaxed">A focused beam expanding toward the target. Heuristic is Euclidean distance.</p>
+                    <div class="mt-4 pt-3 border-t border-white/5 text-[10px] font-mono text-zinc-500">Cost: flat ×1 · slope ×15 · &gt;35° <span class="text-red-400">×200 (impassable)</span></div>
+                </div>
+
+                <div class="instrument-panel rounded-sm p-6">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="flex items-center gap-3">
+                            <span class="font-mono text-2xl text-ath-400 font-bold">Di</span>
+                            <div>
+                                <div class="text-white display-serif font-medium">Dijkstra's Algorithm</div>
+                                <div class="mono-tag text-zinc-500 mt-0.5">uniform flood · optimal</div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-zinc-300 text-[13px] leading-relaxed mb-3">A* without the heuristic. Explores by actual cost only, producing a uniform circular flood.</p>
+                    <p class="text-zinc-400 text-[12px] leading-relaxed">Guaranteed optimal but explores significantly more nodes. Concentric ring expansion.</p>
+                </div>
+
+                <div class="instrument-panel rounded-sm p-6">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="flex items-center gap-3">
+                            <span class="font-mono text-2xl text-ath-400 font-bold">RRT</span>
+                            <div>
+                                <div class="text-white display-serif font-medium">Rapidly-exploring Random Trees</div>
+                                <div class="mono-tag text-zinc-500 mt-0.5">probabilistic · 15% goal bias</div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-zinc-300 text-[13px] leading-relaxed mb-3">Randomly samples points, finds nearest tree node, extends a branch toward the sample.</p>
+                    <p class="text-zinc-400 text-[12px] leading-relaxed">15% goal bias ensures growth toward target. Branches rejected on slopes &gt;35°.</p>
+                </div>
+
+                <div class="instrument-panel rounded-sm p-6">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="flex items-center gap-3">
+                            <span class="font-mono text-2xl text-ath-400 font-bold">D*L</span>
+                            <div>
+                                <div class="text-white display-serif font-medium">D* Lite</div>
+                                <div class="mono-tag text-zinc-500 mt-0.5">backward search · replan</div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-zinc-300 text-[13px] leading-relaxed mb-3">Searches <span class="text-ath-300">backward from goal</span> to rover. Designed for replanning when environment changes.</p>
+                    <p class="text-zinc-400 text-[12px] leading-relaxed">When the environment changes mid-traverse, only affected portions need recomputation.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Terrain -->
+    <section class="py-16 px-6 border-t border-white/5">
+        <div class="max-w-[1240px] mx-auto">
+            <div class="grid lg:grid-cols-12 gap-10 mb-8">
+                <div class="lg:col-span-3">
+                    <span class="section-num">§ 03</span>
+                    <h2 class="display-serif text-2xl text-white font-medium mt-2 heading-mark">Terrain Generation</h2>
+                </div>
+                <div class="lg:col-span-9 max-w-2xl">
+                    <p class="text-zinc-300 leading-relaxed">The terrain is infinite. There are no edges, no loading screens, no prebuilt maps. The rover can drive in any direction forever.</p>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-4">
+                <div class="instrument-panel rounded-sm p-6">
+                    <div class="mono-tag text-ath-400 mb-3">Chunk System</div>
+                    <p class="text-[13px] text-zinc-300 leading-relaxed mb-3">The world is divided into <span class="text-white font-mono">80-unit chunks</span>. A <span class="text-white font-mono">7×7 grid</span> (49 total) is maintained around the rover.</p>
+                    <p class="text-[11px] text-zinc-500 leading-relaxed">As the rover moves, chunks behind unload and new chunks ahead generate every 0.5s.</p>
+                </div>
+                <div class="instrument-panel rounded-sm p-6">
+                    <div class="mono-tag text-ath-400 mb-3">Height Function</div>
+                    <p class="text-[13px] text-zinc-300 leading-relaxed mb-3"><span class="text-white font-mono">3-layer fBm noise</span> at different frequencies blended together, sampled from independent 256×256 seeded noise textures.</p>
+                    <p class="text-[11px] text-zinc-500 leading-relaxed">Plus ridge noise for sharp geological features. One continuous world-space function.</p>
+                </div>
+                <div class="instrument-panel rounded-sm p-6">
+                    <div class="mono-tag text-ath-400 mb-3">Crater Hashing</div>
+                    <p class="text-[13px] text-zinc-300 leading-relaxed mb-3">Deterministic craters via <span class="text-white font-mono">spatial cell hashing</span>. The world divided into 50-unit cells, each cell's hash determines its craters.</p>
+                    <p class="text-[11px] text-zinc-500 leading-relaxed">Geometry: parabolic depression with raised rim.</p>
+                </div>
+            </div>
+
+            <div class="mt-6 instrument-panel rounded-sm p-6 bg-gradient-to-r from-ath-500/5 to-transparent border-l-4 border-ath-500">
+                <div class="mono-tag text-ath-400 mb-3">Design Principle</div>
+                <p class="text-zinc-300 leading-relaxed">Every height query (terrain mesh vertices, rover ground contact, pathfinding cost, engineering viewport) calls the same <code class="bg-ink-deep px-2 py-0.5 rounded text-ath-400 text-[12px] font-mono">getWorldHeight()</code> function. <span class="text-ath-300">There is one source of truth.</span></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- PLANETARY ENVIRONMENTS -->
+    <section class="py-16 px-6 border-t border-white/5">
+        <div class="max-w-[1240px] mx-auto">
+            <div class="grid lg:grid-cols-12 gap-10 mb-8">
+                <div class="lg:col-span-3">
+                    <span class="section-num">§ 04</span>
+                    <h2 class="display-serif text-2xl text-white font-medium mt-2 heading-mark">Planetary Environments</h2>
+                </div>
+                <div class="lg:col-span-9 max-w-2xl">
+                    <p class="text-zinc-400 leading-relaxed">Four planetary bodies. Each switches the entire simulation: terrain heightmap scales, surface and rock colors, crater density, sky gradients, fog density, sun color, dust particle colors.</p>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                <!-- MARS -->
+                <div class="planet-card planet-mars instrument-panel rounded-sm p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-14 h-14 rounded-full bg-gradient-to-br from-orange-700 to-red-900 flex items-center justify-center display-serif text-xl font-bold text-white shadow-lg">♂</div>
+                        <span class="mono-tag text-zinc-500 text-[9px] border border-white/10 px-2 py-1 rounded-sm">rocky</span>
+                    </div>
+                    <h3 class="display-serif text-2xl text-white mb-1">Mars</h3>
+                    <p class="text-[10px] font-mono text-orange-300/80 mb-4 tracking-wider">THE RED PLANET</p>
+                    <div class="space-y-2 text-[12px]">
+                        <div class="flex justify-between border-b border-white/5 pb-1.5"><span class="text-zinc-500">Gravity</span><span class="font-mono text-zinc-200">3.72 m/s²</span></div>
+                        <div class="flex justify-between border-b border-white/5 pb-1.5"><span class="text-zinc-500">Atmosphere</span><span class="font-mono text-zinc-200">0.6 kPa CO₂</span></div>
+                        <div class="flex justify-between border-b border-white/5 pb-1.5"><span class="text-zinc-500">Surface</span><span class="font-mono text-zinc-200">−60°C</span></div>
+                        <div class="flex justify-between border-b border-white/5 pb-1.5"><span class="text-zinc-500">Terrain</span><span class="font-mono text-zinc-300">cratered</span></div>
+                        <div class="flex justify-between"><span class="text-zinc-500">Craters</span><span class="font-mono text-orange-300">dense</span></div>
+                    </div>
+                </div>
+
+                <!-- VENUS -->
+                <div class="planet-card planet-venus instrument-panel rounded-sm p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-14 h-14 rounded-full bg-gradient-to-br from-amber-400 to-yellow-700 flex items-center justify-center display-serif text-xl font-bold text-white shadow-lg">♀</div>
+                        <span class="mono-tag text-zinc-500 text-[9px] border border-white/10 px-2 py-1 rounded-sm">volcanic</span>
+                    </div>
+                    <h3 class="display-serif text-2xl text-white mb-1">Venus</h3>
+                    <p class="text-[10px] font-mono text-amber-300/80 mb-4 tracking-wider">THE HELLSCAPE</p>
+                    <div class="space-y-2 text-[12px]">
+                        <div class="flex justify-between border-b border-white/5 pb-1.5"><span class="text-zinc-500">Gravity</span><span class="font-mono text-zinc-200">8.87 m/s²</span></div>
+                        <div class="flex justify-between border-b border-white/5 pb-1.5"><span class="text-zinc-500">Atmosphere</span><span class="font-mono text-zinc-200">9200 kPa CO₂</span></div>
+                        <div class="flex justify-between border-b border-white/5 pb-1.5"><span class="text-zinc-500">Surface</span><span class="font-mono text-zinc-200">462°C</span></div>
+                        <div class="flex justify-between border-b border-white/5 pb-1.5"><span class="text-zinc-500">Terrain</span><span class="font-mono text-zinc-300">flat volcanic</span></div>
+                        <div class="flex justify-between"><span class="text-zinc-500">Craters</span><span class="font-mono text-amber-300">very sparse</span></div>
+                    </div>
+                </div>
+
+                <!-- EUROPA -->
+                <div class="planet-card planet-europa instrument-panel rounded-sm p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-14 h-14 rounded-full bg-gradient-to-br from-slate-200 to-slate-500 flex items-center justify-center display-serif text-xl font-bold text-slate-900 shadow-lg">◎</div>
+                        <span class="mono-tag text-zinc-500 text-[9px] border border-white/10 px-2 py-1 rounded-sm">icy moon</span>
+                    </div>
+                    <h3 class="display-serif text-2xl text-white mb-1">Europa</h3>
+                    <p class="text-[10px] font-mono text-slate-300/80 mb-4 tracking-wider">JUPITER'S ICE WORLD</p>
+                    <div class="space-y-2 text-[12px]">
+                        <div class="flex justify-between border-b border-white/5 pb-1.5"><span class="text-zinc-500">Gravity</span><span class="font-mono text-zinc-200">1.31 m/s²</span></div>
+                        <div class="flex justify-between border-b border-white/5 pb-1.5"><span class="text-zinc-500">Atmosphere</span><span class="font-mono text-zinc-200">~0 Pa</span></div>
+                        <div class="flex justify-between border-b border-white/5 pb-1.5"><span class="text-zinc-500">Surface</span><span class="font-mono text-zinc-200">−160°C</span></div>
+                        <div class="flex justify-between border-b border-white/5 pb-1.5"><span class="text-zinc-500">Terrain</span><span class="font-mono text-zinc-300">icy ridges</span></div>
+                        <div class="flex justify-between"><span class="text-zinc-500">Craters</span><span class="font-mono text-slate-300">moderate</span></div>
+                    </div>
+                </div>
+
+                <!-- TITAN -->
+                <div class="planet-card planet-titan instrument-panel rounded-sm p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-14 h-14 rounded-full bg-gradient-to-br from-orange-300 to-amber-700 flex items-center justify-center display-serif text-xl font-bold text-orange-950 shadow-lg">◉</div>
+                        <span class="mono-tag text-zinc-500 text-[9px] border border-white/10 px-2 py-1 rounded-sm">dunes</span>
+                    </div>
+                    <h3 class="display-serif text-2xl text-white mb-1">Titan</h3>
+                    <p class="text-[10px] font-mono text-orange-300/80 mb-4 tracking-wider">SATURN'S GIANT MOON</p>
+                    <div class="space-y-2 text-[12px]">
+                        <div class="flex justify-between border-b border-white/5 pb-1.5"><span class="text-zinc-500">Gravity</span><span class="font-mono text-zinc-200">1.35 m/s²</span></div>
+                        <div class="flex justify-between border-b border-white/5 pb-1.5"><span class="text-zinc-500">Atmosphere</span><span class="font-mono text-zinc-200">146.7 kPa N₂</span></div>
+                        <div class="flex justify-between border-b border-white/5 pb-1.5"><span class="text-zinc-500">Surface</span><span class="font-mono text-zinc-200">−179°C</span></div>
+                        <div class="flex justify-between border-b border-white/5 pb-1.5"><span class="text-zinc-500">Terrain</span><span class="font-mono text-zinc-300">smooth dunes</span></div>
+                        <div class="flex justify-between"><span class="text-zinc-500">Craters</span><span class="font-mono text-orange-300">almost none</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="instrument-panel rounded-sm p-6 max-w-4xl">
+                <div class="mono-tag text-ath-400 mb-3">Planet Parameters, Not Planet Code</div>
+                <p class="text-zinc-300 text-[14px] leading-relaxed">Each planet is a data object, not a separate code path. Mars and Europa run identical terrain generation logic with different parameter values. <span class="text-ath-300">Adding a new planet is adding one object to a dictionary.</span></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Architecture -->
+    <section class="py-16 px-6 border-t border-white/5">
+        <div class="max-w-[1240px] mx-auto">
+            <div class="grid lg:grid-cols-12 gap-10 mb-8">
+                <div class="lg:col-span-3">
+                    <span class="section-num">§ 05</span>
+                    <h2 class="display-serif text-2xl text-white font-medium mt-2 heading-mark">Architecture</h2>
+                </div>
+            </div>
+
+            <div class="instrument-panel rounded-sm p-6 md:p-10">
+                <div class="arch-diagram">
+                    <div class="arch-frame">
+                        <div class="arch-header">
+                            <div class="arch-header-title">ATHENA v2.0</div>
+                            <div class="arch-header-sub">React + Three.js · Browser</div>
+                        </div>
+                        <div class="arch-parallel-3">
+                            <div class="arch-node">
+                                <div class="arch-node-name">Terrain Engine</div>
+                                <ul class="arch-node-list"><li>fBm noise</li><li>Crater hash</li><li>Chunk mgmt</li><li>Slope calc</li></ul>
+                            </div>
+                            <div class="arch-node">
+                                <div class="arch-node-name">Pathfinding Engine</div>
+                                <ul class="arch-node-list"><li>A*</li><li>Dijkstra</li><li>RRT</li><li>D* Lite</li></ul>
+                            </div>
+                            <div class="arch-node">
+                                <div class="arch-node-name">Planetary Environment</div>
+                                <ul class="arch-node-list"><li>Mars</li><li>Venus</li><li>Europa</li><li>Titan</li></ul>
+                            </div>
+                        </div>
+                        <div class="arch-merge-3">
+                            <div class="arch-merge-3-b arch-merge-3-l"></div>
+                            <div class="arch-merge-3-b arch-merge-3-c"></div>
+                            <div class="arch-merge-3-b arch-merge-3-r"></div>
+                            <div class="arch-merge-3-bar"></div>
+                            <div class="arch-merge-3-tail"></div>
+                            <div class="arch-merge-3-arrow"></div>
+                        </div>
+                        <div class="arch-node arch-node-primary">
+                            <div class="arch-node-name">Unified World Model</div>
+                            <div class="arch-node-meta">getWorldHeight() · getWorldSlope() · chunks</div>
+                        </div>
+                        <div class="arch-flow"></div>
+                        <div class="arch-node">
+                            <div class="arch-node-name">Visualization Layer</div>
+                            <div class="arch-node-meta">Cost heat map · Frontier · Trail · Waypoints</div>
+                        </div>
+                        <div class="arch-flow"></div>
+                        <div class="arch-node">
+                            <div class="arch-node-name">Rover Simulation · Engineering Viewport</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-white/5 py-10 px-6 mt-16">
+        <div class="max-w-[1240px] mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-start gap-6">
+                <div>
+                    <div class="display-serif text-lg text-white mb-1">ATHENA</div>
+                    <div class="mono-tag text-zinc-500">built by Swan Yi Htet &amp; David Young</div>
+                </div>
+                <div class="flex flex-wrap gap-4 text-[12px] mono-tag">
+                    <a href="index.html" class="text-zinc-500 hover:text-ath-400 transition-colors">← portfolio</a>
+                    <a href="project-orion.html" class="text-zinc-500 hover:text-ember-300 transition-colors">ORION</a>
+                    <a href="project-broteus.html" class="text-zinc-500 hover:text-violet-300 transition-colors">BROTEUS</a>
+                    <a href="project-chiron.html" class="text-zinc-500 hover:text-teal-300 transition-colors">CHIRON</a>
+                    <a href="https://shtet100.github.io/ATHENA/" target="_blank" class="text-ath-400 hover:text-ath-300 transition-colors">live ↗</a>
+                </div>
+            </div>
+            <div class="mt-6 pt-4 border-t border-white/5 flex flex-col sm:flex-row justify-between items-center gap-2 text-[10px] mono-tag text-zinc-700">
+                <span>© 2026 Swan Yi Htet</span>
+                <span>SYSTEM_ID: NAV_01</span>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
